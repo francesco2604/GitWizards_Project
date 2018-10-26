@@ -1,0 +1,24 @@
+{
+  "name": "gitwizardsproject",
+  "version": "1.0.0",
+  "description": "Progetto Ingegneria Software 2",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francesco2604/GitWizards_Project.git"
+  },
+  "author": "GitWizardsTeam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/francesco2604/GitWizards_Project/issues"
+  },
+  "homepage": "https://github.com/francesco2604/GitWizards_Project#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
