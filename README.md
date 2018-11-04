@@ -4,3 +4,4 @@ Progetto Ingegneria Software 2
 * Omar Echbiki Mat.187894
 * Daniele Francescatti Mat.180514
 * Francesco Gava Mat.187861.
+* Alessio Paternoster Mat.180114
