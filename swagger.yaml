@@ -1,120 +1,359 @@
 swagger: '2.0'
 info:
   version: '1.0'
-  title: "api_isw2"
-  description: Polls is a simple API allowing consumers to view polls and vote in them.
+  title: "GitWizards_Project API"
+  description: Definizione api per progettto ingegneria software 2
   license:
     name: MIT
     url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
 host: polls.apiblueprint.org
 basePath: /
 schemes:
-- http
-consumes:
-- application/json
-produces:
-- application/json
+- https
 paths:
-  /questions:
-    x-summary: Questions Collection
+  /users:
+    x-summary: Lista di utenti
     get:
-      summary: List All Questions
+      summary: Ricava la lista degli utenti del sistema
+      produces:
+        - application/json
       responses:
         200:
-          description: Successful Response
+          description: Operazione effettuata con successo
           schema:
             type: array
             items:
-              $ref: '#/definitions/Question'
+              $ref: '#/definitions/User'
           examples:
             application/json:
-              - question: Favourite programming language?
-                published_at: '2015-08-05T08:40:51.620Z'
-                choices:
-                  - choice: Swift
-                    votes: 2048
-                  - choice: Python
-                    votes: 1024
-                  - choice: Objective-C
-                    votes: 512
-                  - choice: Ruby
-                    votes: 256
-    post:
-      description: >-
-        You may create your own question using this action. It takes a JSON
-        object containing a question and a collection of answers in the
-        form of choices.
-      summary: Create a New Question
+              - id: 123456
+                name: 'Mario'
+                surname: 'Rossi'
+        404:
+          description: Lista degli utenti non trovata
+          schema:
+              $ref: '#/definitions/Error'
+              
+  /users/{id}:
+    x-summary: Utente
+    get:
+      summary: Ritorna l'utente attraverso ID
+      produces:
+        - application/json
       parameters:
-        - name: body
-          in: body
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID dell'utente che si vuole ricavare <br />
+                       L'ID corrisponde alla matricola dell'utente
+      responses:
+        200:
+          description: Ritorna la rappresentazione del singolo utente identificato dal suo ID
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/User'
+            example:
+                id: 123456
+                name: 'Mario'
+                surname: 'Rossi'
+        404:
+          description: Utente non trovato
+          schema:
+              $ref: '#/definitions/Error'
+    put:
+      summary: Crea un nuovo utente nel sistema
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID dell'utente che si vuole ricavare <br />
+                       L'ID corrisponde alla matricola dell'utente
+        - in: body
+          name: user
           required: true
           schema:
-            $ref: '#/definitions/QuestionRequest'
+            $ref: '#/definitions/User'
+          description: La rappresentazione dell'utente che deve essere aggiunto al sistema
       responses:
         201:
-          description: ''
+          description: L'utente è stato aggiunto correttamente
+        200:
+          description: L'utente è stato aggiornato correttamente
+          
+    delete:
+      summary: Elimina un utente dal sistema
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID dell'utente che si vuole eliminare <br />
+                       L'ID corrisponde alla matricola dell'utente
+      responses:
+        204:
+          description: L' utente è stato eliminato con successo
+        404:
+          description: Utente non trovato
           schema:
-            $ref: '#/definitions/Question'
+            $ref: '#/definitions/Error'
+          
+          
+   
+  /exams:
+    x-summary: Lista degli esami
+    get:
+      summary: Ricava la lista degli esami
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Exams'
           examples:
             application/json:
-                question: Favourite programming language?
-                published_at: '2015-08-05T08:40:51.620Z'
-                choices:
-                  - choice: Swift
-                    votes: 0
-                  - choice: Python
-                    votes: 0
-                  - choice: Objective-C
-                    votes: 0
-                  - choice: Ruby
-                    votes: 0
+              - id: 123456
+                name: 'Mario'
+                surname: 'Rossi'
+        404:
+          description: Lista degli utenti non trovata
+          schema:
+              $ref: '#/definitions/ErrorExams'
+    
+  /exams/{id_ex}:
+    x-summary: Lista domande di un esame
+    get:
+      summary: Ricava la lista degli esami
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id_ex
+          required: true
+          type: integer
+          format: int64
+          description: L'ID dell'esame <br />
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            type: array 
+            items:
+              $ref: '#/definitions/Task'
+          
+        404:
+          description: Lista degli utenti non trovata
+          schema:
+              $ref: '#/definitions/ErrorExams'
+              
+  /exams/{iD}/task/{numeroDomanda}:
+    x-summary: Task
+    get:
+      summary: Ritorna task attraverso id esame e numero domanda
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: iD
+          required: true
+          type: integer
+          format: int64
+          description: L'ID dell'esame <br />
+                       
+        - in: path
+          name: numeroDomanda
+          required: true
+          type: integer
+          format: int64
+          description: Numero corrispondente alla domanda che si vuole cercare <br/>
+                                 
+      responses:
+        200:
+          description: Ritorna dammanda corrispondente 
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Task'
+            example:
+                id: 123456
+                numeroDomanda: 2
+                quuestion: 'Diametro Terra?'
+        404:
+          description: Domanda non trovata
+          schema:
+              $ref: '#/definitions/ErrorTask'
+    put:
+      summary: Crea una nuova domanda in un esame
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: iD
+          required: true
+          type: integer
+          format: int64
+          description: L'ID corrispondente all'esame in cui si vuole aggiungere una domanda<br/>
+          
+        - in: path
+          name: numeroDomanda
+          required: true
+          type: integer
+          format: int64
+          description: Numero domanda<br/>
+                                   
+        - in: body
+          name: task
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+          description: La rappresentazione della domanda che si vuole aggiungere
+      responses:
+        201:
+          description: La domanda è stata aggiunta correttamentw
+        200:
+          description: La domanda è stata è stata aggiornata correttamente
+          
+    delete:
+      summary: Elimina una domanda da un esame
+      produces: 
+        - application/json
+      parameters:
+        - in: path
+          name: iD
+          required: true
+          type: integer
+          format: int64
+          description: L'ID corrispondente all'esame in cui si vuole aggiungere una domanda<br/>
+          
+        - in: path
+          name: numeroDomanda
+          required: true
+          type: integer
+          format: int64
+          description: Numero domanda<br/>
+                                   
+      responses:
+        204:
+          description: La domanda è stata eliminata con successo
+        404:
+          description: La domanda non è stata trovata
+          schema:
+            $ref: '#/definitions/ErrorTask'          
+          
 definitions:
-  Question:
-    title: Question
+  User:
+    title: user
     type: object
     properties:
-      question:
-        type: string
-      published_at:
-        type: string
-      choices:
-        type: array
-        items:
-          $ref: '#/definitions/Choice'
-    required:
-      - question
-      - published_at
-      - choices
-  Choice:
-    title: Choice
-    type: object
-    properties:
-      votes:
+      id:
         type: integer
-        format: int32
-      choice:
+        format: int64
+      name:
+        type: string
+      surname:
         type: string
     required:
-      - votes
-      - choice
-  QuestionRequest:
-    title: Question Request
+      - id
+      - name
+      - surname
+    example:
+      id: 123456
+      name: 'Mario'
+      surname: 'Rossi'
+  
+  Error:
+      title: error
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+      example:
+        code: '404'
+        message: 'errore lettura utente'
+        
+        
+  Task:
+    title: task
     type: object
     properties:
+      iD:
+        type: integer
+        format: int64
+      numeroDomanda:
+        type: integer
+        format: int64
       question:
         type: string
-      choices:
-        type: array
-        items:
-          type: string
     required:
+      - iD
+      - numeroDomanda
       - question
-      - choices
     example:
-      question: Favourite programming language?
-      choices:
-        - Swift
-        - Python
-        - Objective-C
-        - Ruby
+      id: 123456
+      numeroDomanda: 2
+      question: 'diametro della Terra?'
+  
+  ErrorTask:
+      title: errorTask
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+      example:
+        code: '404'
+        message: 'errore lettura doamnda'        
+             
+  Exams:
+    title: esame
+    type: object
+    properties:
+      iD:
+        type: integer
+        format: int64
+      
+      Description:
+        type: string
+    required:
+      - iD
+      - description
+
+    example:
+      id: 123456
+      description: 'esame ingegneria del software 2'
+  
+  ErrorExams:
+      title: errorExams
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+      example:
+        code: '404'
+        message: 'errore lettura esami'
