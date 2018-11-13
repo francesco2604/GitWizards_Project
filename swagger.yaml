@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  version: '1.0'
+  version: '1.0.0'
   title: "GitWizards_Project API"
-  description: Definizione api per progettto ingegneria software 2
+  description: Definizione API per progettto ingegneria software 2
   license:
     name: MIT
     url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
@@ -12,32 +12,62 @@ schemes:
 - https
 paths:
   /users:
-    x-summary: Lista di utenti
+    x-summary: Gestione Utenti
     get:
       summary: Ricava la lista degli utenti del sistema
       produces:
         - application/json
       responses:
         200:
-          description: Operazione effettuata con successo
+          description: Lista degli utenti recuperata con successo
           schema:
             type: array
             items:
               $ref: '#/definitions/User'
           examples:
             application/json:
-              - id: 123456
+              - id: 12
                 name: 'Mario'
                 surname: 'Rossi'
+              - id: 13
+                name: 'Luigi'
+                surname: 'Bo'
         404:
           description: Lista degli utenti non trovata
           schema:
               $ref: '#/definitions/Error'
               
+    post:
+      summary: Registra un nuovo utente nel sistema
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          required: true
+          description: L'utente che deve essere aggiunto al sistema
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        201:
+          description: Utente registrato nel sistema
+          headers:
+            Location:
+              description: "La locazione API dell'utente appena creato"
+              type: "string"
+          schema:
+              $ref: '#/definitions/User'
+        400:
+          description: Richiesta registrazione utente mal formattata
+          schema:
+            $ref: '#/definitions/Error'
+              
   /users/{id}:
     x-summary: Utente
     get:
-      summary: Ritorna l'utente attraverso ID
+      summary: Ricava un utente dal sistema
       produces:
         - application/json
       parameters:
@@ -45,26 +75,19 @@ paths:
           name: id
           required: true
           type: integer
-          format: int64
-          description: L'ID dell'utente che si vuole ricavare <br />
-                       L'ID corrisponde alla matricola dell'utente
+          description: L'ID dell'utente che si vuole ricavare
       responses:
         200:
-          description: Ritorna la rappresentazione del singolo utente identificato dal suo ID
+          description: Utente recuperato con successo
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/User'
-            example:
-                id: 123456
-                name: 'Mario'
-                surname: 'Rossi'
+            $ref: '#/definitions/User'
         404:
-          description: Utente non trovato
+          description: Utente richiesto non trovato
           schema:
               $ref: '#/definitions/Error'
+              
     put:
-      summary: Crea un nuovo utente nel sistema
+      summary: Aggiorna le informazioni di un utente del sistema
       consumes:
         - application/json
       parameters:
@@ -72,21 +95,18 @@ paths:
           name: id
           required: true
           type: integer
-          format: int64
-          description: L'ID dell'utente che si vuole ricavare <br />
-                       L'ID corrisponde alla matricola dell'utente
+          description: L'ID dell'utente di cui si vogliono aggiornare le informazioni
         - in: body
           name: user
           required: true
+          description: La copia aggiornata dell'utente con cui si vuole aggiornare l'utente nel sistema
           schema:
             $ref: '#/definitions/User'
-          description: La rappresentazione dell'utente che deve essere aggiunto al sistema
       responses:
-        201:
-          description: L'utente è stato aggiunto correttamente
         200:
           description: L'utente è stato aggiornato correttamente
-          
+        204:
+          description: Nessuna operazione effettuata / No content
     delete:
       summary: Elimina un utente dal sistema
       produces:
@@ -96,19 +116,15 @@ paths:
           name: id
           required: true
           type: integer
-          format: int64
-          description: L'ID dell'utente che si vuole eliminare <br />
-                       L'ID corrisponde alla matricola dell'utente
+          description: L'ID dell'utente che si intende eliminare
       responses:
         204:
-          description: L' utente è stato eliminato con successo
+          description: L'utente è stato eliminato con successo
         404:
-          description: Utente non trovato
+          description: L'utente specificato non è stato trovato nel sistema
           schema:
             $ref: '#/definitions/Error'
           
-          
-   
   /exams:
     x-summary: Lista degli esami
     get:
@@ -125,17 +141,18 @@ paths:
           examples:
             application/json:
               - id: 123456
-                name: 'Mario'
-                surname: 'Rossi'
+                Description: 'Reti'
+              - id: 123457
+                Description: 'Sistemi operativi'
         404:
-          description: Lista degli utenti non trovata
+          description: Esami non trovati
           schema:
               $ref: '#/definitions/ErrorExams'
     
   /exams/{id_ex}:
-    x-summary: Lista domande di un esame
+    x-summary: Esame
     get:
-      summary: Ricava la lista degli esami
+      summary: Visualizza informazioni esame
       produces:
         - application/json
       parameters:
@@ -151,13 +168,51 @@ paths:
           schema:
             type: array 
             items:
-              $ref: '#/definitions/Task'
+              $ref: '#/definitions/Exams'
+            example:
+              application/json:
+              id: 123456
+              Description: 'Ingegneria del software'
           
         404:
           description: Lista degli utenti non trovata
           schema:
               $ref: '#/definitions/ErrorExams'
+  
+  /taskgroup/{id}:
+    x-summary: Task group
+    get:
+      summary: Ritorna la lista delle task inserite nel task group selezionato
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID del Task group <br />
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            type: array 
+            items:
+              $ref: '#/definitions/Task'
+            example:
+              application / json:
+                - id: 123
+                  numeroDomanda: 5
+                  question: 'Chi ha scoperto l america?'
+                - id: 124
+                  numeroDomanda: 6
+                  question: 'Chi è stato il primo re di Roma?'
               
+        404:
+          description: Task group non trovato
+          schema:
+              $ref: '#/definitions/ErrorTaskGroup'
+  
   /exams/{iD}/task/{numeroDomanda}:
     x-summary: Task
     get:
@@ -259,19 +314,53 @@ definitions:
     properties:
       id:
         type: integer
-        format: int64
       name:
         type: string
       surname:
         type: string
     required:
-      - id
       - name
       - surname
     example:
-      id: 123456
+      id: 12
       name: 'Mario'
       surname: 'Rossi'
+  
+  Student:
+    title: student
+    type: object
+    properties:
+      id:
+        type: integer
+      matricola:
+        type: integer
+      user_url:
+        type: string
+    required:
+      - id
+      - matricola
+    example:
+      id: 12
+      student_id: 345678
+      user_url: '/users/12'
+  
+  Teacher:
+    title: teacher
+    type: object
+    properties:
+      id:
+        type: integer
+      department:
+        type: string
+      user_url:
+        type: string
+    required:
+      - id
+      - department
+    example:
+      id: 12
+      department: 'DISI'
+      user_url: '/users/12'
   
   Error:
       title: error
@@ -286,8 +375,7 @@ definitions:
         - message
       example:
         code: '404'
-        message: 'errore lettura utente'
-        
+        message: 'semplice messaggio di errore'
         
   Task:
     title: task
@@ -344,16 +432,31 @@ definitions:
       description: 'esame ingegneria del software 2'
   
   ErrorExams:
-      title: errorExams
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-      required:
-        - code
-        - message
-      example:
-        code: '404'
-        message: 'errore lettura esami'
+    title: errorExams
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+      - code
+      - message
+    example:
+      code: '404'
+      message: 'errore lettura esami'
+  
+  ErrorTaskGroup:
+    title: errorTaskGroup
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+      - code
+      - message
+    example:
+      code: '404'
+      message: 'errore lettura task'
