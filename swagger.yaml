@@ -1,22 +1,40 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: "GitWizards_Project API"
-  description: Definizione API per progettto ingegneria software 2
-  license:
-    name: MIT
-    url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
-host: polls.apiblueprint.org
-basePath: /
+  title: "Exam Manager"
+  description: API per un sistema di gestione esami
+basePath: /v1
 schemes:
 - https
+tags:
+  - name: Users
+    description: Tutto quel che riguarda la gestione degli utenti
 paths:
   /users:
-    x-summary: Gestione Utenti
     get:
       summary: Ricava la lista degli utenti del sistema
+      tags:
+        - Users
       produces:
         - application/json
+      parameters:
+        - in: query
+          name: role
+          required: false
+          type: string
+          description: Il ruolo utente con il quale si vuole filtrare la lista
+        - in: query
+          name: limit
+          required: false
+          type: integer
+          default: 25
+          description: Il numero massimo di entry / risultati che si vogliono nella risposta
+        - in: query
+          name: offset
+          required: false
+          type: integer
+          default: 0
+          description: L'offset rispetto a inizio lista da cui partire per ricavare i risultati 
       responses:
         200:
           description: Lista degli utenti recuperata con successo
@@ -26,17 +44,25 @@ paths:
               $ref: '#/definitions/User'
           examples:
             application/json:
-              - id: 12
-                name: 'Mario'
-                surname: 'Rossi'
-              - id: 13
-                name: 'Luigi'
-                surname: 'Bo'
+              - id: 1
+                firstname: 'Mario'
+                lastname: 'Rossi'
+                email: 'mario.rossi@example.com'
+                type: 'Student'
+                identification_number: 234567
+              - id: 2
+                firstname: 'Luca'
+                lastname: 'Giorgini'
+                email: 'luca.giorgini@example.com'
+                type: 'Student&Teacher'
+                identification_number: 890123
         404:
           description: Lista degli utenti non trovata
           schema:
-              $ref: '#/definitions/Error'
-              
+            $ref: '#/definitions/Error'
+            example:
+              code: '404'
+              message: 'Nessun utente trovato'
     post:
       summary: Registra un nuovo utente nel sistema
       consumes:
@@ -65,7 +91,6 @@ paths:
             $ref: '#/definitions/Error'
               
   /users/{id}:
-    x-summary: Utente
     get:
       summary: Ricava un utente dal sistema
       produces:
@@ -84,8 +109,7 @@ paths:
         404:
           description: Utente richiesto non trovato
           schema:
-              $ref: '#/definitions/Error'
-              
+            $ref: '#/definitions/Error'
     put:
       summary: Aggiorna le informazioni di un utente del sistema
       consumes:
@@ -126,7 +150,6 @@ paths:
             $ref: '#/definitions/Error'
           
   /exams:
-    x-summary: Lista degli esami
     get:
       summary: Ricava la lista degli esami
       produces:
@@ -148,9 +171,34 @@ paths:
           description: Esami non trovati
           schema:
               $ref: '#/definitions/ErrorExams'
-    
+    post:
+      summary: Aggiunge un nuovo esame nel sistema (solo docente)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: exam
+          required: true
+          description: L'esame che deve essere aggiunto al sistema
+          schema:
+            $ref: '#/definitions/Exams'
+      responses:
+        201:
+          description: Esame aggiunto con successo
+          headers:
+            Location:
+              description: "La locazione API dell'esame appena creato"
+              type: "string"
+          schema:
+              $ref: '#/definitions/Exams'
+        400:
+          description: Richiesta aggiunta esame mal formattata
+          schema:
+            $ref: '#/definitions/Error'
+              
   /exams/{id_ex}:
-    x-summary: Esame
     get:
       summary: Visualizza informazioni esame
       produces:
@@ -178,9 +226,83 @@ paths:
           description: Lista degli utenti non trovata
           schema:
               $ref: '#/definitions/ErrorExams'
-  
+    put:
+      summary: Modifica un esame esistente (solo docente)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id_ex
+          required: true
+          type: integer
+          format: int64
+          description: L'ID dell'esame <br />
+        - in: body
+          name: exam
+          required: true
+          description: La copia aggiornata dell'esame con cui si vuole aggiornare l'esame nel sistema
+          schema:
+            $ref: '#/definitions/Exams'
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            type: array 
+            items:
+              $ref: '#/definitions/Exams'
+            example:
+              application/json:
+              id: 123456
+              Description: 'Ingegneria del software'
+          
+        404:
+          description: Lista degli utenti non trovata
+          schema:
+              $ref: '#/definitions/ErrorExams'
+    delete:
+      summary: Elimina un esame dal sistema (solo docente)
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id_ex
+          required: true
+          type: integer
+          description: L'ID dell'esame che si intende eliminare
+      responses:
+        204:
+          description: L'esame è stato eliminato con successo
+        404:
+          description: L'esame specificato non è stato trovato nel sistema
+          schema:
+            $ref: '#/definitions/Error'
+  /taskgroup:
+    get:
+      summary: Ritorna la lista delle task group presenti nel sistema
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            type: array 
+            items:
+              $ref: '#/definitions/TaskGroup'
+            example:
+              application / json:
+                - id: 123
+                  numeroDomanda: 5
+                  question: 'Chi ha scoperto l america?'
+                - id: 124
+                  numeroDomanda: 6
+                  question: 'Chi è stato il primo re di Roma?'
+        404:
+          description: Task group non trovato
+          schema:
+              $ref: '#/definitions/ErrorTaskGroup'
   /taskgroup/{id}:
-    x-summary: Task group
     get:
       summary: Ritorna la lista delle task inserite nel task group selezionato
       produces:
@@ -196,25 +318,45 @@ paths:
         200:
           description: Operazione effettuata con successo
           schema:
-            type: array 
-            items:
-              $ref: '#/definitions/Task'
-            example:
-              application / json:
-                - id: 123
-                  numeroDomanda: 5
-                  question: 'Chi ha scoperto l america?'
-                - id: 124
-                  numeroDomanda: 6
-                  question: 'Chi è stato il primo re di Roma?'
-              
+            $ref: '#/definitions/TaskGroup'
         404:
           description: Task group non trovato
           schema:
               $ref: '#/definitions/ErrorTaskGroup'
-  
+    post:
+      summary: Aggiunge un nuovo gruppo di task nel sistema (solo docente)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID corrispondente al task group da aggiungere<br/>
+          
+        - in: body
+          name: taskgroup
+          required: true
+          description: Il task group che deve essere aggiunto al sistema
+          schema:
+            $ref: '#/definitions/TaskGroup'
+      responses:
+        201:
+          description: Task group creato con successo
+          headers:
+            Location:
+              description: "La locazione API dell'esame appena creato"
+              type: "string"
+          schema:
+              $ref: '#/definitions/TaskGroup'
+        400:
+          description: Richiesta aggiunta task group mal formattata
+          schema:
+            $ref: '#/definitions/Error'
   /exams/{iD}/task/{numeroDomanda}:
-    x-summary: Task
     get:
       summary: Ritorna task attraverso id esame e numero domanda
       produces:
@@ -314,68 +456,54 @@ definitions:
     properties:
       id:
         type: integer
-      name:
+        description: Il numero che identifica univocamente l'utente nel sistema
+      firstname:
         type: string
-      surname:
+        description: Il nome dell'utente
+      lastname:
         type: string
+        description: Il cognome dell'utente
+      email:
+        type: string
+        description: L'indirizzo e-mail dell'utente
+      type:
+        type: string
+        enum: [ Student, Teacher, Student&Teacher]
+        description: Identifica il tipo di utente. Può essere uno studente, un docente o entrambi.
+      identification_number:
+        type: integer
+        description: Il numero che identifica univocamente l'utente come studente o/e come docente.
+                     E' un numero relativo al badge universitario dell'utente.
     required:
-      - name
-      - surname
+      - firstname
+      - lastname
+      - email
+      - type
+      - identification_number
     example:
       id: 12
-      name: 'Mario'
-      surname: 'Rossi'
-  
-  Student:
-    title: student
-    type: object
-    properties:
-      id:
-        type: integer
-      matricola:
-        type: integer
-      user_url:
-        type: string
-    required:
-      - id
-      - matricola
-    example:
-      id: 12
-      student_id: 345678
-      user_url: '/users/12'
-  
-  Teacher:
-    title: teacher
-    type: object
-    properties:
-      id:
-        type: integer
-      department:
-        type: string
-      user_url:
-        type: string
-    required:
-      - id
-      - department
-    example:
-      id: 12
-      department: 'DISI'
-      user_url: '/users/12'
-  
+      firstname: 'Mario'
+      lastname: 'Rossi'
+      email: 'mario.rossi@example.com'
+      type: 'Student'
+      identification_number: 345678
+
   Error:
-      title: error
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-      required:
-        - code
-        - message
-      example:
-        code: '404'
-        message: 'semplice messaggio di errore'
+    title: error
+    type: object
+    properties:
+      code:
+        type: string
+        description: Il codice d'errore ritornato dal server web
+      message:
+        type: string
+        description: La descrizione dell'errore ritornato dal server web
+    required:
+      - code
+      - message
+    example:
+      code: '404'
+      message: 'Risorsa non trovata'
         
   Task:
     title: task
@@ -421,7 +549,7 @@ definitions:
         type: integer
         format: int64
       
-      Description:
+      description:
         type: string
     required:
       - iD
@@ -446,6 +574,26 @@ definitions:
       code: '404'
       message: 'errore lettura esami'
   
+  TaskGroup:
+    title: taskgroup
+    type: object
+    properties:
+      iD:
+        type: integer
+        format: int64
+      description:
+        type: string
+      tasks:
+        type: array
+        items: 
+          $ref: '#/definitions/Task'          
+    required:
+      - iD
+      - description
+    example:
+      id: 123456
+      description: 'Domande su javascript'
+      
   ErrorTaskGroup:
     title: errorTaskGroup
     type: object
