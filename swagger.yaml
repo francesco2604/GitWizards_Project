@@ -10,6 +10,16 @@ schemes:
 tags:
   - name: Users
     description: Tutto quel che riguarda la gestione degli utenti
+  - name: Exams
+    description: Tutto quello che riguarda i gruppi di task
+  - name: TaskGroup
+    description: Tutto quello che riguarda i gruppi di task
+  - name: Task
+    description: Tutto quello che riguarda i task
+  - name: Submission
+    description: Tutto quel che riguarda la gestione dell'invio dell'esame con le risposte date dall'utente
+  - name: PeerReview
+    description: Tutto quello che riguarda le peer review
 paths:
   /users:
     get:
@@ -20,7 +30,7 @@ paths:
         - application/json
       parameters:
         - in: query
-          name: role
+          name: type
           required: false
           type: string
           default: 'Student'
@@ -41,6 +51,12 @@ paths:
           name: user_id
           type: integer
           required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: string
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
       responses:
         200:
           description: Lista degli utenti recuperata con successo
@@ -63,12 +79,25 @@ paths:
                 type: 'Student&Teacher'
                 identification_number: 890123
         404:
-          description: Errore dutante il recupero della lista degli utenti
+          description: Errore durante il recupero della lista degli utenti
           schema:
             $ref: '#/definitions/Error'
-            
+          examples:
+            application/json:
+              code: '404'
+              message: 'Errore durante il recupero della lista di utenti'
+        403:
+          description: Non si hanno i permessi necessari per visualizzare questa risorsa
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per accesso alla risorsa'
     post:
       summary: Registra un nuovo utente nel sistema
+      tags:
+        - Users
       consumes:
         - application/json
       produces:
@@ -79,7 +108,12 @@ paths:
           required: true
           description: L'utente che deve essere aggiunto al sistema
           schema:
-            $ref: '#/definitions/User'
+            example:
+              firstname: 'Mario'
+              lastname: 'Rossi'
+              email: 'mario.rossi@example.com'
+              type: 'Student'
+              identification_number: 345678
       responses:
         201:
           description: Utente registrato nel sistema
@@ -93,13 +127,16 @@ paths:
           description: Richiesta registrazione utente mal formattata
           schema:
             $ref: '#/definitions/Error'
-            example:
+          examples:
+            application/json:
               code: '400'
               message: 'Errore durante la registrazione utente nel sistema'
               
   /users/{id}:
     get:
       summary: Ricava un utente dal sistema
+      tags:
+        - Users
       produces:
         - application/json
       parameters:
@@ -108,6 +145,16 @@ paths:
           required: true
           type: integer
           description: L'ID dell'utente che si vuole ricavare
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: string
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
       responses:
         200:
           description: Utente recuperato con successo
@@ -117,9 +164,25 @@ paths:
           description: Utente richiesto non trovato
           schema:
             $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '404'
+              message: 'Errore utente richiesto non trovato'
+        403:
+          description: Non si hanno i permessi necessari per visualizzare questa risorsa
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per accesso alla risorsa'
     put:
       summary: Aggiorna le informazioni di un utente del sistema
+      tags:
+        - Users
       consumes:
+        - application/json
+      produces:
         - application/json
       parameters:
         - in: path
@@ -133,13 +196,28 @@ paths:
           description: La copia aggiornata dell'utente con cui si vuole aggiornare l'utente nel sistema
           schema:
             $ref: '#/definitions/User'
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
       responses:
         200:
           description: L'utente è stato aggiornato correttamente
         204:
           description: Nessuna operazione effettuata / No content
+        403:
+          description: Non si hanno i permessi necessari per modificare questa risorsa
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per la modifica alla risorsa'
     delete:
       summary: Elimina un utente dal sistema
+      tags:
+        - Users
       produces:
         - application/json
       parameters:
@@ -148,6 +226,11 @@ paths:
           required: true
           type: integer
           description: L'ID dell'utente che si intende eliminare
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
       responses:
         204:
           description: L'utente è stato eliminato con successo
@@ -155,9 +238,23 @@ paths:
           description: L'utente specificato non è stato trovato nel sistema
           schema:
             $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '404'
+              message: 'Errore nella cancellazione. Utente richiesto non trovato'
+        403:
+          description: Non si hanno i permessi necessari per eliminare questa risorsa
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per eliminare la risorsa'
           
   /exams:
     get:
+      tags:
+        - Exams
       summary: Ricava la lista degli esami
       produces:
         - application/json
@@ -177,7 +274,7 @@ paths:
         404:
           description: Esami non trovati
           schema:
-              $ref: '#/definitions/ErrorExams'
+              $ref: '#/definitions/Error'
     post:
       summary: Aggiunge un nuovo esame nel sistema (solo docente)
       consumes:
@@ -232,7 +329,7 @@ paths:
         404:
           description: Lista degli utenti non trovata
           schema:
-              $ref: '#/definitions/ErrorExams'
+              $ref: '#/definitions/Error'
     put:
       summary: Modifica un esame esistente (solo docente)
       consumes:
@@ -267,7 +364,7 @@ paths:
         404:
           description: Lista degli utenti non trovata
           schema:
-              $ref: '#/definitions/ErrorExams'
+              $ref: '#/definitions/Error'
     delete:
       summary: Elimina un esame dal sistema (solo docente)
       produces:
@@ -285,8 +382,126 @@ paths:
           description: L'esame specificato non è stato trovato nel sistema
           schema:
             $ref: '#/definitions/Error'
+            
+  /task/{task_id}:
+    get:
+      tags:
+        - Task
+      summary: Riporta task
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID del Task <br />
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            $ref: '#/definitions/Task'
+            example:
+              id: 123456
+              numeroDomanda: 2
+              question: 'diametro della Terra?'
+              type: 1
+              answers:
+                - '9.742 km'
+                - '19.742 km'
+                - '12.742 km'
+              correctAnswer: '3'
+              studentAnswer: '1'
+        404:
+          description: Task group non trovato
+          schema:
+              $ref: '#/definitions/Error'
+    put:
+      summary: Modifica un task 
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID del task da modificare <br />
+        - in: body
+          name: task
+          required: true
+          description: La copia aggiornata del task che si vuole sostituire a quello presente nel sistema
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            type: array 
+            items:
+              $ref: '#/definitions/Task'
+            
+          
+        404:
+          description: Task  non trovato
+          schema:
+              $ref: '#/definitions/Error'
+              
+    delete:
+          summary: Elimina un task
+          produces: 
+            - application/json
+          parameters:
+            - in: path
+              name: task_id
+              required: true
+              type: integer
+              format: int64
+              description: L'ID corrispondente al task  che si vuole eliminare<br/>
+          responses:
+            204:
+              description: Il task  è stato eliminato con successo
+            404:
+              description: Il task non è stato trovato
+              schema:
+                $ref: '#/definitions/Error'                 
+      
+  /task:
+    post:
+      summary: Aggiunge un nuovo task nel sistema 
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: task
+          required: true
+          description: Id domanda da creare
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        201:
+          description: Task creato con successo
+          headers:
+            Location:
+              description: "La locazione API del task appena creato"
+              type: "string"
+          schema:
+              $ref: '#/definitions/Task'
+        400:
+          description: Richiesta aggiunta task mal formattata
+          schema:
+            $ref: '#/definitions/Error'
+    
+            
   /taskgroup:
     get:
+      tags:
+        - Taskgroup
       summary: Ritorna la lista delle task group presenti nel sistema (solo docente)
       produces:
         - application/json
@@ -298,29 +513,36 @@ paths:
             items:
               $ref: '#/definitions/TaskGroup'
             example:
-              application / json:
-                - id: 123
-                  description: 'Domande di storia'
-                  tasks:
-                  - id: 111
-                    numeroDomanda: 5
-                    question: 'Chi è stato il primo re di roma?'
+              - id: 123
+                description: 'Domande di storia'
+                tasks:
+                - id: 111
+                  numeroDomanda: 5
+                  question: 'Chi è stato il primo re di Roma?'
+                  type: 1
+                  answers: 
+                    - 'Romolo'
+                    - 'Enea'
+                    - 'Ulisse'
+                  correctAnswer: '1'
+                  studentAnswer: '3'
+              - id: 124
+                description: 'Domande di geografia'
+                tasks:
+                  - id: 222
+                    numeroDomanda: 7
+                    question: 'Qual è la capitale dell Italia?'
                     type: 1
-                    answers: 'Romolo;Enea;Ulisse'
-                    correctAnswer: 1
-                - id: 124
-                  description: 'Domande di geografia'
-                  tasks:
-                    - id: 222
-                      numeroDomanda: 7
-                      question: 'Qual è la capitale dell Italia?'
-                      type: 1
-                      answers: 'Milano;Roma;Napoli'
-                      correctAnswer: 2
+                    answers: 
+                      - 'Milano'
+                      - 'Roma'
+                      - 'Napoli'
+                    correctAnswer: '2'
+                    studentAnswer: '2'
         404:
           description: Task group non trovato
           schema:
-              $ref: '#/definitions/ErrorTaskGroup'
+              $ref: '#/definitions/Error'
     post:
       summary: Aggiunge un nuovo gruppo di task nel sistema (solo docente)
       consumes:
@@ -363,7 +585,7 @@ paths:
         200:
           description: Operazione effettuata con successo
           schema:
-            $ref: '#/definitions/Task'
+            $ref: '#/definitions/TaskGroup'
         404:
           description: Task group non trovato
           schema:
@@ -395,23 +617,28 @@ paths:
             items:
               $ref: '#/definitions/TaskGroup'
             example:
-              application/json:
               id: 123456
               Description: 'Domande su javascript'
               tasks:
                 - id: 111
                   numeroDomanda: 1
-                  question: "Dove viene utilizzato principalmente javascript?"
+                  question: 'Dove viene utilizzato principalmente javascript?'
                   type: 2
+                  studentAnswer: 'Non lo so'
                 - id: 222
                   numeroDomanda: 2
-                  question: "In quale tag html si mette il codice javascript?"
+                  question: 'In quale tag html si mette il codice javascript?'
                   type: 1
-                  answers: '<scripting>;<js>;<javascript>;<script>'
-                  correctAnswer: 4
+                  answers: 
+                    - '<scripting>'
+                    - '<js>'
+                    - '<javascript>'
+                    - '<script>'
+                  correctAnswer: '4'
+                  studentAnswer: '4'
           
         404:
-          description: Lista degli utenti non trovata
+          description: Task group non trovato
           schema:
               $ref: '#/definitions/Error'
     delete:
@@ -432,99 +659,195 @@ paths:
           description: Il task group non è stato trovato
           schema:
             $ref: '#/definitions/Error'          
-  /exams/{iD}/task/{numeroDomanda}:
+            
+  /submissions:
+    post:
+      summary: Invia le risposte di un esame assegnato dal docente
+      tags:
+        - Submission
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: string
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
+        - in: body
+          name: exam_submission
+          required: true
+          description: Le risposte di un esame assegnato dal docente
+          schema:
+            example:
+              exam_id: 1
+              tasks:
+                - id: 123
+                  studentAnswer: '2'
+                - id: 456
+                  studentAnswer: 'Hitler invase la Polonia'
+                - id: 789
+                  studentAnswer: '1;3'
+      responses:
+        201:
+          description: Risposte dell'esame inviate correttamente al sistema
+        400:
+          description: Errore nell'invio delle risposte al sistema. Risposte mal formattate
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '400'
+              message: 'Errore durante invio risposte esame al sistema'
+        403:
+          description: Errore. Non si hanno i permessi necessari per fare submissione della risorsa
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per il submission della risorsa'
+  
+    
+
+  /peerreview:
     get:
-      summary: Ritorna task attraverso id esame e numero domanda
+      summary: restituisce tutte le peer review assegnate  poi poterle valutare
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Peer review ottenute con sucesso
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PeerReview'
+            example:
+              - id: 1233
+                task:
+                  id: 123456
+                  numeroDomanda: 2
+                  question: 'diametro del sole?'
+                  type: 1
+                  answers: '90.742 km;190.742 km;120.742 km'
+                  correctAnswer: 3
+                  studentanswer: 1
+                mark: 30
+                description: 'Lo studente ha sbagliato completamente la domanda'
+              - id: 1233
+                task:
+                  id: 123456
+                  numeroDomanda: 2
+                  question: 'diametro della Terra?'
+                  type: 1
+                  answers: '9.742 km;19.742 km;12.742 km'
+                  correctAnswer: 3
+                  studentanswer: 1
+                mark: 30
+                description: 'Lo studente ha fatto la domanda perfettamente'
+
+        404:
+          description: Task group non trovato
+          schema:
+              $ref: '#/definitions/Error'
+        403:
+          description: Non si hanno i permessi necessari per visualizzare le peer review
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per accesso alla risorsa' 
+    post:
+      tags:
+        - PeerReview
+      summary: Aggiunge un nuova peerreview nel sistema 
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: string
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
+        - in: body
+          name: task
+          required: true
+          description: peerreview  da inviare
+          schema:
+            $ref: '#/definitions/PeerReview'
+      responses:
+        201:
+          description: Peerreview creato con successo
+        400:
+          description: Errore, peerreview mal formattata
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '400'
+              message: 'Errore durante invio peerreview al sistema'
+              
+        403:
+          description: Errore. Non si hanno i permessi necessari per fare submissione della risorsa
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per il submission della risorsa'
+  /peerreview/{id}:
+    put:
+      summary: Esegue una peer review (studente) o ne corregge una eseguita (docente)
+      tags:
+        - PeerReview
+      consumes:
+        - application/json
       produces:
         - application/json
       parameters:
         - in: path
-          name: iD
+          name: id
           required: true
           type: integer
-          format: int64
-          description: L'ID dell'esame <br />
-                       
-        - in: path
-          name: numeroDomanda
-          required: true
-          type: integer
-          format: int64
-          description: Numero corrispondente alla domanda che si vuole cercare <br/>
-                                 
-      responses:
-        200:
-          description: Ritorna dammanda corrispondente 
-          schema:
-            type: object
-            items:
-              $ref: '#/definitions/Task'
-            example:
-                id: 123456
-                numeroDomanda: 2
-                quuestion: 'Diametro Terra?'
-        404:
-          description: Domanda non trovata
-          schema:
-              $ref: '#/definitions/ErrorTask'
-    put:
-      summary: Crea una nuova domanda in un esame
-      consumes:
-        - application/json
-      parameters:
-        - in: path
-          name: iD
-          required: true
-          type: integer
-          format: int64
-          description: L'ID corrispondente all'esame in cui si vuole aggiungere una domanda<br/>
-          
-        - in: path
-          name: numeroDomanda
-          required: true
-          type: integer
-          format: int64
-          description: Numero domanda<br/>
-                                   
+          description: L'ID della peer review di cui si vogliono aggiornare le informazioni
         - in: body
-          name: task
+          name: peerreview
           required: true
+          description: La copia aggiornata della peer review con cui si vuole aggiornare quella presente nel sistema
           schema:
-            $ref: '#/definitions/Task'
-          description: La rappresentazione della domanda che si vuole aggiungere
+            $ref: '#/definitions/PeerReview'
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
       responses:
-        201:
-          description: La domanda è stata aggiunta correttamentw
         200:
-          description: La domanda è stata è stata aggiornata correttamente
-          
-    delete:
-      summary: Elimina una domanda da un esame
-      produces: 
-        - application/json
-      parameters:
-        - in: path
-          name: iD
-          required: true
-          type: integer
-          format: int64
-          description: L'ID corrispondente all'esame in cui si vuole aggiungere una domanda<br/>
-          
-        - in: path
-          name: numeroDomanda
-          required: true
-          type: integer
-          format: int64
-          description: Numero domanda<br/>
-                                   
-      responses:
+          description: La peer review è stata aggiornata correttamente
         204:
-          description: La domanda è stata eliminata con successo
-        404:
-          description: La domanda non è stata trovata
+          description: Nessuna operazione effettuata / No content
+        403:
+          description: Non si hanno i permessi necessari per modificare questa risorsa
           schema:
-            $ref: '#/definitions/ErrorTask'          
-          
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '403'
+              message: 'Accesso negato. Mancanza di permessi per la modifica alla risorsa'
 definitions:
   User:
     title: user
@@ -580,52 +903,6 @@ definitions:
     example:
       code: '404'
       message: 'Risorsa non trovata'
-        
-  Task:
-    title: task
-    type: object
-    properties:
-      iD:
-        type: integer
-        format: int64
-      numeroDomanda:
-        type: integer
-        format: int64
-      question:
-        type: string
-      answers:
-        type: integer
-        format: int64
-      correctAnswer:
-        type: integer
-        format: int64
-    required:
-      - iD
-      - numeroDomanda
-      - question
-      - type
-    example:
-      id: 123456
-      numeroDomanda: 2
-      question: 'diametro della Terra?'
-      type: 1
-      answers: '9.742 km;19.742 km;12.742 km'
-      correctAnswer: 3
-  
-  ErrorTask:
-      title: errorTask
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-      required:
-        - code
-        - message
-      example:
-        code: '404'
-        message: 'errore lettura doamnda'        
              
   Exams:
     title: esame
@@ -645,20 +922,45 @@ definitions:
       id: 123456
       description: 'esame ingegneria del software 2'
   
-  ErrorExams:
-    title: errorExams
+  Task:
+    title: task
     type: object
     properties:
-      code:
+      iD:
+        type: integer
+        format: int64
+      numeroDomanda:
+        type: integer
+        format: int64
+      question:
         type: string
-      message:
+      type:
+        type: integer
+        format: int64
+      answers:
+        type: array
+        items: 
+          type: string
+      correctAnswer:
+        type: string
+      studentAnswer:
         type: string
     required:
-      - code
-      - message
+      - iD
+      - numeroDomanda
+      - question
+      - type
     example:
-      code: '404'
-      message: 'errore lettura esami'
+      id: 123456
+      numeroDomanda: 2
+      question: 'diametro della Terra?'
+      type: 1
+      answers:
+        - '9.742 km'
+        - '19.742 km'
+        - '12.742 km'
+      correctAnswer: '3'
+      studentAnswer: '1'
   
   TaskGroup:
     title: taskgroup
@@ -678,19 +980,59 @@ definitions:
       - description
     example:
       id: 123456
-      description: 'Domande su javascript'
-      
-  ErrorTaskGroup:
-    title: errorTaskGroup
+      description: 'Domande di storia'
+      tasks:
+        - id: 123
+          numeroDomanda: 7
+          question: 'Di che nazionalità era Napoleone Bonaparte?'
+          type: 1
+          answers: 
+            - 'Inglese'
+            - 'Francese'
+            - 'Spagnola'
+          correctAnswer: '2'
+          studentAnswer: '2'
+        - id: 456
+          numeroDomanda: 8
+          question: 'Spiega come è iniziata la seconda guerra mondiale'
+          type: 2
+          studentAnswer: 'Hitler invase la Polonia'
+  PeerReview:
+    title: peerreviews
     type: object
     properties:
-      code:
+      id:
+        type: integer
+      examid:
+        type: integer
+      task:
+        type: object
+        $ref: '#/definitions/Task'
+      studentanswer:
         type: string
-      message:
+      mark:
+        type: integer
+      description:
         type: string
     required:
-      - code
-      - message
+      - id
+      - idtask
+      - studentanswer
+      - mark
     example:
-      code: '404'
-      message: 'errore lettura task'
+      id: 001
+      task: 
+        application/json:
+          id: 123456
+          numeroDomanda: 2
+          question: 'diametro della Terra?'
+          type: 1
+          answers:
+            - '9.742 km'
+            - '19.742 km'
+            - '12.742 km'
+          correctAnswer: '3'
+          studentAnswer: '3'
+      studentanswer: '3'
+      mark: 30
+      description: 'The task is perfect as it is'
