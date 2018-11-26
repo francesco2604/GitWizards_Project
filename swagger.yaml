@@ -548,10 +548,6 @@ paths:
                       - 'Napoli'
                     correctAnswer: '2'
                     studentAnswer: '2'
-        404:
-          description: Task group non trovato
-          schema:
-              $ref: '#/definitions/Error'
         403:
           description: Errore. Non si hanno i permessi necessari per visualizzare i task group
           schema:
