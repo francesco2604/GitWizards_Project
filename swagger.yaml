@@ -19,7 +19,7 @@ tags:
   - name: Users
     description: Tutto quel che riguarda la gestione degli utenti
   - name: Exams
-    description: Tutto quello che riguarda i gruppi di task
+    description: Tutto quello che riguarda gli esami
   - name: TaskGroup
     description: Tutto quello che riguarda i gruppi di task
   - name: Task
@@ -284,6 +284,8 @@ paths:
           schema:
               $ref: '#/definitions/Error'
     post:
+      tags:
+        - Exams
       summary: Aggiunge un nuovo esame nel sistema (solo docente)
       consumes:
         - application/json
@@ -312,6 +314,8 @@ paths:
               
   /exams/{id_ex}:
     get:
+      tags:
+        - Exams
       summary: Visualizza informazioni esame
       produces:
         - application/json
@@ -329,16 +333,14 @@ paths:
             type: array 
             items:
               $ref: '#/definitions/Exams'
-            example:
-              application/json:
-              id: 123456
-              Description: 'Ingegneria del software'
           
         404:
           description: Lista degli utenti non trovata
           schema:
               $ref: '#/definitions/Error'
     put:
+      tags:
+        - Exams
       summary: Modifica un esame esistente (solo docente)
       consumes:
         - application/json
@@ -364,16 +366,13 @@ paths:
             type: array 
             items:
               $ref: '#/definitions/Exams'
-            example:
-              application/json:
-              id: 123456
-              Description: 'Ingegneria del software'
-          
         404:
           description: Lista degli utenti non trovata
           schema:
               $ref: '#/definitions/Error'
     delete:
+      tags:
+        - Exams
       summary: Elimina un esame dal sistema (solo docente)
       produces:
         - application/json
@@ -426,6 +425,8 @@ paths:
           schema:
               $ref: '#/definitions/Error'
     put:
+      tags:
+        - Task
       summary: Modifica un task 
       consumes:
         - application/json
@@ -448,37 +449,37 @@ paths:
         200:
           description: Operazione effettuata con successo
           schema:
-            type: array 
-            items:
-              $ref: '#/definitions/Task'
-            
-          
+            $ref: '#/definitions/Task'
         404:
           description: Task  non trovato
           schema:
               $ref: '#/definitions/Error'
               
     delete:
-          summary: Elimina un task
-          produces: 
-            - application/json
-          parameters:
-            - in: path
-              name: task_id
-              required: true
-              type: integer
-              format: int64
-              description: L'ID corrispondente al task  che si vuole eliminare<br/>
-          responses:
-            204:
-              description: Il task  è stato eliminato con successo
-            404:
-              description: Il task non è stato trovato
-              schema:
-                $ref: '#/definitions/Error'                 
+      tags:
+        - Task
+      summary: Elimina un task
+      produces: 
+        - application/json
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          type: integer
+          format: int64
+          description: L'ID corrispondente al task  che si vuole eliminare<br/>
+      responses:
+        204:
+          description: Il task  è stato eliminato con successo
+        404:
+          description: Il task non è stato trovato
+          schema:
+            $ref: '#/definitions/Error'                 
       
   /task:
     post:
+      tags:
+        - Task
       summary: Aggiunge un nuovo task nel sistema 
       consumes:
         - application/json
@@ -509,7 +510,7 @@ paths:
   /taskgroup:
     get:
       tags:
-        - Taskgroup
+        - TaskGroup
       summary: Ritorna la lista delle task group presenti nel sistema (solo docente)
       produces:
         - application/json
@@ -551,7 +552,13 @@ paths:
           description: Task group non trovato
           schema:
               $ref: '#/definitions/Error'
+        403:
+          description: Errore. Non si hanno i permessi necessari per visualizzare i task group
+          schema:
+            $ref: '#/definitions/Error'
     post:
+      tags:
+        - TaskGroup
       summary: Aggiunge un nuovo gruppo di task nel sistema (solo docente)
       consumes:
         - application/json
@@ -563,7 +570,9 @@ paths:
           required: true
           description: Il task group che deve essere aggiunto al sistema
           schema:
-            $ref: '#/definitions/TaskGroup'
+             example: 
+              id: 123456,
+              description: "Domande di storia"
       responses:
         201:
           description: Task group creato con successo
@@ -572,13 +581,21 @@ paths:
               description: "La locazione API del task group appena creato"
               type: "string"
           schema:
-              $ref: '#/definitions/TaskGroup'
+            example: 
+              id: 123456,
+              description: "Domande di storia"
         400:
           description: Richiesta aggiunta task group mal formattata
           schema:
             $ref: '#/definitions/Error'
+        403:
+          description: Errore. Non si hanno i permessi necessari per creare un task group
+          schema:
+            $ref: '#/definitions/Error'
   /taskgroup/{id}:
     get:
+      tags:
+        - TaskGroup
       summary: Ritorna la lista delle task inserite nel task group selezionato (solo docente)
       produces:
         - application/json
@@ -598,7 +615,13 @@ paths:
           description: Task group non trovato
           schema:
               $ref: '#/definitions/Error'
+        403:
+          description: Errore. Non si hanno i permessi necessari per visualizzare un task group
+          schema:
+            $ref: '#/definitions/Error'
     put:
+      tags:
+        - TaskGroup
       summary: Modifica un task group esistente (solo docente)
       consumes:
         - application/json
@@ -649,7 +672,13 @@ paths:
           description: Task group non trovato
           schema:
               $ref: '#/definitions/Error'
+        403:
+          description: Errore. Non si hanno i permessi necessari per modificare un task group
+          schema:
+            $ref: '#/definitions/Error'
     delete:
+      tags:
+        - TaskGroup
       summary: Elimina un task group (solo docente)
       produces: 
         - application/json
@@ -666,7 +695,11 @@ paths:
         404:
           description: Il task group non è stato trovato
           schema:
-            $ref: '#/definitions/Error'          
+            $ref: '#/definitions/Error' 
+        403:
+          description: Errore. Non si hanno i permessi necessari per eliminare un task group
+          schema:
+            $ref: '#/definitions/Error'
             
   /submissions:
     post:
@@ -726,6 +759,8 @@ paths:
 
   /peerreview:
     get:
+      tags:
+        - PeerReview
       summary: restituisce tutte le peer review assegnate  poi poterle valutare
       produces:
         - application/json
@@ -800,6 +835,19 @@ paths:
       responses:
         201:
           description: Peerreview creato con successo
+          schema:
+            example:
+              id: 1233
+              task:
+                id: 123456
+                numeroDomanda: 2
+                question: 'diametro del sole?'
+                type: 1
+                answers: '90.742 km;190.742 km;120.742 km'
+                correctAnswer: 3
+                studentanswer: 1
+              mark: 30
+              description: 'Lo studente ha sbagliato completamente la domanda'
         400:
           description: Errore, peerreview mal formattata
           schema:
@@ -846,6 +894,19 @@ paths:
       responses:
         200:
           description: La peer review è stata aggiornata correttamente
+          schema:
+            example:
+              id: 1233
+              task:
+                id: 123456
+                numeroDomanda: 2
+                question: 'diametro del sole?'
+                type: 1
+                answers: '90.742 km;190.742 km;120.742 km'
+                correctAnswer: 3
+                studentanswer: 1
+              mark: 30
+              description: 'Lo studente ha sbagliato completamente la domanda'
         204:
           description: Nessuna operazione effettuata / No content
         403:
@@ -938,19 +999,9 @@ definitions:
     required:
       - iD
       - description
-
-    example:
-      id: 123456
-      description: 'esame ingegneria del software 2'
-      deadline: 3600
-      numerotasks: 2
-      teacher:
-        id: 12
-        firstname: 'Mario'
-        lastname: 'Rossi'
-        email: 'mario.rossi@example.com'
-        type: 'Student'
-        identification_number: 345678
+      - deadline
+      - numerotask
+      - teacher
   
   Task:
     title: task
@@ -1044,11 +1095,14 @@ definitions:
         type: integer
       description:
         type: string
+      deadline:
+        type: integer
     required:
       - id
       - idtask
       - studentanswer
       - mark
+      - deadline
     example:
       id: 001
       task: 
@@ -1066,3 +1120,4 @@ definitions:
       studentanswer: '3'
       mark: 30
       description: 'The task is perfect as it is'
+      deadline: 900
