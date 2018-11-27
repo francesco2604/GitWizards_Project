@@ -264,13 +264,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Exams'
-          examples:
-            application/json:
-              - id: 123456
-                Description: 'Reti'
-              - id: 123457
-                Description: 'Sistemi operativi'
+              $ref: '#/definitions/Exam'
         404:
           description: Esami non trovati
           schema:
@@ -289,7 +283,53 @@ paths:
           required: true
           description: L'esame che deve essere aggiunto al sistema
           schema:
-            $ref: '#/definitions/Exams'
+            example:
+              description: esame di valutazione conoscenze generali
+              deadline: 3600
+              numerotasks: 2
+              teacher: {
+                id: 32,
+                firstname: 'Marco',
+                lastname: 'Giunta',
+                email: 'marco.giunta@example.com',
+                type: 'Teacher',
+                identification_number: 908765
+              }
+              tasks: [
+                {
+                  id: 123,
+                  numeroDomanda: 7,
+                  question: 'Di che nazionalità era Napoleone Bonaparte?',
+                  type: 1,
+                  answers: {
+                    'Inglese',
+                    'Francese',
+                    'Spagnola'
+                  }
+                },
+                {
+                  id: 456,
+                  numeroDomanda: 2,
+                  question: 'diametro della Terra?',
+                  type: 1,
+                  answers: {
+                    '9.742 km',
+                    '19.742 km',
+                    '12.742 km'
+                  },
+                  correctAnswer: '3'
+                }
+              ]
+              students: [
+                {
+                  id: 12,
+                  firstname: 'Mario',
+                  lastname: 'Rossi',
+                  email: 'mario.rossi@example.com',
+                  type: 'Student',
+                  identification_number: 345678
+                }
+              ]
       responses:
         201:
           description: Esame aggiunto con successo
@@ -298,7 +338,7 @@ paths:
               description: "La locazione API dell'esame appena creato"
               type: "string"
           schema:
-              $ref: '#/definitions/Exams'
+              $ref: '#/definitions/Exam'
         400:
           description: Richiesta aggiunta esame mal formattata
           schema:
@@ -316,7 +356,6 @@ paths:
           name: id_ex
           required: true
           type: integer
-          format: int64
           description: L'ID dell'esame <br />
       responses:
         200:
@@ -324,10 +363,9 @@ paths:
           schema:
             type: array 
             items:
-              $ref: '#/definitions/Exams'
-          
+              $ref: '#/definitions/Exam'
         404:
-          description: Lista degli utenti non trovata
+          description: Esame non trovato
           schema:
               $ref: '#/definitions/Error'
     put:
@@ -343,23 +381,69 @@ paths:
           name: id_ex
           required: true
           type: integer
-          format: int64
           description: L'ID dell'esame <br />
         - in: body
           name: exam
           required: true
           description: La copia aggiornata dell'esame con cui si vuole aggiornare l'esame nel sistema
           schema:
-            $ref: '#/definitions/Exams'
+            example:
+              id: 1
+              description: esame di valutazione conoscenze generali
+              deadline: 3600
+              numerotasks: 2
+              teacher: {
+                id: 32,
+                firstname: 'Marco',
+                lastname: 'Giunta',
+                email: 'marco.giunta@example.com',
+                type: 'Teacher',
+                identification_number: 908765
+              }
+              tasks: [
+                {
+                  id: 123,
+                  numeroDomanda: 7,
+                  question: 'Di che nazionalità era Napoleone Bonaparte?',
+                  type: 1,
+                  answers: {
+                    'Inglese',
+                    'Francese',
+                    'Spagnola'
+                  }
+                },
+                {
+                  id: 456,
+                  numeroDomanda: 2,
+                  question: 'diametro della Terra?',
+                  type: 1,
+                  answers: {
+                    '9.742 km',
+                    '19.742 km',
+                    '12.742 km'
+                  },
+                  correctAnswer: '3'
+                }
+              ]
+              students: [
+                {
+                  id: 12,
+                  firstname: 'Mario',
+                  lastname: 'Rossi',
+                  email: 'mario.rossi@example.com',
+                  type: 'Student',
+                  identification_number: 345678
+                }
+              ]
       responses:
         200:
           description: Operazione effettuata con successo
           schema:
             type: array 
             items:
-              $ref: '#/definitions/Exams'
+              $ref: '#/definitions/Exam'
         404:
-          description: Lista degli utenti non trovata
+          description: Errore nella modifica dell'esame
           schema:
               $ref: '#/definitions/Error'
     delete:
@@ -394,24 +478,12 @@ paths:
           name: task_id
           required: true
           type: integer
-          format: int64
           description: L'ID del Task <br />
       responses:
         200:
           description: Operazione effettuata con successo
           schema:
             $ref: '#/definitions/Task'
-            example:
-              id: 123456
-              numeroDomanda: 2
-              question: 'diametro della Terra?'
-              type: 1
-              answers:
-                - '9.742 km'
-                - '19.742 km'
-                - '12.742 km'
-              correctAnswer: '3'
-              studentAnswer: '1'
         404:
           description: Task group non trovato
           schema:
@@ -497,7 +569,6 @@ paths:
           description: Richiesta aggiunta task mal formattata
           schema:
             $ref: '#/definitions/Error'
-    
             
   /taskgroup:
     get:
@@ -518,7 +589,6 @@ paths:
                 description: 'Domande di storia'
                 tasks:
                 - id: 111
-                  numeroDomanda: 5
                   question: 'Chi è stato il primo re di Roma?'
                   type: 1
                   answers: 
@@ -526,12 +596,10 @@ paths:
                     - 'Enea'
                     - 'Ulisse'
                   correctAnswer: '1'
-                  studentAnswer: '3'
               - id: 124
                 description: 'Domande di geografia'
                 tasks:
                   - id: 222
-                    numeroDomanda: 7
                     question: 'Qual è la capitale dell Italia?'
                     type: 1
                     answers: 
@@ -539,7 +607,6 @@ paths:
                       - 'Roma'
                       - 'Napoli'
                     correctAnswer: '2'
-                    studentAnswer: '2'
         403:
           description: Errore. Non si hanno i permessi necessari per visualizzare i task group
           schema:
@@ -547,7 +614,7 @@ paths:
     post:
       tags:
         - TaskGroup
-      summary: Aggiunge un nuovo gruppo di task nel sistema (solo docente)
+      summary: Aggiunge un nuovo task group al sistema (solo docente)
       consumes:
         - application/json
       produces:
@@ -558,8 +625,7 @@ paths:
           required: true
           description: Il task group che deve essere aggiunto al sistema
           schema:
-             example: 
-              id: 123456,
+            example:
               description: "Domande di storia"
       responses:
         201:
@@ -580,11 +646,12 @@ paths:
           description: Errore. Non si hanno i permessi necessari per creare un task group
           schema:
             $ref: '#/definitions/Error'
+            
   /taskgroup/{id}:
     get:
       tags:
         - TaskGroup
-      summary: Ritorna la lista delle task inserite nel task group selezionato (solo docente)
+      summary: Ritorna il task group selezionato (solo docente)
       produces:
         - application/json
       parameters:
@@ -592,13 +659,31 @@ paths:
           name: id
           required: true
           type: integer
-          format: int64
           description: L'ID del Task group <br />
       responses:
         200:
           description: Operazione effettuata con successo
           schema:
-            $ref: '#/definitions/TaskGroup'
+            example:
+              id: 124
+              description: 'Domande di geografia'
+              tasks:
+                - id: 222
+                  question: 'Qual è la capitale dell Italia?'
+                  type: 1
+                  answers: 
+                    - 'Milano'
+                    - 'Roma'
+                    - 'Napoli'
+                  correctAnswer: '2'
+                - id: 222
+                  question: 'Qual è la capitale dell Italia?'
+                  type: 1
+                  answers: 
+                    - 'Milano'
+                    - 'Roma'
+                    - 'Napoli'
+                  correctAnswer: '2'
         404:
           description: Task group non trovato
           schema:
@@ -620,32 +705,20 @@ paths:
           name: id
           required: true
           type: integer
-          format: int64
           description: L'ID del task group <br />
         - in: body
           name: taskgroup
           required: true
           description: La copia aggiornata del task group che si vuole sostituire a quello presente nel sistema
           schema:
-            $ref: '#/definitions/TaskGroup'
-      responses:
-        200:
-          description: Operazione effettuata con successo
-          schema:
-            type: array 
-            items:
-              $ref: '#/definitions/TaskGroup'
             example:
               id: 123456
               Description: 'Domande su javascript'
               tasks:
                 - id: 111
-                  numeroDomanda: 1
                   question: 'Dove viene utilizzato principalmente javascript?'
                   type: 2
-                  studentAnswer: 'Non lo so'
                 - id: 222
-                  numeroDomanda: 2
                   question: 'In quale tag html si mette il codice javascript?'
                   type: 1
                   answers: 
@@ -654,8 +727,26 @@ paths:
                     - '<javascript>'
                     - '<script>'
                   correctAnswer: '4'
-                  studentAnswer: '4'
-          
+      responses:
+        200:
+          description: Operazione effettuata con successo
+          schema:
+            example:
+              id: 123456
+              Description: 'Domande su javascript'
+              tasks:
+                - id: 111
+                  question: 'Dove viene utilizzato principalmente javascript?'
+                  type: 2
+                - id: 222
+                  question: 'In quale tag html si mette il codice javascript?'
+                  type: 1
+                  answers: 
+                    - '<scripting>'
+                    - '<js>'
+                    - '<javascript>'
+                    - '<script>'
+                  correctAnswer: '4'
         404:
           description: Task group non trovato
           schema:
@@ -675,7 +766,6 @@ paths:
           name: id
           required: true
           type: integer
-          format: int64
           description: L'ID corrispondente al task group che si vuole eliminare<br/>
       responses:
         204:
@@ -743,13 +833,11 @@ paths:
               code: '403'
               message: 'Accesso negato. Mancanza di permessi per il submission della risorsa'
   
-    
-
   /peerreview:
     get:
       tags:
         - PeerReview
-      summary: restituisce tutte le peer review assegnate  poi poterle valutare
+      summary: restituisce tutte le peer review
       produces:
         - application/json
       responses:
@@ -784,7 +872,7 @@ paths:
                 description: 'Lo studente ha fatto la domanda perfettamente'
 
         404:
-          description: Task group non trovato
+          description: Peer review non trovata
           schema:
               $ref: '#/definitions/Error'
         403:
@@ -819,7 +907,18 @@ paths:
           required: true
           description: peerreview  da inviare
           schema:
-            $ref: '#/definitions/PeerReview'
+            example:
+              task:
+                id: 123456
+                numeroDomanda: 2
+                question: 'diametro del sole?'
+                type: 1
+                answers: 
+                  - '90.742 km'
+                  - '190.742 km'
+                  - '120.742 km'
+                correctAnswer: 3
+              deadline: 900
       responses:
         201:
           description: Peerreview creato con successo
@@ -831,11 +930,12 @@ paths:
                 numeroDomanda: 2
                 question: 'diametro del sole?'
                 type: 1
-                answers: '90.742 km;190.742 km;120.742 km'
+                answers: 
+                  - '90.742 km'
+                  - '190.742 km'
+                  - '120.742 km'
                 correctAnswer: 3
-                studentanswer: 1
-              mark: 30
-              description: 'Lo studente ha sbagliato completamente la domanda'
+              deadline: 900
         400:
           description: Errore, peerreview mal formattata
           schema:
@@ -844,7 +944,6 @@ paths:
             application/json:
               code: '400'
               message: 'Errore durante invio peerreview al sistema'
-              
         403:
           description: Errore. Non si hanno i permessi necessari per fare submissione della risorsa
           schema:
@@ -853,6 +952,7 @@ paths:
             application/json:
               code: '403'
               message: 'Accesso negato. Mancanza di permessi per il submission della risorsa'
+  
   /peerreview/{id}:
     put:
       summary: Esegue una peer review (studente) o ne corregge una eseguita (docente)
@@ -883,18 +983,7 @@ paths:
         200:
           description: La peer review è stata aggiornata correttamente
           schema:
-            example:
-              id: 1233
-              task:
-                id: 123456
-                numeroDomanda: 2
-                question: 'diametro del sole?'
-                type: 1
-                answers: '90.742 km;190.742 km;120.742 km'
-                correctAnswer: 3
-                studentanswer: 1
-              mark: 30
-              description: 'Lo studente ha sbagliato completamente la domanda'
+            $ref: '#/definitions/PeerReview'
         204:
           description: Nessuna operazione effettuata / No content
         403:
@@ -905,6 +994,7 @@ paths:
             application/json:
               code: '403'
               message: 'Accesso negato. Mancanza di permessi per la modifica alla risorsa'
+              
 definitions:
   User:
     title: user
@@ -961,13 +1051,12 @@ definitions:
       code: '404'
       message: 'Risorsa non trovata'
              
-  Exams:
-    title: esame
+  Exam:
+    title: exam
     type: object
     properties:
-      iD:
+      id:
         type: integer
-        format: int64
       description:
         type: string
       deadline: 
@@ -985,27 +1074,73 @@ definitions:
         items: 
           $ref: '#/definitions/User'      
     required:
-      - iD
       - description
       - deadline
-      - numerotask
+      - numerotasks
       - teacher
-  
+      - tasks
+      - students
+    example:
+      id: 1
+      description: esame di valutazione conoscenze generali
+      deadline: 3600
+      numerotasks: 2
+      teacher: {
+        id: 32,
+        firstname: 'Marco',
+        lastname: 'Giunta',
+        email: 'marco.giunta@example.com',
+        type: 'Teacher',
+        identification_number: 908765
+      }
+      tasks: [
+        {
+          id: 123,
+          numeroDomanda: 7,
+          question: 'Di che nazionalità era Napoleone Bonaparte?',
+          type: 1,
+          answers: {
+            'Inglese',
+            'Francese',
+            'Spagnola'
+          }
+        },
+        {
+          id: 456,
+          numeroDomanda: 2,
+          question: 'diametro della Terra?',
+          type: 1,
+          answers: {
+            '9.742 km',
+            '19.742 km',
+            '12.742 km'
+          },
+          correctAnswer: '3'
+        }
+      ]
+      students: [
+        {
+          id: 12,
+          firstname: 'Mario',
+          lastname: 'Rossi',
+          email: 'mario.rossi@example.com',
+          type: 'Student',
+          identification_number: 345678
+        }
+      ]
+    
   Task:
     title: task
     type: object
     properties:
-      iD:
+      id:
         type: integer
-        format: int64
       numeroDomanda:
         type: integer
-        format: int64
       question:
         type: string
       type:
         type: integer
-        format: int64
       answers:
         type: array
         items: 
@@ -1015,7 +1150,6 @@ definitions:
       studentAnswer:
         type: string
     required:
-      - iD
       - numeroDomanda
       - question
       - type
@@ -1035,9 +1169,8 @@ definitions:
     title: taskgroup
     type: object
     properties:
-      iD:
+      id:
         type: integer
-        format: int64
       description:
         type: string
       tasks:
@@ -1045,7 +1178,7 @@ definitions:
         items: 
           $ref: '#/definitions/Task'          
     required:
-      - iD
+      - id
       - description
     example:
       id: 123456
@@ -1066,6 +1199,7 @@ definitions:
           question: 'Spiega come è iniziata la seconda guerra mondiale'
           type: 2
           studentAnswer: 'Hitler invase la Polonia'
+          
   PeerReview:
     title: peerreviews
     type: object
@@ -1087,12 +1221,13 @@ definitions:
         type: integer
     required:
       - id
-      - idtask
+      - examid
+      - task
       - studentanswer
-      - mark
       - deadline
     example:
       id: 001
+      examid: 234
       task: 
         application/json:
           id: 123456
@@ -1103,9 +1238,8 @@ definitions:
             - '9.742 km'
             - '19.742 km'
             - '12.742 km'
-          correctAnswer: '3'
-          studentAnswer: '3'
       studentanswer: '3'
       mark: 30
       description: 'The task is perfect as it is'
       deadline: 900
+
