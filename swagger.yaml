@@ -3,14 +3,6 @@ info:
   version: '1.0.0'
   title: "Exam Manager"
   description: REST API per un sistema di gestione degli esami
-securityDefinitions:
-  BasicAuth:
-    type: basic
-  ApiKeyAuth:
-    type: apiKey
-    in: header
-    name: X-API-Key
-
 host: api.example.com
 basePath: /v1
 schemes:
