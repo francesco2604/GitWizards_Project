@@ -18,7 +18,8 @@
   },
   "jest": {
     "verbose": true,
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testRegex": "tests/.*\\.(js|jsx)$"
   },
   "homepage": "https://github.com/francesco2604/GitWizards_Project#readme",
   "dependencies": {
