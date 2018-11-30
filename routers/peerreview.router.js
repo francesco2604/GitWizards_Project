@@ -6,7 +6,7 @@ const router = express.Router();
 const app = express();
 const SERVER = app.listen(3000, '/localhost');
 
-router.get('/', async (req, res) => {
+app.get('/', async (req, res) => {
     peerreview.getPeerreviewAll(req, res);
 });
 
