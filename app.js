@@ -20,6 +20,10 @@ app.use(BODY_PARSER.urlencoded({ extended: false }));
 app.use(BODY_PARSER.json());
 app.use('/v1/exams',examsRouter);
 
+/* API routers */
+// example: [ app.use('/v1/users', userRouter); ]
+
+
 const PORT = process.env.PORT || 3000;
 const SERVER = app.listen(PORT, () =>{
     console.log(`Server is up and running on port ${PORT}`);
