@@ -11,8 +11,12 @@ app.use(BODY_PARSER.json());
 /* Init router components*/
 // example: var userRouter = require('./routers/users');
 
+var taskgroupRouter = require('./routers/taskgroup.router.js'); 
+
 /* API routers */
-// example: [ app.use('/v1/users', userRouter); ]
+// example:  app.use('/v1/users', userRouter);
+
+app.use('/v1/taskgroup',taskgroupRouter);
 
 const PORT = process.env.PORT || 3000;
 const SERVER = app.listen(PORT, () =>{
