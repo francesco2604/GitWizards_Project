@@ -16,4 +16,4 @@ function getPeerreviewAll(req, res){
 	res.status(200).json(tasks);
 }
 
-module.exports = {getPeerreviewAll, postPeerreview, putPeerreview};
+module.exports = {getPeerreviewAll};
