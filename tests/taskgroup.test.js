@@ -143,8 +143,22 @@ describe('## API users TEST', () => {
             expect(response2.get('content-type')).toContain('application/json');
             expect(response2.status).toBeDefined();
             expect(response2.status).toBe(404);
-            expect.assertions(13);
 
+            // controllo il formato della risposta se è corretto
+            var body_keys = ['codice','messaggio']
+            expect(typeof response.body).toEqual('object');
+            expect(response2.body).toBeDefined();
+            expect(response2.body).not.toBeNull();
+            expect(Object.keys(response2.body).sort()).toEqual(body_keys.sort());
+            expect(typeof response2.body.codice).toEqual('number');
+            expect(typeof response2.body.messaggio).toEqual('string');
+            expect(response2.body.codice).not.toBeNull();
+            expect(response2.body.codice).toBeDefined();
+            expect(response2.body.messaggio).toBeDefined();
+            expect(response2.body.messaggio).not.toBeNull();
+            expect(response2.body.codice).toBe(404);
+
+            expect.assertions(24);
             return;
         });
         test('it should return a permission denied error', async () => {
@@ -154,7 +168,22 @@ describe('## API users TEST', () => {
             expect(response.headers).not.toBeNull();
             expect(response.status).toBeDefined();
             expect(response.status).toBe(403);
-            expect.assertions(5);
+
+            // controllo il formato della risposta se è corretto
+            var body_keys = ['codice','messaggio']
+            expect(typeof response.body).toEqual('object');
+            expect(response.body).toBeDefined();
+            expect(response.body).not.toBeNull();
+            expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
+            expect(typeof response.body.codice).toEqual('number');
+            expect(typeof response.body.messaggio).toEqual('string');
+            expect(response.body.codice).not.toBeNull();
+            expect(response.body.codice).toBeDefined();
+            expect(response.body.messaggio).toBeDefined();
+            expect(response.body.messaggio).not.toBeNull();
+            expect(response.body.codice).toBe(403);
+
+            expect.assertions(16);
             return;
         });
         test('it should return a not found error', async () => {
@@ -164,7 +193,22 @@ describe('## API users TEST', () => {
             expect(response.headers).not.toBeNull();
             expect(response.status).toBeDefined();
             expect(response.status).toBe(404);
-            expect.assertions(5);
+
+            // controllo il formato della risposta se è corretto
+            var body_keys = ['codice','messaggio']
+            expect(typeof response.body).toEqual('object');
+            expect(response.body).toBeDefined();
+            expect(response.body).not.toBeNull();
+            expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
+            expect(typeof response.body.codice).toEqual('number');
+            expect(typeof response.body.messaggio).toEqual('string');
+            expect(response.body.codice).not.toBeNull();
+            expect(response.body.codice).toBeDefined();
+            expect(response.body.messaggio).toBeDefined();
+            expect(response.body.messaggio).not.toBeNull();
+            expect(response.body.codice).toBe(404);
+
+            expect.assertions(16);
             return;
         });
     });
