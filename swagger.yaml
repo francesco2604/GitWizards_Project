@@ -32,8 +32,8 @@ paths:
         - in: query
           name: type
           required: false
-          type: string
-          default: 'Student'
+          type: integer
+          default: 0
           description: Il ruolo utente con il quale si vuole filtrare la lista
         - in: query
           name: limit
@@ -54,9 +54,9 @@ paths:
           description: L'ID dell'utente che effettua la richiesta
         - in: header
           name: user_role
-          type: string
+          type: integer
           required: true
-          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Lista degli utenti recuperata con successo
@@ -70,13 +70,13 @@ paths:
                 firstname: 'Mario'
                 lastname: 'Rossi'
                 email: 'mario.rossi@example.com'
-                type: 'Student'
+                type: 0
                 identification_number: 234567
               - id: 2
                 firstname: 'Luca'
                 lastname: 'Giorgini'
                 email: 'luca.giorgini@example.com'
-                type: 'Student&Teacher'
+                type: 2
                 identification_number: 890123
         404:
           description: Errore durante il recupero della lista degli utenti
@@ -112,7 +112,7 @@ paths:
               firstname: 'Mario'
               lastname: 'Rossi'
               email: 'mario.rossi@example.com'
-              type: 'Student'
+              type: 0
               identification_number: 345678
       responses:
         201:
@@ -152,9 +152,9 @@ paths:
           description: L'ID dell'utente che effettua la richiesta
         - in: header
           name: user_role
-          type: string
+          type: integer
           required: true
-          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Utente recuperato con successo
@@ -992,9 +992,9 @@ definitions:
         type: string
         description: L'indirizzo e-mail dell'utente
       type:
-        type: string
-        enum: [ Student, Teacher, Student&Teacher]
-        description: Identifica il tipo di utente. Può essere uno studente, un docente o entrambi.
+        type: integer
+        enum: [ 0, 1, 2]
+        description: Identifica il tipo di utente. Può essere uno 0 (studente), 1 (docente) o 2 (entrambi).
       identification_number:
         type: integer
         description: Il numero che identifica univocamente l'utente come studente o/e come docente.
@@ -1010,7 +1010,7 @@ definitions:
       firstname: 'Mario'
       lastname: 'Rossi'
       email: 'mario.rossi@example.com'
-      type: 'Student'
+      type: 0
       identification_number: 345678
 
   Error:
