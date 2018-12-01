@@ -20,7 +20,7 @@ router.put('/:id',async (req,res) => {
 });
 
 router.delete('/:id',async (req,res) => {
-	functions.putTaskgroup(req,res);
+	functions.deleteTaskgroup(req,res);
 });
 
 function inputTgId(a)

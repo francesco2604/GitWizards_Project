@@ -8,7 +8,7 @@ users = [{"id":1,"firstname":"Daniele","lastname":"Francescatti","email":"daniel
 function getTaskgroupAll(req,res)
 {
 	userid = req.headers['user_id'];
-	console.log(userid);
+	//console.log(userid);
 	if(getUserRole(userid) != "Teacher" && getUserRole(userid) != "Student&Teacher")
 	{
 		res.status(403).json(error403);
@@ -31,13 +31,13 @@ function postTaskgroup(req,res)
 	{
 		const taskgroup_name = req.body.description
 
-		//QUESTO CONTROLLO NON FUNZIONA, NON CAGATELO
 		if (taskgroup_name !== null && taskgroup_name !== undefined && taskgroup_name.trim() != "")
 		{
 				id_increment++;
 				const tg =  {"id":id_increment,"description":taskgroup_name}
 				taskgroupList.push(tg)
 				res.status(201).json(tg)
+				console.log("Creata risorsa " + id_increment);
 		}
 		else
 		{
@@ -67,7 +67,7 @@ function getTaskgroup(req,res)
 				index = i;
 			}
 		}
-		console.log(index);
+		//console.log(index);
 		if (index===-1)
 		{
 			 res.status(404).json(error404);
@@ -87,7 +87,38 @@ function putTaskgroup(req,res)
 
 function deleteTaskgroup(req,res)
 {
-	id = req.params.id;
+	userid = req.headers['user_id'];
+	if(getUserRole(userid) != "Teacher" && getUserRole(userid) != "Student&Teacher")
+	{
+		res.status(403).json(error403);
+	}
+	else
+	{
+		id = req.params.id;
+		index = -1
+		tg = null;
+
+		for(i = 0; i < taskgroupList.length; i++)
+		{
+			if (taskgroupList[i].id == id)
+			{
+				tg = taskgroupList[i];
+				index = i;
+			}
+		}
+		//console.log(index);
+		if (index===-1)
+		{
+			 res.status(404).json(error404);
+			 return
+		}
+		else
+		{
+			taskgroupList.splice(index,1);
+			res.status(204).send("Risorsa eliminata con successo").end();
+			console.log("Eliminata risorsa " + (index+1));
+		}
+	}
 }
 
 
