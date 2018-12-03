@@ -10,7 +10,7 @@ app.use(BODY_PARSER.json());
 
 /* Init router components*/
 // example: var userRouter = require('./routers/users');
-var submissionRouter = require('./routers/submissionRouter');
+var submissionRouter = require('./routers/submission.router');
 
 /* API routers */
 // example: [ app.use('/v1/users', userRouter); ]
