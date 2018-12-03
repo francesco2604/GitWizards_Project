@@ -1,8 +1,11 @@
 'use strict';
 
-/* Init libs and Express server instance */
+// === IMPORTS ===
 const EXPRESS       = require('express');
 const BODY_PARSER   = require('body-parser');
+var Error           = require('./models/error.model');
+
+/* Init Express server instance */
 var app = EXPRESS();
 
 /* Set parsing module for requests body */
@@ -13,6 +16,11 @@ const USERS_ROUTER = require('./routers/users.router');
 
 /* API routers */
 app.use('/v1/users', USERS_ROUTER);
+
+/* API error handler */
+app.use(function (err, req, res, next) {
+  res.status(Error.ERROR_CODE.BAD_REQUEST).json(new Error(Error.ERROR_CODE.BAD_REQUEST, 'Richiesta non valida'));
+});
 
 const PORT = process.env.PORT || 3000;
 const SERVER = app.listen(PORT, () =>{
