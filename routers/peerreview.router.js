@@ -1,13 +1,9 @@
 const express = require('express');
-const peerreview = require('../controllers/peerreview.controller.js');
-const http = require('http');
+const PEERREVIEW = require('../controllers/peerreview.controller.js');
 
-const router = express.Router();
-const app = express();
-const SERVER = app.listen(3000, '/localhost');
+const ROUTER = express.Router();
 
-app.get('/', async (req, res) => {
-    peerreview.getPeerreviewAll(req, res);
-});
+/* Peer Review GET */
+ROUTER.get('/', PEERREVIEW.getPeerreviewAll);
 
-module.exports = SERVER;
+module.exports = ROUTER;

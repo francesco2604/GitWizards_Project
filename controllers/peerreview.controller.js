@@ -1,4 +1,5 @@
-const task_prova = {id: 123456,
+/* Example variables */
+var task_prova = {id: 123456,
                     numeroDomanda: 2,
                     question: 'diametro della Terra?',
                     type: 1,
@@ -8,10 +9,11 @@ const task_prova = {id: 123456,
                     correctAnswer: '3',
                     studentAnswer: '1'};
 
-const task_prova2 = task_prova;
+var task_prova2 = task_prova;
 
 var tasks = [task_prova, task_prova2];
 
+/* GET method for Peer Review */
 function getPeerreviewAll(req, res){
 	res.status(200).json(tasks);
 }
