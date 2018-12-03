@@ -1,4 +1,4 @@
-'use strict';   // used to avoid using undeclared variables and write cleaner code
+'use strict';
 
 /* Init libs and Express server instance */
 const EXPRESS       = require('express');
@@ -9,10 +9,10 @@ var app = EXPRESS();
 app.use(BODY_PARSER.json());
 
 /* Init router components*/
-// example: var userRouter = require('./routers/users');
+const USERS_ROUTER = require('./routers/users.router');
 
 /* API routers */
-// example: [ app.use('/v1/users', userRouter); ]
+app.use('/v1/users', USERS_ROUTER);
 
 const PORT = process.env.PORT || 3000;
 const SERVER = app.listen(PORT, () =>{
