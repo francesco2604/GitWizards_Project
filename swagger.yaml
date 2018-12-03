@@ -35,18 +35,6 @@ paths:
           type: integer
           default: 0
           description: Il ruolo utente con il quale si vuole filtrare la lista
-        - in: query
-          name: limit
-          required: false
-          type: integer
-          default: 25
-          description: Il numero massimo di entry / risultati che si vogliono nella risposta
-        - in: query
-          name: offset
-          required: false
-          type: integer
-          default: 0
-          description: L'offset rispetto a inizio lista da cui partire per ricavare i risultati
         - in: header
           name: user_id
           type: integer
