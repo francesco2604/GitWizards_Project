@@ -16,8 +16,9 @@ const USERS_ROUTER = require('./routers/users.router');
 var taskgroupRouter = require('./routers/taskgroup.router.js');
 
 /* API routers */
-app.use('/v1/users',USERS_ROUTER.postRequest);
+app.use('/v1/users',USERS_ROUTER);
 app.use('/v1/taskgroup',taskgroupRouter);
+
 /* API error handler */
 app.use(function (err, req, res, next) {
   res.status(Error.ERROR_CODE.BAD_REQUEST).json(new Error(Error.ERROR_CODE.BAD_REQUEST, 'Richiesta non valida'));
