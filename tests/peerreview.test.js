@@ -16,6 +16,13 @@ describe('Tests for PeerReview', () => {
     expect(res.status).toBe(200);
   });
 
+  // Status: 404, Not found
+  test('Peerreview GET', async () => {
+    let res = await request(API).get('/v1/peereview');
+    expect.assertions(1);
+    expect(res.status).toBe(404);
+  });
+
 });
 
 afterAll(() => {
