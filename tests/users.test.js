@@ -29,10 +29,14 @@ function checkError(response, error){
 
 // ============ TESTS =======================
 describe('## API users', () => {
+
+    // common
+    var general_error = new Error(Error.ERROR_CODE.BAD_REQUEST, 'Richiesta non valida');
+
     describe('POST /v1/users - create new user into the system', () => {
         // common
         var good_user   = new User(undefined, 'Mario', 'Rossi', 'mario.rossi@gmail.com', User.USER_TYPE.STUDENT, 123456);
-        var bad_users = [ undefined, new User(undefined, 'Mario', 'Rossi', 'mario.rossi@gmail.com'), ''];
+        var bad_users = [ undefined, new User(undefined, 'Mario', 'Rossi', 'mario.rossi@gmail.com'), '', null];
         var post_error  = new Error(Error.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione utente nel sistema");
 
         test('should create new user if the request-body object is a valid User instance', async () => {
@@ -66,6 +70,11 @@ describe('## API users', () => {
         test('should reject the creation of new user if request body is empty', async() => {
             var response = await makePostRequest(SERVER, '/v1/users', bad_users[2]);
             checkError(response, post_error);
+            return;
+        });
+        test('should reject the creation of new user if request body is null', async() => {
+            var response = await makePostRequest(SERVER, '/v1/users', bad_users[3]);
+            checkError(response, general_error);
             return;
         });
     });
