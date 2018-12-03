@@ -5,10 +5,10 @@ beforeAll(() => {
  console.log('API test starting!');
 });
 
-// raggruppa più test cases
+/* Test cases for Peer Review */
 describe('Tests for PeerReview', () => {
   
-  // test per il metodo GET di /peerreview
+  /* Test GET method in Peer Review */
   // Status: 200, OK
   test('Peerreview GET', async () => {
     let res = await request(API).get('/v1/peerreview');
