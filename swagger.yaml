@@ -70,13 +70,13 @@ paths:
                 firstname: 'Mario'
                 lastname: 'Rossi'
                 email: 'mario.rossi@example.com'
-                type: 0
+                type: 1
                 identification_number: 234567
               - id: 2
                 firstname: 'Luca'
                 lastname: 'Giorgini'
                 email: 'luca.giorgini@example.com'
-                type: 2
+                type: 3
                 identification_number: 890123
         404:
           description: Errore durante il recupero della lista degli utenti
@@ -112,7 +112,7 @@ paths:
               firstname: 'Mario'
               lastname: 'Rossi'
               email: 'mario.rossi@example.com'
-              type: 0
+              type: 1
               identification_number: 345678
       responses:
         201:
@@ -258,6 +258,17 @@ paths:
       summary: Ricava la lista degli esami
       produces:
         - application/json
+      parameters:
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Operazione effettuata con successo
@@ -292,7 +303,7 @@ paths:
                   firstname: 'Marco'
                   lastname: 'Giunta'
                   email: 'marco.giunta@example.com'
-                  type: 'Teacher'
+                  type: 1
                   identification_number: 908765
               tasks: 
                 - id: 123
@@ -317,8 +328,9 @@ paths:
                   firstname: 'Mario'
                   lastname: 'Rossi'
                   email: 'mario.rossi@example.com'
-                  type: 'Student'
-                  identification_number: 345678
+                  type: 0
+                  identification_number: 34567
+     
       responses:
         201:
           description: Esame aggiunto con successo
@@ -346,6 +358,17 @@ paths:
           required: true
           type: integer
           description: L'ID dell'esame <br />
+          
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Operazione effettuata con successo
@@ -387,7 +410,7 @@ paths:
                   firstname: 'Marco'
                   lastname: 'Giunta'
                   email: 'marco.giunta@example.com'
-                  type: 'Teacher'
+                  type: '1'
                   identification_number: 908765
               tasks: 
                 - id: 123
@@ -412,8 +435,21 @@ paths:
                   firstname: 'Mario'
                   lastname: 'Rossi'
                   email: 'mario.rossi@example.com'
-                  type: 'Student'
+                  type: 0
                   identification_number: 345678
+                  
+                  
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
+          
       responses:
         200:
           description: Operazione effettuata con successo
@@ -437,6 +473,16 @@ paths:
           required: true
           type: integer
           description: L'ID dell'esame che si intende eliminare
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         204:
           description: L'esame è stato eliminato con successo
@@ -993,8 +1039,8 @@ definitions:
         description: L'indirizzo e-mail dell'utente
       type:
         type: integer
-        enum: [ 0, 1, 2]
-        description: Identifica il tipo di utente. Può essere uno 0 (studente), 1 (docente) o 2 (entrambi).
+        enum: [ 1, 2, 3]
+        description: Identifica il tipo di utente. Può essere uno 1 (studente), 2 (docente) o 3 (entrambi).
       identification_number:
         type: integer
         description: Il numero che identifica univocamente l'utente come studente o/e come docente.
@@ -1010,7 +1056,7 @@ definitions:
       firstname: 'Mario'
       lastname: 'Rossi'
       email: 'mario.rossi@example.com'
-      type: 0
+      type: 1
       identification_number: 345678
 
   Error:
@@ -1069,7 +1115,7 @@ definitions:
           firstname: 'Marco'
           lastname: 'Giunta'
           email: 'marco.giunta@example.com'
-          type: 'Teacher'
+          type: 1
           identification_number: 908765
       tasks: 
         - id: 123
@@ -1094,7 +1140,8 @@ definitions:
           firstname: 'Mario'
           lastname: 'Rossi'
           email: 'mario.rossi@example.com'
-          type: 'Student'
+          type: 0
+        
           identification_number: 345678
     
   Task:
