@@ -22,6 +22,40 @@ test("validate response of get list ", async function () {
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
+//test for get an exam from list
+
+test("response 202 for get a exam from list", async function () {
+  var response = await request(server).get('/v1/exams/2');
+  expect(response.status).toBe(200);
+});
+
+
+test(" response 404 for get a exam from list ", async function () {
+
+  var response = await request(server).get('/v1/exams/877');
+  expect(response.status).toBe(404);
+});
+
+test(" response 400 for get a exam  from list ", async function () {
+
+  var response = await request(server).get('/v1/exams/ethjy');
+  expect(response.status).toBe(400);
+});
+
+
+test("validate response of get by id  in a exam  list ", async function () {
+
+  var response = await request(server).get('/v1/exams/2');
+  var exam = response.body;
+  expect(response.body.id).toBeDefined();
+  expect(response.body.description).toBeDefined();
+  expect(response.body.deadline).toBeDefined();
+  expect(response.body.numerotasks).toBeDefined();
+  expect(response.body.teacher).toBeDefined();
+  expect(response.body.tasks).toBeDefined();
+  expect(response.body.students).toBeDefined();
+});
+
 //test for post an exam
 
 test(" response 403 for post a exam ----no user id ", async function () {
