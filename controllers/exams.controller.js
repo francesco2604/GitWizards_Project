@@ -10,3 +10,11 @@ function getExamsList()
 {
   return examRepositories.getList();
 }
+
+
+
+
+
+
+
+module.exports = {getExamsList,postExams,getExamsById,putExamsById,deleteExamsById}
