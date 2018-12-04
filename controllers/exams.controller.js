@@ -35,4 +35,21 @@ function postExams(exam_post, identity)
         return exam_post
   }
 }
-module.exports = {getExamsList,getExamsById,postExams}
+function deleteExamsById(id,identity)
+{
+
+  if( parseInt(identity.user_role)!= 2)
+    return 'No permission'
+  const index = (getExamsList()).findIndex((item)=> {return item.id===id})
+  if(index===-1)
+    return 'Not Found'
+  else{
+    if(((examRepositories.getExamForId(index))['teacher'])['id']!=parseInt(identity.user_id))
+        return 'No permission'
+    else {
+          examRepositories.deleteEx(index)
+          return getExamsList();
+    }
+  }
+}
+module.exports = {getExamsList,getExamsById,postExams,deleteExamsById}
