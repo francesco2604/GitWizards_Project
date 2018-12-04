@@ -35,6 +35,40 @@ function postExams(exam_post, identity)
         return exam_post
   }
 }
+function putExamsById(id, propertiesChanged, identity) {
+  if(id === undefined || identity === undefined)
+  return 'Error'
+  if(parseInt(identity.user_role)!= 2)
+     return 'No permission'
+  if (propertiesChanged === undefined)
+      return 'Not Found'
+  var examFromDB = getExamsById(id);
+
+  if(examFromDB=='Not Found')
+        return 'Not Found'
+  else {
+
+          if(((examFromDB['teacher'])['id'])!= parseInt(identity.user_id ))
+          return 'No permission'
+          else {
+              if(examFromDB === 'Error')
+                return examFromDB
+              else
+              {
+
+                for(let p of propertiesForUpdate) {
+                  let value = propertiesChanged[p];
+                  if(examFromDB[p]!= value){
+                    examFromDB[p] = value;
+                }
+              }
+              deleteExamsById(id,identity)
+              examRepositories.addEx(examFromDB)
+              return examFromDB
+            }
+          }
+        }
+    }
 function deleteExamsById(id,identity)
 {
 
@@ -52,4 +86,4 @@ function deleteExamsById(id,identity)
     }
   }
 }
-module.exports = {getExamsList,getExamsById,postExams,deleteExamsById}
+module.exports = {getExamsList,getExamsById,postExams,deleteExamsById,putExamsById}
