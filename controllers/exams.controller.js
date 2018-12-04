@@ -8,12 +8,12 @@ function getExamsList()
 {
   return examRepositories.getList();
 }
+
 function getExamsById(id)
 {
   const index = (getExamsList()).findIndex((item)=> {return item.id===id})
-  if (index===-1) {
+  if (index===-1)
     return 'Not Found'
-  }
   try {
     return examRepositories.getExamForId(index)
   }
