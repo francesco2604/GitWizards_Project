@@ -35,7 +35,7 @@ class Exam
   get studentsGet()
   {return this.students;}
 
-  toJson()
+  toJSON()
   {
     return ({
       id: this.id,
