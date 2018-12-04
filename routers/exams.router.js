@@ -13,6 +13,7 @@ router.post('/', (req, res) => {
 	var propertiesPost = req.body;
 	var identity= req.headers;
 	var risposta=functions.postExams(propertiesPost,identity);
+
 	if(risposta==='Error')
 		sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND , "Non trovato");
 	else{
