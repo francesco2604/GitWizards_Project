@@ -13,9 +13,11 @@ app.use(BODY_PARSER.json());
 
 /* Init router components*/
 const USERS_ROUTER = require('./routers/users.router');
+var taskgroupRouter = require('./routers/taskgroup.router.js');
 
 /* API routers */
-app.use('/v1/users', USERS_ROUTER);
+app.use('/v1/users',USERS_ROUTER);
+app.use('/v1/taskgroup',taskgroupRouter);
 
 /* API error handler */
 app.use(function (err, req, res, next) {
