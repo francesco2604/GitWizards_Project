@@ -35,4 +35,4 @@ function postExams(exam_post, identity)
         return exam_post
   }
 }
-module.exports = {getExamsList,postExams}
+module.exports = {getExamsList,getExamsById,postExams}
