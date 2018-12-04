@@ -10,7 +10,7 @@ var teacher ={id:32,firstname: 'mario',lastname: 'rossi',email: 'prova@gmail.com
 var students = [{id:89,firstname: 'francesco ',lastname: 'persi',email: 'prova@gmail.com',type: 0,identification_number:1875698 },
                 {id:85,firstname: 'carlo',lastname: 'conti',email: 'prova@gmail.com',type: 0,identification_number:187525 }];
 
-//test for get exams list
+//test for get exams list for teacherand student
 test("response 202 for get the examslist", async function () {
   var response = await request(server).get('/v1/exams/');
   expect(response.status).toBe(200);
