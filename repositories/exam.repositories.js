@@ -12,13 +12,13 @@ class ExamRepository
 
      constructor()
      {
-       this.exams=[(new Exam(2,'prova2',3600, 2,teacher,tasks, students)).toJSON(),
-       (new Exam(3, 'prova3', 3600, 2,teacher, tasks,students)).toJSON(),
-       (new Exam(4, 'prova4', 3600, 2,teacher, tasks,students)).toJSON(),
-       (new Exam(5, 'prova5', 3600, 2,teacher, tasks,students)).toJSON(),
-       (new Exam(6, 'prova6', 3600, 2,teacher, tasks,students)).toJSON(),
-       (new Exam(7, 'prova7', 3600, 2,teacher, tasks,students)).toJSON(),
-       (new Exam(8, 'prova8', 3600, 2,teacher, tasks,students)).toJSON()];
+       this.exams=[(new Exam(2,'prova2',3600, 2,teacher,tasks, students)),
+       (new Exam(3, 'prova3', 3600, 2,teacher, tasks,students)),
+       (new Exam(4, 'prova4', 3600, 2,teacher, tasks,students)),
+       (new Exam(5, 'prova5', 3600, 2,teacher, tasks,students)),
+       (new Exam(6, 'prova6', 3600, 2,teacher, tasks,students)),
+       (new Exam(7, 'prova7', 3600, 2,teacher, tasks,students)),
+       (new Exam(8, 'prova8', 3600, 2,teacher, tasks,students))];
      }
     getExamForId(index){return this.exams[index]}
     getList(){return this.exams}
