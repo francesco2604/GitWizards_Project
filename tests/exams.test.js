@@ -22,7 +22,7 @@ test("validate response of get list ", async function () {
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
-//test for get an exam from list
+//test for get an exam from list for student and teacher 
 
 test("response 202 for get a exam from list", async function () {
   var response = await request(server).get('/v1/exams/2');
