@@ -12,8 +12,26 @@ router.get('/', async (req,res) => {
 	var examList = functions.getExamsList();
 	res.status(200).json(examList);
 });
+//METHOD GET ID 
+router.get('/:id',async (req,res) => {
+	if(isNaN(req.params.id))
+	  sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione esame nel sistema");
+	else{
+		var id = parseInt(req.params.id);
+		var exam_risposta = functions.getExamsById(id);
+		if(exam_risposta==='ErrorCatch')
+	  sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore  nel sistema");
+		else {
+			if(exam_risposta==='Not Found')
+			sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND , "Non trovato");
 
-	router.post('/', (req, res) => {
+			else
+			res.status(200).location('/v1/exams/${req.params.id}').json(exam_risposta)
+
+		}
+	}});
+
+router.post('/', (req, res) => {
 		var propertiesPost = req.body;
 		console.log(propertiesPost)
 		var identity= req.headers;

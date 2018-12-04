@@ -8,6 +8,19 @@ function getExamsList()
 {
   return examRepositories.getList();
 }
+function getExamsById(id)
+{
+  const index = (getExamsList()).findIndex((item)=> {return item.id===id})
+  if (index===-1) {
+    return 'Not Found'
+  }
+  try {
+    return examRepositories.getExamForId(index)
+  }
+  catch (error) {
+    return 'ErrorCatch'
+  }
+}
 function postExams(exam_post, identity)
 {
   if((exam_post['teacher'])['id']!=identity.user_id || identity.user_role!= 2)
@@ -22,4 +35,4 @@ function postExams(exam_post, identity)
         return exam_post
   }
 }
-module.exports = {getExamsList,postExams}
+module.exports = {getExamsList,getExamsById,postExams}
