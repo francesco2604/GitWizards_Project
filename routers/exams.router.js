@@ -12,7 +12,7 @@ router.get('/', async (req,res) => {
 	var examList = functions.getExamsList();
 	res.status(200).json(examList);
 });
-//METHOD GET ID FOR TEACHER AND STUDENT  
+//METHOD GET ID FOR TEACHER AND STUDENT
 router.get('/:id',async (req,res) => {
 	if(isNaN(req.params.id))
 	  sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione esame nel sistema");
@@ -46,5 +46,24 @@ router.post('/', (req, res) => {
 			res.status(200).location('/v1/users/${risposta.id}').json(risposta);
 		}
 	})
+
+  router.delete('/:id',async (req,res) => {
+  	if(isNaN(req.params.id))
+  	sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore nel sistema");
+  	else{
+  		var id = parseInt(req.params.id);
+  		var identity= req.headers;
+  		var risposta=functions.deleteExamsById(id,identity);
+  		if(risposta==='Not Found')
+  	sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND , "Non trovato");
+  		else{
+  			if(risposta==='No permission')
+  			sendErrorResponse(res, result_response.ERROR_CODE.FORBIDDEN , "Non permesso");
+
+  			else
+  				res.status(200).location('/v1/exams/${req.params.id}').json(risposta)}
+  		}
+  	});
+
 
 module.exports = router
