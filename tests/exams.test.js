@@ -23,3 +23,21 @@ test("validate response of get list ", async function () {
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+afterAll(() => {
+  server.close();
+});
