@@ -22,7 +22,7 @@ test("validate response of get list ", async function () {
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
-//test for get an exam from list for student and teacher 
+//test for get an exam from list for student and teacher
 
 test("response 202 for get a exam from list", async function () {
   var response = await request(server).get('/v1/exams/2');
@@ -70,6 +70,46 @@ test(" response 403 for post a exam ----no user role", async function () {
 test("validate response for post a exam", async function () {
     var response = await request(server).post('/v1/exams/').send(new Exam(66, 'prova3', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role', '2' ).set('content-type', 'application/json');
   expect(response.status).toBe(200);
+});
+
+// test for delete an exams
+test(" response 404 for delete a exam", async function () {
+
+  //expect(exams.postExam().toEqual(exams.statusok);
+  var response = await request(server).delete('/v1/exams/88558').set('user_id','32').set('user_role','2');
+  expect(response.status).toBe(404);
+
+});
+
+test(" response 400 for delete a exam", async function () {
+
+  //expect(exams.postExam().toEqual(exams.statusok);
+  var response = await request(server).delete('/v1/exams/dfgr').set('user_id','32').set('user_role','2');
+  expect(response.status).toBe(400);
+
+});
+test(" response 400 for delete a exam no id", async function () {
+
+  //expect(exams.postExam().toEqual(exams.statusok);
+  var response = await request(server).delete('/v1/exams/2').set('user_id','2').set('user_role','2');
+  expect(response.status).toBe(403);
+
+});
+
+test(" response 400 for delete a exam no role", async function () {
+
+  //expect(exams.postExam().toEqual(exams.statusok);
+  var response = await request(server).delete('/v1/exams/5').set('user_id','32').set('user_role','1');
+  expect(response.status).toBe(403);
+
+});
+test(" response 200 for delete a exam", async function () {
+
+  //expect(exams.postExam().toEqual(exams.statusok);
+  var response = await request(server).delete('/v1/exams/2').set('user_id','32').set('user_role','2');
+  //console.log(response.status)
+  expect(response.status).toBe(200);
+
 });
 
 // close server
