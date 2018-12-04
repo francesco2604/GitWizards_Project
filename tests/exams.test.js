@@ -9,7 +9,6 @@ const tasks = [{id: 123456,numeroDomanda: 2,question: 'diametro della Terra?',ty
 var teacher ={id:32,firstname: 'mario',lastname: 'rossi',email: 'prova@gmail.com',type: 1,identification_number:123456 };
 var students = [{id:89,firstname: 'francesco ',lastname: 'persi',email: 'prova@gmail.com',type: 0,identification_number:1875698 },
                 {id:85,firstname: 'carlo',lastname: 'conti',email: 'prova@gmail.com',type: 0,identification_number:187525 }];
-
 //test for get exams list
 test("response 202 for get the examslist", async function () {
   var response = await request(server).get('/v1/exams/');
@@ -23,21 +22,6 @@ test("validate response of get list ", async function () {
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 afterAll(() => {
   server.close();
 });
