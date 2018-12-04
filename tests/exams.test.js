@@ -22,6 +22,22 @@ test("validate response of get list ", async function () {
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
+//test for post an exam
+
+test(" response 403 for post a exam ----no user id ", async function () {
+  var response = await request(server).post('/v1/exams/').send(new Exam(66, 'prova3', 3600, 2,teacher, tasks,students)).set('user_id','3').set('user_role','2').set('content-type', 'application/json');
+
+  expect(response.status).toBe(400);
+});
+test(" response 403 for post a exam ----no user role", async function () {
+  var response = await request(server).post('/v1/exams/').send(new Exam(66, 'prova3', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','1').set('content-type', 'application/json');
+  expect(response.status).toBe(400);
+});
+test("validate response for post a exam", async function () {
+    var response = await request(server).post('/v1/exams/').send(new Exam(66, 'prova3', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role', '2' ).set('content-type', 'application/json');
+  expect(response.status).toBe(200);
+});
+
 // close server
 afterAll(() => {
   server.close();

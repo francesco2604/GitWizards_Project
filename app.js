@@ -23,7 +23,6 @@ app.use('/v1/exams', examsRouter);
 app.use(function (err, req, res, next) {
   res.status(Error.ERROR_CODE.BAD_REQUEST).json(new Error(Error.ERROR_CODE.BAD_REQUEST, 'Richiesta non valida'));
 });
-
 const PORT = process.env.PORT || 3000;
 const SERVER = app.listen(PORT, () =>{
     console.log(`Server is up and running on port ${PORT}`);
