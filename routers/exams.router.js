@@ -12,7 +12,7 @@ router.get('/', async (req,res) => {
 	var examList = functions.getExamsList();
 	res.status(200).json(examList);
 });
-//METHOD GET ID 
+//METHOD GET ID FOR TEACHER AND STUDENT  
 router.get('/:id',async (req,res) => {
 	if(isNaN(req.params.id))
 	  sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione esame nel sistema");
