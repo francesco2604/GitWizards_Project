@@ -46,6 +46,27 @@ router.post('/', (req, res) => {
 			res.status(200).location('/v1/users/${risposta.id}').json(risposta);
 		}
 	})
+router.put('/:id',async (req,res) => {
+  if(isNaN(req.params.id))
+    sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore nel sistema");
+  else{
+    var propertiesChanged = req.body;
+    var identity= req.headers;
+    var id = parseInt(req.params.id);
+    var risposta=functions.putExamsById(id, propertiesChanged,identity);
+    //console.log(risposta)
+    if(risposta==='Error')
+      sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore nel sistema");
+    else{if(risposta==='Not Found')
+    sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND , "Non trovato");
+    else{
+      if(risposta==='No permission')
+      sendErrorResponse(res, result_response.ERROR_CODE.FORBIDDEN , "Non permesso");
+      else
+          res.status(200).location('/v1/exams/${req.params.id}').json(risposta)
+    }
+  }
+}});
 
   router.delete('/:id',async (req,res) => {
   	if(isNaN(req.params.id))
