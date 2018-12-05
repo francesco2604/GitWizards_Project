@@ -24,20 +24,17 @@ class UserRepository {
     }
 
     getAllUsers(user_type=User.USER_TYPE.STUDENT){
-        var users_to_return = []
-        var iterator = this._users.values().next();
-        while(iterator && !iterator.done){
-            if(iterator.value.user_type === user_type ||
-               iterator.value.user_type === User.USER_TYPE.BOTH){
-                users_to_return.push(iterator.value);
-            }
-            iterator = iterator.next();
+        var users = this._users ? Array.from(this._users.values()) : null;
+        if(users){
+            return users.filter((user) => {
+                return user.user_type === user_type || user.user_type === User.USER_TYPE.BOTH;
+            });
         }
-        return users_to_return;
+        return users;
     }
 
     getUserRoleByUserId(user_id){
-        var user = getUserById(user_id);
+        var user = this.getUserById(user_id);
         if(user){
             return user.user_type;
         }
