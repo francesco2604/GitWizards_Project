@@ -4,8 +4,8 @@ var Exam = require('../models/exams.object.js');
 var router = require('../routers/exams.router.js');
 var functions = require('../controllers/exams.controller.js');
 var ExamRepository = require('../repositories/exam.repositories.js');
-const tasks = [{id: 123456,question: 'diametro della Terra?',answers: ['9.742 km','19.742 km','12.742 km'],correct_answer: '3',student_answer: '1'},
-                {id: 85884,question: 'diametro della Terra?',answers: ['9.742 km','19.742 km','12.742 km'],correct_answer: '3',student_answer: '1'}];
+const tasks = [{id: 1,question: 'Quanti anni aveva napoleone alla sua morte?',type: '1',answers: ['48','44','12'],correct_answer: '2',student_answer: '1'},
+                {id: 2,question: 'Quanti anni aveva napoleone alla sua nascita?',type: '1', answers: ['0','1','9 mesi'],correct_answer: '1',student_answer: '2'}];
 var teacher ={id:2,firstname: 'Marco',lastname: 'Bonni',email: 'marco.bonni@example.com',user_type: 2,identification_number:789065 };
 var students = [{id:1,firstname: 'Mario',lastname: 'Rossi',email: 'mario.rossi@example.com',user_type: 1,identification_number:123456 }]
 
@@ -165,7 +165,7 @@ test(" response 400 for delete a exam no id", async function () {
 test(" response 400 for delete a exam no role", async function () {
 
   //expect(exams.postExam().toEqual(exams.statusok);
-  var response = await request(server).delete('/v1/exams/5').set('user_id','2').set('user_role','1');
+  var response = await request(server).delete('/v1/exams/2').set('user_id','2').set('user_role','1');
   expect(response.status).toBe(403);
 
 });
