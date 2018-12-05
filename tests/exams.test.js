@@ -10,7 +10,10 @@ var teacher ={id:32,firstname: 'mario',lastname: 'rossi',email: 'prova@gmail.com
 var students = [{id:89,firstname: 'francesco',lastname: 'persi',email: 'prova@gmail.com',user_type: 1,identification_number:1875698 },
                 {id:23,firstname: 'paolo',lastname: 'persi',email: 'prova@gmail.com',user_type: 1,identification_number:187546 }];
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> a16e557576c5af31f91eddc8820e87890aac49b2
 //test for get exams list for teacher and student
 test("response 202 for get the examslist", async function () {
   var response = await request(server).get('/v1/exams/');
@@ -18,47 +21,46 @@ test("response 202 for get the examslist", async function () {
 
 });
 test("validate response of get list ", async function () {
-
   var response = await request(server).get('/v1/exams/');
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
 test('should return a valid JSON array if user has the permissions to view the users list', async () => {
-            var response = await request(server).get('/v1/exams/').send().set('accept', 'application/json');
-            expect.assertions(11);
-            expect(response.status).toBe(200);
-            expect(response.get('content-type')).toContain('application/json');
-            expect(response.body).not.toBeNull();
-            expect(typeof response.body[0]).toBe('object');
-            expect(response.body[0].id).toBeDefined();
-            expect(response.body[0].description).toBeDefined();
-            expect(response.body[0].deadline).toBeDefined();
-            expect(response.body[0].numerotasks).toBeDefined();
-            expect(response.body[0].teacher).toBeDefined();
-            expect(response.body[0].tasks).toBeDefined();
-            expect(response.body[0].students).toBeDefined();
+  var response = await request(server).get('/v1/exams/').send().set('accept', 'application/json');
+  expect.assertions(11);
+  expect(response.status).toBe(200);
+  expect(response.get('content-type')).toContain('application/json');
+  expect(response.body).not.toBeNull();
+  expect(typeof response.body[0]).toBe('object');
+  expect(response.body[0].id).toBeDefined();
+  expect(response.body[0].description).toBeDefined();
+  expect(response.body[0].deadline).toBeDefined();
+  expect(response.body[0].numerotasks).toBeDefined();
+  expect(response.body[0].teacher).toBeDefined();
+  expect(response.body[0].tasks).toBeDefined();
+  expect(response.body[0].students).toBeDefined();
   });
 
 
   test('it should return all the examsList', async () => {
-			var response = await request(server).get('/v1/exams/').set('content-type', 'application/json');
-      var body_keys = ['id','description','deadline','numerotasks','teacher','tasks','students']
-      expect.assertions(15);
-			expect(response).not.toBeNull();
-			expect(response.headers).toBeDefined();
-			expect(response.headers).not.toBeNull();
-			expect(response.status).toBe(200);
-			expect(typeof response.body[0]).toEqual('object');
-			expect(response.body).toBeDefined();
-			expect(response.body).not.toBeNull();
-			expect(typeof response.body[0].id).toEqual('number');
-			expect(typeof response.body[0].description).toEqual('string');
-      expect(response.body[0].deadline).toEqual(3600);
-      expect(response.body[0].numerotasks).toEqual(2);
-      expect(response.body[0].teacher).toEqual(teacher);
-      expect(response.body[0].tasks).toEqual(tasks);
-      expect(response.body[0].students).toEqual(students);
-      expect(Object.keys(response.body[0]).sort()).toEqual(body_keys.sort());
+  var response = await request(server).get('/v1/exams/').set('content-type', 'application/json');
+  var body_keys = ['id','description','deadline','numerotasks','teacher','tasks','students']
+  expect.assertions(15);
+  expect(response).not.toBeNull();
+  expect(response.headers).toBeDefined();
+  expect(response.headers).not.toBeNull();
+  expect(response.status).toBe(200);
+  expect(typeof response.body[0]).toEqual('object');
+  expect(response.body).toBeDefined();
+  expect(response.body).not.toBeNull();
+  expect(typeof response.body[0].id).toEqual('number');
+  expect(typeof response.body[0].description).toEqual('string');
+  expect(response.body[0].deadline).toEqual(3600);
+  expect(response.body[0].numerotasks).toEqual(2);
+  expect(response.body[0].teacher).toEqual(teacher);
+  expect(response.body[0].tasks).toEqual(tasks);
+  expect(response.body[0].students).toEqual(students);
+  expect(Object.keys(response.body[0]).sort()).toEqual(body_keys.sort());
 		});
 //test for get an exam from list for student and teacher
 test("response 202 for get a exam from list", async function () {
