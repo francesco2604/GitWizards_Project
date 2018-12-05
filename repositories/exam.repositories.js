@@ -1,12 +1,14 @@
 'use strict'
 var Exam = require('../models/exams.object.js');
-const tasks = [{id: 123456,numeroDomanda: 2,question: 'diametro della Terra?',type: 1,answers: ['9.742 km','19.742 km','12.742 km'],correctAnswer: '3',studentAnswer: '1'},
-{id: 85884,numeroDomanda: 2,question: 'diametro della Terra?',type: 1,answers: ['9.742 km','19.742 km','12.742 km'],correctAnswer: '3',studentAnswer: '1'}];
+var User = require('../models/user.model.js');
+var Task = require('../models/task.model.js');
+const tasks = [new Task(123456, 'diametro della Terra?', 1, ['9.742 km','19.742 km','12.742 km'],'3','1'),
+              new Task(85884, 'diametro della Terra?', 1, ['9.742 km','19.742 km','12.742 km'],'3', '1')];
 
 var exams=[];
-var teacher ={id:32,firstname: 'mario',lastname: 'rossi',email: 'prova@gmail.com',type: 1,identification_number:123456 };
-var students = [{id:89,firstname: 'francesco ',lastname: 'persi',email: 'prova@gmail.com',type: 0,identification_number:1875698 },
-{id:85,firstname: 'carlo',lastname: 'conti',email: 'prova@gmail.com',type: 0,identification_number:187525 }];
+var teacher = new User(32,'mario','rossi','prova@gmail.com',User.USER_TYPE.TEACHER,123456)
+var students = [new User(89,'francesco','persi','prova@gmail.com',User.USER_TYPE.STUDENT,1875698),
+                new User(23,'paolo','persi','prova@gmail.com',User.USER_TYPE.STUDENT,187546)];
 class ExamRepository
 {
 
