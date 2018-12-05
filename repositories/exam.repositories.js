@@ -1,11 +1,9 @@
 'use strict'
 var Exam = require('../models/exams.object.js');
 var UserRep = require('../repositories/user.repository.js');
-var User = require('../models/user.model.js');
-var Task = require('../models/task.model.js');
-const tasks = [new Task(123456, 'diametro della Terra?', 1, ['9.742 km','19.742 km','12.742 km'],'3','1'),
-              new Task(85884, 'diametro della Terra?', 1, ['9.742 km','19.742 km','12.742 km'],'3', '1')];
-
+//var User = require('../models/user.model.js');
+var Task = require('../repositories/task.repository.js');
+const tasks = [ Task.getTaskById(1),Task.getTaskById(2)];
 var exams=[];
 var teacher = UserRep.getUserById(2)
 var students = [UserRep.getUserById(1)];
