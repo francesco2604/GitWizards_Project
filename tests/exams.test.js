@@ -6,9 +6,8 @@ var functions = require('../controllers/exams.controller.js');
 var ExamRepository = require('../repositories/exam.repositories.js');
 const tasks = [{id: 123456,question: 'diametro della Terra?',answers: ['9.742 km','19.742 km','12.742 km'],correct_answer: '3',student_answer: '1'},
                 {id: 85884,question: 'diametro della Terra?',answers: ['9.742 km','19.742 km','12.742 km'],correct_answer: '3',student_answer: '1'}];
-var teacher ={id:32,firstname: 'mario',lastname: 'rossi',email: 'prova@gmail.com',user_type: 2,identification_number:123456 };
-var students = [{id:89,firstname: 'francesco',lastname: 'persi',email: 'prova@gmail.com',user_type: 1,identification_number:1875698 },
-                {id:23,firstname: 'paolo',lastname: 'persi',email: 'prova@gmail.com',user_type: 1,identification_number:187546 }];
+var teacher ={id:2,firstname: 'Marco',lastname: 'Bonni',email: 'marco.bonni@example.com',user_type: 2,identification_number:789065 };
+var students = [{id:1,firstname: 'Mario',lastname: 'Rossi',email: 'mario.rossi@example.com',user_type: 1,identification_number:123456 }]
 
 //test for get exams list for teacher and student
 test("response 202 for get the examslist", async function () {
@@ -103,7 +102,7 @@ test(" response 403 for post a exam ----no user role", async function () {
   expect(response.status).toBe(403);
 });
 test("validate response for post a exam", async function () {
-    var response = await request(server).post('/v1/exams/').send(new Exam(66, 'prova3', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role', '2' ).set('content-type', 'application/json').set('accept', 'application/json');
+    var response = await request(server).post('/v1/exams/').send(new Exam(66, 'prova3', 3600, 2,teacher, tasks,students)).set('user_id','2').set('user_role', '2' ).set('content-type', 'application/json').set('accept', 'application/json');
   expect(response.status).toBe(200);
 });
 
@@ -116,25 +115,25 @@ test(" response 400 for put a exam  from list id", async function () {
 });
 test(" response 400 for put a exam  from list role", async function () {
 
-  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','1').set('content-type', 'application/json').set('accept', 'application/json');
+  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','2').set('user_role','1').set('content-type', 'application/json').set('accept', 'application/json');
 
   expect(response.status).toBe(403);
 });
 test(" response 404 for put a exam  from list ", async function () {
 
-  var response = await request(server).put('/v1/exams/8888787').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
+  var response = await request(server).put('/v1/exams/8888787').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
 
   expect(response.status).toBe(404);
 });
 test(" response 404 for put a exam  from list ", async function () {
 
-  var response = await request(server).put('/v1/exams/cdevdevde').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');;
+  var response = await request(server).put('/v1/exams/cdevdevde').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');;
   expect(response.status).toBe(400);
 });
 
 test(" response 200 for PUT  from list ", async function () {
 
-  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
+  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
 //console.log(response.status);
   expect(response.status).toBe(200);
 });
@@ -143,7 +142,7 @@ test(" response 200 for PUT  from list ", async function () {
 test(" response 404 for delete a exam", async function () {
 
   //expect(exams.postExam().toEqual(exams.statusok);
-  var response = await request(server).delete('/v1/exams/88558').set('user_id','32').set('user_role','2');
+  var response = await request(server).delete('/v1/exams/88558').set('user_id','2').set('user_role','2');
   expect(response.status).toBe(404);
 
 });
@@ -151,14 +150,14 @@ test(" response 404 for delete a exam", async function () {
 test(" response 400 for delete a exam", async function () {
 
   //expect(exams.postExam().toEqual(exams.statusok);
-  var response = await request(server).delete('/v1/exams/dfgr').set('user_id','32').set('user_role','2');
+  var response = await request(server).delete('/v1/exams/dfgr').set('user_id','2').set('user_role','2');
   expect(response.status).toBe(400);
 
 });
 test(" response 400 for delete a exam no id", async function () {
 
   //expect(exams.postExam().toEqual(exams.statusok);
-  var response = await request(server).delete('/v1/exams/2').set('user_id','2').set('user_role','2');
+  var response = await request(server).delete('/v1/exams/2').set('user_id','1').set('user_role','2');
   expect(response.status).toBe(403);
 
 });
@@ -166,15 +165,16 @@ test(" response 400 for delete a exam no id", async function () {
 test(" response 400 for delete a exam no role", async function () {
 
   //expect(exams.postExam().toEqual(exams.statusok);
-  var response = await request(server).delete('/v1/exams/5').set('user_id','32').set('user_role','1');
+  var response = await request(server).delete('/v1/exams/5').set('user_id','2').set('user_role','1');
   expect(response.status).toBe(403);
 
 });
 test(" response 200 for delete a exam", async function () {
 
   //expect(exams.postExam().toEqual(exams.statusok);
-  var response = await request(server).delete('/v1/exams/2').set('user_id','32').set('user_role','2');
-  //console.log(response.status)
+  var response = await request(server).delete('/v1/exams/2').set('user_id','2').set('user_role','2');
+
+//  console.log(response)
   expect(response.status).toBe(200);
 
 });
