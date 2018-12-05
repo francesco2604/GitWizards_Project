@@ -110,7 +110,7 @@ describe('## API users', () => {
             expect(response.status).toBe(200);
             expect(response.get('content-type')).toContain('application/json');
             expect(response.body).not.toBeNull();
-            expect(typeof response.body).toBe('array');
+            expect(Array.isArray(response.body)).toBe(true);
             return;
         });
         test('should return a list of users with correct properties if user has the permissions to view the users list', async () => {
@@ -140,13 +140,13 @@ describe('## API users', () => {
             expect(response.status).toBe(200);
             expect(response.get('content-type')).toContain('application/json');
             expect(response.body).not.toBeNull();
-            expect(typeof response.body).toBe('array');
+            expect(Array.isArray(response.body)).toBe(true);
             return;
         });
         test('should return a list of users with correct properties if user has the permissions to view the users list. ' +
-             ' All the users in the list should have user type equal to the one specified by the user in the URL', async () => {
+             '\n\tAll the users in the list should have user type equal to the one specified by the user in the URL', async () => {
             var response = await makeGetRequest(SERVER, '/v1/users', good_headers, [{ type : User.USER_TYPE.STUDENT }]);
-            expect.assertions(11);
+            expect.assertions(10);
             expect(Object.keys(response.body[0]).sort()).toEqual(user_obj_keys.sort());
             expect(typeof response.body[0].id).toBe('number');
             expect(typeof response.body[0].firstname).toBe('string');
