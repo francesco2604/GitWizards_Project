@@ -23,6 +23,19 @@ class UserRepository {
         return this._users.get(user_id);
     }
 
+    getAllUsers(user_type=User.USER_TYPE.STUDENT){
+        var users_to_return = []
+        var iterator = this._users.values().next();
+        while(iterator && !iterator.done){
+            if(iterator.value.user_type === user_type ||
+               iterator.value.user_type === User.USER_TYPE.BOTH){
+                users_to_return.push(iterator.value);
+            }
+            iterator = iterator.next();
+        }
+        return users_to_return;
+    }
+
 }
 
 // ====== INIT AND EXPORT =========
