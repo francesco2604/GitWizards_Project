@@ -75,32 +75,31 @@ test("validate response for post a exam", async function () {
 //PUT TEST
 test(" response 400 for put a exam  from list id", async function () {
 
-  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','3').set('user_role','2');
+  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','3').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
 
   expect(response.status).toBe(403);
 });
 test(" response 400 for put a exam  from list role", async function () {
 
-  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','1');
+  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','1').set('content-type', 'application/json').set('accept', 'application/json');
 
   expect(response.status).toBe(403);
 });
 test(" response 404 for put a exam  from list ", async function () {
 
-  var response = await request(server).put('/v1/exams/8888787').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2');
+  var response = await request(server).put('/v1/exams/8888787').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
 
   expect(response.status).toBe(404);
 });
 test(" response 404 for put a exam  from list ", async function () {
 
-  var response = await request(server).put('/v1/exams/cdevdevde').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2');
-
+  var response = await request(server).put('/v1/exams/cdevdevde').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');;
   expect(response.status).toBe(400);
 });
 
 test(" response 200 for PUT  from list ", async function () {
 
-  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2');
+  var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','32').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
 //console.log(response.status);
   expect(response.status).toBe(200);
 });
