@@ -3,6 +3,7 @@ const server = require('../app.js');
 
 // describe all tests for user endpoint
 describe('## API users TEST', () => {
+	// test sulla richiesta POST
     describe('POST /v1/taskgroup/ - create a taskgroup ', () => {
       // variables used as test cases
       var good_header = {
@@ -180,7 +181,7 @@ describe('## API users TEST', () => {
 	});
     
     //test sulla richiesta GET su di un singolo taskgroup
-	describe('GET /v1/taskgroup/ - recive the selected taskgroup ', () => {
+	describe('GET /v1/taskgroup/:id - recive the selected taskgroup ', () => {
 		// variables used as test cases
 		var good_header = {
 			'Content-Type': 'application/json',
@@ -244,6 +245,105 @@ describe('## API users TEST', () => {
 			return;
 		});
 	});
+	
+	// test sulla richiesta PUT
+    describe('PUT /v1/taskgroup/:id - create a taskgroup ', () => {
+      // variables used as test cases
+      var good_header = {
+          'Content-Type': 'application/json',
+          'user_id': 1
+      };
+      var bad_header = {
+          'Content-Type': 'application/json',
+          'user_id': 2
+      };
+      // tests
+      test('it should return a successfull creation', async () => {
+          var response = await request(server).post('/v1/taskgroup/1').set(good_header).send({"description":"Domande per il testing"});
+          expect(response).not.toBeNull();
+          expect(response.body).toBeDefined();
+          expect(response.body).not.toBeNull();
+          expect(response.get('content-type')).toBeDefined();
+          expect(response.get('content-type')).not.toBeNull();
+          expect(response.get('content-type')).toContain('application/json');
+          expect(response.status).toBeDefined();
+          expect(response.status).toBe(200);
+
+
+          // controllo il formato della risposta se è corretto
+          var body_keys = ['id','description']
+          expect(typeof response.body).toEqual('object');
+          expect(response.body).toBeDefined();
+          expect(response.body).not.toBeNull();
+          expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
+          expect(typeof response.body.id).toEqual('number');
+          expect(typeof response.body.description).toEqual('string');
+          expect(response.body.id).not.toBeNull();
+          expect(response.body.id).toBeDefined();
+          expect(response.body.description).toBeDefined();
+          expect(response.body.description).not.toBeNull();
+
+          expect.assertions(18);
+          return;
+      });
+      test('it should return a permission denied error', async () => {
+          var response = await request(server).put('/v1/taskgroup/1').set(bad_header).send({"description":"Domande per il testing"});
+          expect(response).not.toBeNull();
+          expect(response.headers).toBeDefined();
+          expect(response.headers).not.toBeNull();
+          expect(response.get('content-type')).toBeDefined();
+          expect(response.get('content-type')).not.toBeNull();
+          expect(response.get('content-type')).toContain('application/json');
+          expect(response.status).toBeDefined();
+          expect(response.status).toBe(403);
+			
+          // controllo il formato della risposta se è corretto
+          var body_keys = ['codice','messaggio']
+          expect(typeof response.body).toEqual('object');
+          expect(response.body).toBeDefined();
+          expect(response.body).not.toBeNull();
+          expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
+          expect(typeof response.body.codice).toEqual('number');
+          expect(typeof response.body.messaggio).toEqual('string');
+          expect(response.body.codice).not.toBeNull();
+          expect(response.body.codice).toBeDefined();
+          expect(response.body.messaggio).toBeDefined();
+          expect(response.body.messaggio).not.toBeNull();
+          expect(response.body.codice).toBe(403);
+
+          expect.assertions(19);
+          return;
+      });
+      test('it should return a bad format error', async () => {
+          var response = await request(server).post('/v1/taskgroup/').set(good_header);
+          expect(response).not.toBeNull();
+          expect(response.headers).toBeDefined();
+          expect(response.headers).not.toBeNull();
+          expect(response.get('content-type')).toBeDefined();
+          expect(response.get('content-type')).not.toBeNull();
+          expect(response.get('content-type')).toContain('application/json');
+          expect(response.status).toBeDefined();
+          expect(response.status).toBe(400);
+
+          // controllo il formato della risposta se è corretto
+          var body_keys = ['codice','messaggio']
+          expect(typeof response.body).toEqual('object');
+          expect(response.body).toBeDefined();
+          expect(response.body).not.toBeNull();
+          expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
+          expect(typeof response.body.codice).toEqual('number');
+          expect(typeof response.body.messaggio).toEqual('string');
+          expect(response.body.codice).not.toBeNull();
+          expect(response.body.codice).toBeDefined();
+          expect(response.body.messaggio).toBeDefined();
+          expect(response.body.messaggio).not.toBeNull();
+          expect(response.body.codice).toBe(400);
+
+          expect.assertions(19);
+          return;
+      });
+    });
+    
 	
     // test sulla richiesta DELETE
     describe('DELETE /v1/taskgroup/:id - delete a specified taskgroup ', () => {
