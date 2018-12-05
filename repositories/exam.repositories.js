@@ -1,8 +1,9 @@
 'use strict'
 var Exam = require('../models/exams.object.js');
 var User = require('../models/user.model.js');
-const tasks = [{id: 123456,numeroDomanda: 2,question: 'diametro della Terra?',type: 1,answers: ['9.742 km','19.742 km','12.742 km'],correctAnswer: '3',studentAnswer: '1'},
-{id: 85884,numeroDomanda: 2,question: 'diametro della Terra?',type: 1,answers: ['9.742 km','19.742 km','12.742 km'],correctAnswer: '3',studentAnswer: '1'}];
+var Task = require('../models/task.model.js');
+const tasks = [new Task(123456, 'diametro della Terra?', 1, ['9.742 km','19.742 km','12.742 km'],'3','1'),
+              new Task(85884, 'diametro della Terra?', 1, ['9.742 km','19.742 km','12.742 km'],'3', '1')];
 
 var exams=[];
 var teacher = new User(32,'mario','rossi','prova@gmail.com',User.USER_TYPE.TEACHER,123456)
