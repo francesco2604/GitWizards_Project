@@ -55,6 +55,7 @@ class Task {
         return ({
             id: this.id,
             firstname: this.firstname,
+            type:this.type,
             question: this.question,
             answers: this.answers,
             correct_answer: this.correct_answer,
