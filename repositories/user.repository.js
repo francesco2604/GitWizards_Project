@@ -36,6 +36,14 @@ class UserRepository {
         return users_to_return;
     }
 
+    getUserRoleByUserId(user_id){
+        var user = getUserById(user_id);
+        if(user){
+            return user.user_type;
+        }
+        return -1;
+    }
+
 }
 
 // ====== INIT AND EXPORT =========
