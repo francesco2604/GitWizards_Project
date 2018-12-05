@@ -3,11 +3,28 @@ var functions = require('../controllers/exams.controller.js');
 var result_response               = require('../models/error.model')
 var router = express.Router();
 
+function isRequestOkAndHeaderHasAcceptJson(req){
+    if(req && req.headers){
+        if(req.headers['accept'].indexOf('application/json') !== -1){
+            return true;
+        }
+    }
+    return false;
+}
+function isBodyJson(req){
+    if(req.headers['content-type'].indexOf('application/json') !== -1){
+        if(req.body && typeof req.body === 'object'){
+            return true;
+        }
+    }
+    return false;
+}
 function sendErrorResponse(res, error_code, error_message){
     res.status(error_code).json(new result_response(error_code, error_message));
 }
 
-// METHOD GET
+// METHOD GET LIST FOR  STUDENT TEACHER AND
+
 router.get('/', async (req,res) => {
 	var examList = functions.getExamsList();
 	res.status(200).json(examList);
@@ -32,6 +49,7 @@ router.get('/:id',async (req,res) => {
 	}});
 
 router.post('/', (req, res) => {
+  if(isRequestOkAndHeaderHasAcceptJson(req) && isBodyJson(req)){
 		var propertiesPost = req.body;
 		console.log(propertiesPost)
 		var identity= req.headers;
@@ -45,6 +63,10 @@ router.post('/', (req, res) => {
 			//res.status(200).json("post eseguito con successo")
 			res.status(200).location('/v1/users/${risposta.id}').json(risposta);
 		}
+  }
+  else {
+    sendErrorResponse(res, Error.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione utente nel sistema");
+  }
 	})
 router.put('/:id',async (req,res) => {
   if(isNaN(req.params.id))
