@@ -11,10 +11,6 @@ var students = [{id:89,firstname: 'francesco',lastname: 'persi',email: 'prova@gm
                 {id:23,firstname: 'paolo',lastname: 'persi',email: 'prova@gmail.com',user_type: 1,identification_number:187546 }];
 
 
-
-
-
-
 //test for get exams list for teacher and student
 test("response 202 for get the examslist", async function () {
   var response = await request(server).get('/v1/exams/');
