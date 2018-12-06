@@ -61,6 +61,7 @@ function putExamsById(id, propertiesChanged, identity) {
     }
   }
 }
+//DELETE FUNCTION 
 function deleteExamsById(id,identity)
 {
 
