@@ -295,7 +295,6 @@ paths:
                   identification_number: 908765
               tasks: 
                 - id: 123
-                  numeroDomanda: 7
                   question: 'Di che nazionalità era Napoleone Bonaparte?'
                   type: 1
                   answers:
@@ -303,7 +302,6 @@ paths:
                     - 'Francese'
                     - 'Spagnola'
                 - id: 456
-                  numeroDomanda: 2
                   question: 'diametro della Terra?'
                   type: 1
                   answers:
@@ -402,7 +400,6 @@ paths:
                   identification_number: 908765
               tasks: 
                 - id: 123
-                  numeroDomanda: 7
                   question: 'Di che nazionalità era Napoleone Bonaparte?'
                   type: 1
                   answers:
@@ -410,7 +407,6 @@ paths:
                     - 'Francese'
                     - 'Spagnola'
                 - id: 456
-                  numeroDomanda: 2
                   question: 'diametro della Terra?'
                   type: 1
                   answers:
@@ -864,7 +860,6 @@ paths:
               - id: 1233
                 task:
                   id: 123456
-                  numeroDomanda: 2
                   question: 'diametro del sole?'
                   type: 1
                   answers: '90.742 km;190.742 km;120.742 km'
@@ -875,7 +870,6 @@ paths:
               - id: 1233
                 task:
                   id: 123456
-                  numeroDomanda: 2
                   question: 'diametro della Terra?'
                   type: 1
                   answers: '9.742 km;19.742 km;12.742 km'
@@ -923,7 +917,6 @@ paths:
             example:
               task:
                 id: 123456
-                numeroDomanda: 2
                 question: 'diametro del sole?'
                 type: 1
                 answers: 
@@ -940,7 +933,6 @@ paths:
               id: 1233
               task:
                 id: 123456
-                numeroDomanda: 2
                 question: 'diametro del sole?'
                 type: 1
                 answers: 
@@ -1107,7 +1099,6 @@ definitions:
           identification_number: 908765
       tasks: 
         - id: 123
-          numeroDomanda: 7
           question: 'Di che nazionalità era Napoleone Bonaparte?'
           type: 1
           answers:
@@ -1115,7 +1106,6 @@ definitions:
             - 'Francese'
             - 'Spagnola'
         - id: 456
-          numeroDomanda: 2
           question: 'diametro della Terra?'
           type: 1
           answers:
@@ -1138,8 +1128,6 @@ definitions:
     properties:
       id:
         type: integer
-      numeroDomanda:
-        type: integer
       question:
         type: string
       type:
@@ -1153,12 +1141,10 @@ definitions:
       studentAnswer:
         type: string
     required:
-      - numeroDomanda
       - question
       - type
     example:
       id: 123456
-      numeroDomanda: 2
       question: 'diametro della Terra?'
       type: 1
       answers:
@@ -1188,7 +1174,6 @@ definitions:
       description: 'Domande di storia'
       tasks:
         - id: 123
-          numeroDomanda: 7
           question: 'Di che nazionalità era Napoleone Bonaparte?'
           type: 1
           answers: 
@@ -1198,7 +1183,6 @@ definitions:
           correctAnswer: '2'
           studentAnswer: '2'
         - id: 456
-          numeroDomanda: 8
           question: 'Spiega come è iniziata la seconda guerra mondiale'
           type: 2
           studentAnswer: 'Hitler invase la Polonia'
@@ -1233,7 +1217,6 @@ definitions:
       task: 
         application/json:
           id: 123456
-          numeroDomanda: 2
           question: 'diametro della Terra?'
           type: 1
           answers:
