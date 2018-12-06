@@ -1,24 +1,23 @@
 var TaskgroupRepository = require('../repositories/taskgroup.repository.js');
-var taskgroupRepositories=(new TaskgroupRepository())
-var taskgroupsList= taskgroupRepositories.getList();
+var taskgroupsList = TaskgroupRepository.getList();
 //taskgroupList = [];
 //id_increment = 0;
-error404 = {"codice":404,"messaggio":"Risorsa non trovata"}
-error400 = {"codice":400,"messaggio":"Richiesta mal formattata"}
 
 
 function getTaskgroupAll(userid)
 {
 	//taskgroups = [{'id':123456,'description':'domande di storia'},{'id':123457,'description':'domande di geografia'}];		//questo sarà poi preso dall' archivio
-	return taskgroupsList;
+	console.log('ciao');
+	return TaskgroupRepository.getList();
 }
 
 function postTaskgroup(desc)
 {
 	if (desc !== null && desc !== undefined && desc.trim() != "")
 	{
-		var tg =  {"id":0,"description":desc,"tasks":[]}
-		taskgroupRepositories.addTg(tg);
+		var index = TaskgroupRepository.addTg(desc);
+		var tg = TaskgroupRepository.getTg(index);
+		//console.log(tg);
 		return tg;
 		//console.log("Creata risorsa ");
 	}
@@ -31,31 +30,13 @@ function postTaskgroup(desc)
 function getTaskgroup(id)
 {
 	index = -1
-	tg = null;
-
-	for(i = 0; i < taskgroupsList.length; i++)
-	{
-		if (taskgroupsList[i].id == id)
-		{
-			tg = taskgroupsList[i];
-			index = i;
-		}
-	}
-	//console.log(index);
-	if (index===-1)
-	{
-		 return null;
-	}
-	else
-	{
-		return tg;
-	}
+	return TaskgroupRepository.getTg(id)
 }
 
 function putTaskgroup(id,desc,tasks)
 {
 	index = -1
-	tg = null;
+	tg = TaskgroupRepository.getTg(id);
 	//cerco la taskgroup
 	for(i = 0; i < taskgroupsList.length; i++)
 	{
@@ -70,10 +51,8 @@ function putTaskgroup(id,desc,tasks)
 		 return null;
 	}
 	else
-	{
-		var tg =  {"id":id,"description":desc,"tasks":tasks}
-		
-		taskgroupRepositories.modifyTg(index,tg);
+	{		
+		TaskgroupRepository.modifyTg(index,desc,tasks);
 		console.log("Modificata risorsa "+index);
 		return tg;
 	}
@@ -99,7 +78,7 @@ function deleteTaskgroup(id)
 	}
 	else
 	{
-		taskgroupRepositories.deleteTg(index);
+		TaskgroupRepository.deleteTg(index);
 		console.log("Eliminata risorsa " + (index+1));
 		return 1;
 	}

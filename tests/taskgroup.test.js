@@ -1,6 +1,9 @@
 const request = require('supertest');
 const server = require('../app.js');
 
+var Task = require('../models/task.model.js');
+var Tskgrp = require('../models/taskgroup.model.js');
+
 // describe all tests for user endpoint
 describe('## API users TEST', () => {
 	// test sulla richiesta POST
@@ -8,11 +11,11 @@ describe('## API users TEST', () => {
       // variables used as test cases
       var good_header = {
           'Content-Type': 'application/json',
-          'user_id': 1
+          'user_id': 2
       };
       var bad_header = {
           'Content-Type': 'application/json',
-          'user_id': 2
+          'user_id': 1
       };
       // tests
       test('it should return a successfull creation', async () => {
@@ -68,18 +71,18 @@ describe('## API users TEST', () => {
           expect(response.status).toBe(403);
 
           // controllo il formato della risposta se è corretto
-          var body_keys = ['codice','messaggio']
+          var body_keys = ['code','message']
           expect(typeof response.body).toEqual('object');
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();
           expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-          expect(typeof response.body.codice).toEqual('number');
-          expect(typeof response.body.messaggio).toEqual('string');
-          expect(response.body.codice).not.toBeNull();
-          expect(response.body.codice).toBeDefined();
-          expect(response.body.messaggio).toBeDefined();
-          expect(response.body.messaggio).not.toBeNull();
-          expect(response.body.codice).toBe(403);
+          expect(typeof response.body.code).toEqual('number');
+          expect(typeof response.body.message).toEqual('string');
+          expect(response.body.code).not.toBeNull();
+          expect(response.body.code).toBeDefined();
+          expect(response.body.message).toBeDefined();
+          expect(response.body.message).not.toBeNull();
+          expect(response.body.code).toBe(403);
 
           expect.assertions(19);
           return;
@@ -96,18 +99,18 @@ describe('## API users TEST', () => {
           expect(response.status).toBe(400);
 
           // controllo il formato della risposta se è corretto
-          var body_keys = ['codice','messaggio']
+          var body_keys = ['code','message']
           expect(typeof response.body).toEqual('object');
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();
           expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-          expect(typeof response.body.codice).toEqual('number');
-          expect(typeof response.body.messaggio).toEqual('string');
-          expect(response.body.codice).not.toBeNull();
-          expect(response.body.codice).toBeDefined();
-          expect(response.body.messaggio).toBeDefined();
-          expect(response.body.messaggio).not.toBeNull();
-          expect(response.body.codice).toBe(400);
+          expect(typeof response.body.code).toEqual('number');
+          expect(typeof response.body.message).toEqual('string');
+          expect(response.body.code).not.toBeNull();
+          expect(response.body.code).toBeDefined();
+          expect(response.body.message).toBeDefined();
+          expect(response.body.message).not.toBeNull();
+          expect(response.body.code).toBe(400);
 
           expect.assertions(19);
           return;
@@ -119,11 +122,11 @@ describe('## API users TEST', () => {
 		// variables used as test cases
 		var good_header = {
 			'Content-Type': 'application/json',
-			'user_id': 1
+			'user_id': 2
 		};
 		var bad_header = {
 			'Content-Type': 'application/json',
-			'user_id': 2
+			'user_id': 1
 		};
 		
 		//tests
@@ -162,18 +165,18 @@ describe('## API users TEST', () => {
 			expect(response.status).toBe(403);
 
 			// controllo il formato della risposta se è corretto
-			var body_keys = ['codice','messaggio']
+			var body_keys = ['code','message']
 			expect(typeof response.body).toEqual('object');
 			expect(response.body).toBeDefined();
 			expect(response.body).not.toBeNull();
 			expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-			expect(typeof response.body.codice).toEqual('number');
-			expect(typeof response.body.messaggio).toEqual('string');
-			expect(response.body.codice).not.toBeNull();
-			expect(response.body.codice).toBeDefined();
-			expect(response.body.messaggio).toBeDefined();
-			expect(response.body.messaggio).not.toBeNull();
-			expect(response.body.codice).toBe(403);
+			expect(typeof response.body.code).toEqual('number');
+			expect(typeof response.body.message).toEqual('string');
+			expect(response.body.code).not.toBeNull();
+			expect(response.body.code).toBeDefined();
+			expect(response.body.message).toBeDefined();
+			expect(response.body.message).not.toBeNull();
+			expect(response.body.code).toBe(403);
 
 			expect.assertions(19);
 			return;
@@ -185,11 +188,11 @@ describe('## API users TEST', () => {
 		// variables used as test cases
 		var good_header = {
 			'Content-Type': 'application/json',
-			'user_id': 1
+			'user_id': 2
 		};
 		var bad_header = {
 			'Content-Type': 'application/json',
-			'user_id': 2
+			'user_id': 1
 		};
 		
 		//tests
@@ -228,18 +231,18 @@ describe('## API users TEST', () => {
 			expect(response.status).toBe(403);
 
 			// controllo il formato della risposta se è corretto
-			var body_keys = ['codice','messaggio']
+			var body_keys = ['code','message']
 			expect(typeof response.body).toEqual('object');
 			expect(response.body).toBeDefined();
 			expect(response.body).not.toBeNull();
 			expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-			expect(typeof response.body.codice).toEqual('number');
-			expect(typeof response.body.messaggio).toEqual('string');
-			expect(response.body.codice).not.toBeNull();
-			expect(response.body.codice).toBeDefined();
-			expect(response.body.messaggio).toBeDefined();
-			expect(response.body.messaggio).not.toBeNull();
-			expect(response.body.codice).toBe(403);
+			expect(typeof response.body.code).toEqual('number');
+			expect(typeof response.body.message).toEqual('string');
+			expect(response.body.code).not.toBeNull();
+			expect(response.body.code).toBeDefined();
+			expect(response.body.message).toBeDefined();
+			expect(response.body.message).not.toBeNull();
+			expect(response.body.code).toBe(403);
 
 			expect.assertions(19);
 			return;
@@ -251,15 +254,19 @@ describe('## API users TEST', () => {
       // variables used as test cases
       var good_header = {
           'Content-Type': 'application/json',
-          'user_id': 1
+          'user_id': 2
       };
       var bad_header = {
           'Content-Type': 'application/json',
-          'user_id': 2
+          'user_id': 1
       };
       // tests
       test('it should return a successfull modification', async () => {
-          var response = await request(server).post('/v1/taskgroup/1').set(good_header).send({"description":"Domande per il testing"});
+		  tsks = []
+		  var tsk = new Task(1, 'Quanti anni aveva napoleone alla sua nascita?', '1', ['48','44','12'], '2', '1')
+		  tsks.push(tsk);
+		  var tgp = new Tskgrp(1,"prova modifica",tsks);
+          var response = await request(server).put('/v1/taskgroup/1').set(good_header).send(tgp);
           expect(response).not.toBeNull();
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();
@@ -269,7 +276,7 @@ describe('## API users TEST', () => {
           expect(response.get('content-type')).toContain('application/json');
           expect(response.status).toBeDefined();         
 
-
+		
           // controllo il formato della risposta se è corretto
           var body_keys = ['id','description','tasks']
           expect(typeof response.body).toEqual('object');
@@ -287,7 +294,11 @@ describe('## API users TEST', () => {
           return;
       });
       test('it should return a permission denied error', async () => {
-          var response = await request(server).put('/v1/taskgroup/1').set(bad_header).send({"description":"Domande per il testing"});
+		  tsks = []
+		  var tsk = new Task(1, 'Quanti anni aveva napoleone alla sua nascita?', '1', ['48','44','12'], '2', '1')
+		  tsks.push(tsk);
+		  var tgp = new Tskgrp(1,"prova modifica",tsks);
+          var response = await request(server).put('/v1/taskgroup/1').set(bad_header).send(tgp);
           expect(response).not.toBeNull();
           expect(response.headers).toBeDefined();
           expect(response.headers).not.toBeNull();
@@ -298,46 +309,46 @@ describe('## API users TEST', () => {
           expect(response.status).toBe(403);
 			
           // controllo il formato della risposta se è corretto
-          var body_keys = ['codice','messaggio']
+          var body_keys = ['code','message']
           expect(typeof response.body).toEqual('object');
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();
           expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-          expect(typeof response.body.codice).toEqual('number');
-          expect(typeof response.body.messaggio).toEqual('string');
-          expect(response.body.codice).not.toBeNull();
-          expect(response.body.codice).toBeDefined();
-          expect(response.body.messaggio).toBeDefined();
-          expect(response.body.messaggio).not.toBeNull();
-          expect(response.body.codice).toBe(403);
+          expect(typeof response.body.code).toEqual('number');
+          expect(typeof response.body.message).toEqual('string');
+          expect(response.body.code).not.toBeNull();
+          expect(response.body.code).toBeDefined();
+          expect(response.body.message).toBeDefined();
+          expect(response.body.message).not.toBeNull();
+          expect(response.body.code).toBe(403);
 
           expect.assertions(19);
           return;
       });
       test('it should return a bad format error', async () => {
-          var response = await request(server).post('/v1/taskgroup/').set(good_header);
+          var response = await request(server).put('/v1/taskgroup/1').set(good_header);
           expect(response).not.toBeNull();
           expect(response.headers).toBeDefined();
           expect(response.headers).not.toBeNull();
           expect(response.get('content-type')).toBeDefined();
           expect(response.get('content-type')).not.toBeNull();
+          expect(response.status).toBe(400);
           expect(response.get('content-type')).toContain('application/json');
           expect(response.status).toBeDefined();
-          expect(response.status).toBe(400);
 
           // controllo il formato della risposta se è corretto
-          var body_keys = ['codice','messaggio']
+          var body_keys = ['code','message']
           expect(typeof response.body).toEqual('object');
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();
           expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-          expect(typeof response.body.codice).toEqual('number');
-          expect(typeof response.body.messaggio).toEqual('string');
-          expect(response.body.codice).not.toBeNull();
-          expect(response.body.codice).toBeDefined();
-          expect(response.body.messaggio).toBeDefined();
-          expect(response.body.messaggio).not.toBeNull();
-          expect(response.body.codice).toBe(400);
+          expect(typeof response.body.code).toEqual('number');
+          expect(typeof response.body.message).toEqual('string');
+          expect(response.body.code).not.toBeNull();
+          expect(response.body.code).toBeDefined();
+          expect(response.body.message).toBeDefined();
+          expect(response.body.message).not.toBeNull();
+          expect(response.body.code).toBe(400);
 
           expect.assertions(19);
           return;
@@ -350,11 +361,11 @@ describe('## API users TEST', () => {
         // variables used as test cases
         var good_header = {
             'Content-Type': 'application/json',
-            'user_id': 1
+            'user_id': 2
         };
         var bad_header = {
             'Content-Type': 'application/json',
-            'user_id': 2
+            'user_id': 1
         };
 
         // tests
@@ -378,18 +389,18 @@ describe('## API users TEST', () => {
             expect(response2.status).toBe(404);
 
             // controllo il formato della risposta se è corretto
-            var body_keys = ['codice','messaggio']
+            var body_keys = ['code','message']
             expect(typeof response.body).toEqual('object');
             expect(response2.body).toBeDefined();
             expect(response2.body).not.toBeNull();
             expect(Object.keys(response2.body).sort()).toEqual(body_keys.sort());
-            expect(typeof response2.body.codice).toEqual('number');
-            expect(typeof response2.body.messaggio).toEqual('string');
-            expect(response2.body.codice).not.toBeNull();
-            expect(response2.body.codice).toBeDefined();
-            expect(response2.body.messaggio).toBeDefined();
-            expect(response2.body.messaggio).not.toBeNull();
-            expect(response2.body.codice).toBe(404);
+            expect(typeof response2.body.code).toEqual('number');
+            expect(typeof response2.body.message).toEqual('string');
+            expect(response2.body.code).not.toBeNull();
+            expect(response2.body.code).toBeDefined();
+            expect(response2.body.message).toBeDefined();
+            expect(response2.body.message).not.toBeNull();
+            expect(response2.body.code).toBe(404);
 
             expect.assertions(24);
             return;
@@ -403,18 +414,18 @@ describe('## API users TEST', () => {
             expect(response.status).toBe(403);
 
             // controllo il formato della risposta se è corretto
-            var body_keys = ['codice','messaggio']
+            var body_keys = ['code','message']
             expect(typeof response.body).toEqual('object');
             expect(response.body).toBeDefined();
             expect(response.body).not.toBeNull();
             expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-            expect(typeof response.body.codice).toEqual('number');
-            expect(typeof response.body.messaggio).toEqual('string');
-            expect(response.body.codice).not.toBeNull();
-            expect(response.body.codice).toBeDefined();
-            expect(response.body.messaggio).toBeDefined();
-            expect(response.body.messaggio).not.toBeNull();
-            expect(response.body.codice).toBe(403);
+            expect(typeof response.body.code).toEqual('number');
+            expect(typeof response.body.message).toEqual('string');
+            expect(response.body.code).not.toBeNull();
+            expect(response.body.code).toBeDefined();
+            expect(response.body.message).toBeDefined();
+            expect(response.body.message).not.toBeNull();
+            expect(response.body.code).toBe(403);
 
             expect.assertions(16);
             return;
@@ -428,18 +439,18 @@ describe('## API users TEST', () => {
             expect(response.status).toBe(404);
 
             // controllo il formato della risposta se è corretto
-            var body_keys = ['codice','messaggio']
+            var body_keys = ['code','message']
             expect(typeof response.body).toEqual('object');
             expect(response.body).toBeDefined();
             expect(response.body).not.toBeNull();
             expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-            expect(typeof response.body.codice).toEqual('number');
-            expect(typeof response.body.messaggio).toEqual('string');
-            expect(response.body.codice).not.toBeNull();
-            expect(response.body.codice).toBeDefined();
-            expect(response.body.messaggio).toBeDefined();
-            expect(response.body.messaggio).not.toBeNull();
-            expect(response.body.codice).toBe(404);
+            expect(typeof response.body.code).toEqual('number');
+            expect(typeof response.body.message).toEqual('string');
+            expect(response.body.code).not.toBeNull();
+            expect(response.body.code).toBeDefined();
+            expect(response.body.message).toBeDefined();
+            expect(response.body.message).not.toBeNull();
+            expect(response.body.code).toBe(404);
 
             expect.assertions(16);
             return;
