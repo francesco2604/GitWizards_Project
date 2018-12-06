@@ -1,12 +1,12 @@
 'use strict'
 var Exam = require('../models/exams.object.js');
-const tasks = [{id: 123456,numeroDomanda: 2,question: 'diametro della Terra?',type: 1,answers: ['9.742 km','19.742 km','12.742 km'],correctAnswer: '3',studentAnswer: '1'},
-{id: 85884,numeroDomanda: 2,question: 'diametro della Terra?',type: 1,answers: ['9.742 km','19.742 km','12.742 km'],correctAnswer: '3',studentAnswer: '1'}];
-
+var UserRep = require('../repositories/user.repository.js');
+//var User = require('../models/user.model.js');
+var Task = require('../repositories/task.repository.js');
+const tasks = [ Task.getTaskById(1),Task.getTaskById(2)];
 var exams=[];
-var teacher ={id:32,firstname: 'mario',lastname: 'rossi',email: 'prova@gmail.com',type: 1,identification_number:123456 };
-var students = [{id:89,firstname: 'francesco ',lastname: 'persi',email: 'prova@gmail.com',type: 0,identification_number:1875698 },
-{id:85,firstname: 'carlo',lastname: 'conti',email: 'prova@gmail.com',type: 0,identification_number:187525 }];
+var teacher = UserRep.getUserById(2)
+var students = [UserRep.getUserById(1)];
 class ExamRepository
 {
 
