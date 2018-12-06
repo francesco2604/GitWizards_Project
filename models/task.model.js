@@ -64,6 +64,7 @@ class Task {
             id: this.id,
             firstname: this.firstname,
             question: this.question,
+            type: this._type,
             answers: this.answers,
             correct_answer: this.correct_answer,
             student_answer: this.student_answer

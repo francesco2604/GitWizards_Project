@@ -4,8 +4,8 @@ var Exam = require('../models/exams.object.js');
 var router = require('../routers/exams.router.js');
 var functions = require('../controllers/exams.controller.js');
 var ExamRepository = require('../repositories/exam.repositories.js');
-const tasks = [{id: 1,question: 'Quanti anni aveva napoleone alla sua morte?',type: '1',answers: ['48','44','12'],correct_answer: '2',student_answer: '1'},
-                {id: 2,question: 'Quanti anni aveva napoleone alla sua nascita?',type: '1', answers: ['0','1','9 mesi'],correct_answer: '1',student_answer: '2'}];
+const tasks = [{id: 1,question: 'Quanti anni aveva napoleone alla sua morte?',type: 1,answers: ['48','44','12'],correct_answer: '2',student_answer: '1'},
+                {id: 2,question: 'Quanti anni aveva napoleone alla sua nascita?',type: 1, answers: ['0','1','9 mesi'],correct_answer: '1',student_answer: '2'}];
 var teacher ={id:2,firstname: 'Marco',lastname: 'Bonni',email: 'marco.bonni@example.com',user_type: 2,identification_number:789065 };
 var students = [{id:1,firstname: 'Mario',lastname: 'Rossi',email: 'mario.rossi@example.com',user_type: 1,identification_number:123456 }]
 
