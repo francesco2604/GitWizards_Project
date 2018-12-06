@@ -79,6 +79,7 @@ function deleteExamsById(id,identity)
   if(index===-1)
     return 'Not Found'
   else{
+    //console.log(((examRepositories.getExamForId(index))['teacher'])['id'],identity.user_id)
     if(((examRepositories.getExamForId(index))['teacher'])['id']!=parseInt(identity.user_id))
         return 'No permission'
     else {
