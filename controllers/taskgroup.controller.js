@@ -5,176 +5,104 @@ var taskgroupsList= taskgroupRepositories.getList();
 //id_increment = 0;
 error404 = {"codice":404,"messaggio":"Risorsa non trovata"}
 error400 = {"codice":400,"messaggio":"Richiesta mal formattata"}
-error403 = {"codice":403,"messaggio":"Non si hanno i permessi necessari"}
-users = [{"id":1,"firstname":"Daniele","lastname":"Francescatti","email":"daniele.francescatti@gmail.com","type":2,"identification_number":"180514"},{"id": 2,"firstname": "Luca","lastname": "Giorgini","email": "luca.giorgini@example.com","type": 1,"identification_number": 890123}]
 
-function getTaskgroupAll(req,res)
+
+function getTaskgroupAll(userid)
 {
-	userid = req.headers['user_id'];
-	//console.log(userid);
-	if(getUserRole(userid) != 2 && getUserRole(userid) != 3)
+	//taskgroups = [{'id':123456,'description':'domande di storia'},{'id':123457,'description':'domande di geografia'}];		//questo sarà poi preso dall' archivio
+	return taskgroupsList;
+}
+
+function postTaskgroup(desc)
+{
+	if (desc !== null && desc !== undefined && desc.trim() != "")
 	{
-		res.status(403).json(error403);
+		var tg =  {"id":0,"description":desc,"tasks":[]}
+		taskgroupRepositories.addTg(tg);
+		return tg;
+		//console.log("Creata risorsa ");
 	}
 	else
 	{
-		//taskgroups = [{'id':123456,'description':'domande di storia'},{'id':123457,'description':'domande di geografia'}];		//questo sarà poi preso dall' archivio
-		res.status(200).json(taskgroupsList);
+		return null;
 	}
 }
 
-function postTaskgroup(req,res)
+function getTaskgroup(id)
 {
-	userid = req.headers['user_id'];
-	if(getUserRole(userid) != 2 && getUserRole(userid) != 3)
+	index = -1
+	tg = null;
+
+	for(i = 0; i < taskgroupsList.length; i++)
 	{
-		res.status(403).json(error403);
+		if (taskgroupsList[i].id == id)
+		{
+			tg = taskgroupsList[i];
+			index = i;
+		}
+	}
+	//console.log(index);
+	if (index===-1)
+	{
+		 return null;
 	}
 	else
 	{
-		var taskgroup_name = req.body.description
-
-		if (taskgroup_name !== null && taskgroup_name !== undefined && taskgroup_name.trim() != "")
-		{
-			var tg =  {"id":0,"description":taskgroup_name,"tasks":[]}
-			taskgroupRepositories.addTg(tg);
-			res.status(201).json(tg)
-			//console.log("Creata risorsa ");
-		}
-		else
-		{
-			res.status(400).json(error400);
-		}
+		return tg;
 	}
 }
 
-function getTaskgroup(req,res)
+function putTaskgroup(id,desc,tasks)
 {
-	userid = req.headers['user_id'];
-	if(getUserRole(userid) != 2 && getUserRole(userid) != 3)
+	index = -1
+	tg = null;
+	//cerco la taskgroup
+	for(i = 0; i < taskgroupsList.length; i++)
 	{
-		res.status(403).json(error403);
+		if (taskgroupsList[i].id == id)
+		{
+			tg = taskgroupsList[i];
+			index = i;
+		}
+	}
+	if (index===-1)
+	{
+		 return null;
 	}
 	else
 	{
-		id = req.params.id;
-		index = -1
-		tg = null;
-
-		for(i = 0; i < taskgroupList.length; i++)
-		{
-			if (taskgroupList[i].id == id)
-			{
-				tg = taskgroupList[i];
-				index = i;
-			}
-		}
-		//console.log(index);
-		if (index===-1)
-		{
-			 res.status(404).json(error404);
-			 return
-		}
-		else
-		{
-			res.status(200).json(tg)
-		}
+		var tg =  {"id":id,"description":desc,"tasks":tasks}
+		
+		taskgroupRepositories.modifyTg(index,tg);
+		console.log("Modificata risorsa "+index);
+		return tg;
 	}
 }
 
-function putTaskgroup(req,res)
+function deleteTaskgroup(id)
 {
-	userid = req.headers['user_id'];
-	if(getUserRole(userid) != 2 && getUserRole(userid) != 3)
+	index = -1
+	tg = null;
+
+	for(i = 0; i < taskgroupsList.length; i++)
 	{
-		res.status(403).json(error403);
+		if (taskgroupsList[i].id == id)
+		{
+			tg = taskgroupsList[i];
+			index = i;
+		}
+	}
+	//console.log(index);
+	if (index===-1)
+	{
+		 return 0;
 	}
 	else
 	{
-		id = req.params.id;
-		index = -1
-		tg = null;
-		//cerco la taskgroup
-		for(i = 0; i < taskgroupsList.length; i++)
-		{
-			if (taskgroupsList[i].id == id)
-			{
-				tg = taskgroupsList[i];
-				index = i;
-			}
-		}
-		if (index===-1)
-		{
-			 res.status(404).json(error404);
-			 return
-		}
-		else
-		{
-			var taskgroup_name = req.body.description
-			var tasks = req.body.tasks
-			var tg =  {"id":id,"description":taskgroup_name,"tasks":tasks}
-			
-			taskgroupRepositories.modifyTg(index,tg);
-			res.status(200).json(tg);
-			console.log("Modificata risorsa "+index);
-		}
+		taskgroupRepositories.deleteTg(index);
+		console.log("Eliminata risorsa " + (index+1));
+		return 1;
 	}
-}
-
-function deleteTaskgroup(req,res)
-{
-	userid = req.headers['user_id'];
-	if(getUserRole(userid) != 2 && getUserRole(userid) != 3)
-	{
-		res.status(403).json(error403);
-	}
-	else
-	{
-		id = req.params.id;
-		index = -1
-		tg = null;
-
-		for(i = 0; i < taskgroupsList.length; i++)
-		{
-			if (taskgroupsList[i].id == id)
-			{
-				tg = taskgroupsList[i];
-				index = i;
-			}
-		}
-		//console.log(index);
-		if (index===-1)
-		{
-			 res.status(404).json(error404);
-			 return
-		}
-		else
-		{
-			taskgroupRepositories.deleteTg(index);
-			res.status(204).send("Risorsa eliminata con successo").end();
-			console.log("Eliminata risorsa " + (index+1));
-		}
-	}
-}
-
-
-// estrapola il ruolo tramite l' id utente
-function getUserRole(id)
-{
-	role = 0
-
-	if(id > 0 && id !== undefined && id !== null)
-	{
-		for(i = 0; i < users.length; i++)
-		{
-			if (users[i].id == id)
-			{
-				role = users[i].type;
-			}
-		}
-	}
-
-	return role;
 }
 
 module.exports = {getTaskgroupAll,postTaskgroup,getTaskgroup,putTaskgroup,deleteTaskgroup}
