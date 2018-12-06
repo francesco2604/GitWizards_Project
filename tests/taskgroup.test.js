@@ -41,7 +41,7 @@ describe('## API users TEST', () => {
 
 
           // controllo il formato della risposta se è corretto
-          var body_keys = ['id','description']
+          var body_keys = ['id','description','tasks']
           expect(typeof response.body).toEqual('object');
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();
@@ -137,7 +137,7 @@ describe('## API users TEST', () => {
 			
 			// controllo il formato della risposta se è corretto
 
-			var body_keys = ['id','description']
+			var body_keys = ['id','description','tasks']
 			expect(typeof response.body[0]).toEqual('object');
 			expect(response.body).toBeDefined();
 			expect(response.body).not.toBeNull();
@@ -203,7 +203,7 @@ describe('## API users TEST', () => {
 			
 			// controllo il formato della risposta se è corretto
 
-			var body_keys = ['id','description']
+			var body_keys = ['id','description','tasks']
 			expect(typeof response.body).toEqual('object');
 			expect(response.body).toBeDefined();
 			expect(response.body).not.toBeNull();
@@ -258,20 +258,20 @@ describe('## API users TEST', () => {
           'user_id': 2
       };
       // tests
-      test('it should return a successfull creation', async () => {
+      test('it should return a successfull modification', async () => {
           var response = await request(server).post('/v1/taskgroup/1').set(good_header).send({"description":"Domande per il testing"});
           expect(response).not.toBeNull();
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();
+          expect(response.status).toBe(200);
           expect(response.get('content-type')).toBeDefined();
           expect(response.get('content-type')).not.toBeNull();
           expect(response.get('content-type')).toContain('application/json');
-          expect(response.status).toBeDefined();
-          expect(response.status).toBe(200);
+          expect(response.status).toBeDefined();         
 
 
           // controllo il formato della risposta se è corretto
-          var body_keys = ['id','description']
+          var body_keys = ['id','description','tasks']
           expect(typeof response.body).toEqual('object');
           expect(response.body).toBeDefined();
           expect(response.body).not.toBeNull();

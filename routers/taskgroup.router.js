@@ -109,7 +109,7 @@ router.delete('/:id',async (req,res) =>
 		result = functions.deleteTaskgroup(req.params.id);
 		if(result === 1)
 		{
-			res.status(200).send("Cancellazione avvenuta con successo");
+			res.status(204).send("Cancellazione avvenuta con successo");
 		}
 		else
 		{
