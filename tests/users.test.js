@@ -45,7 +45,7 @@ function checkError(response, error){
 describe('## API users', () => {
 
     // common
-    var general_error = new Error(Error.ERROR_CODE.BAD_REQUEST, 'Richiesta non valida');
+    var server_error = new Error(Error.ERROR_CODE.INTERNAL_ERROR, 'Errore interno del server');
     var no_permission_error =  new Error(Error.ERROR_CODE.FORBIDDEN, 'Accesso negato. Mancanza di permessi per accesso alla risorsa');
     var user_obj_keys = ['id', 'firstname', 'lastname', 'email', 'user_type', 'identification_number'];
 
@@ -89,7 +89,7 @@ describe('## API users', () => {
         });
         test('should reject the creation of new user if request body is null', async() => {
             var response = await makePostRequest(SERVER, '/v1/users', bad_users[3]);
-            checkError(response, general_error);
+            checkError(response, server_error);
             return;
         });
     });
