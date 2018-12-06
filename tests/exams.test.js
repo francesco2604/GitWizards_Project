@@ -11,17 +11,17 @@ var students = [{id:1,firstname: 'Mario',lastname: 'Rossi',email: 'mario.rossi@e
 
 //test for get exams list for teacher and student
 test("response 202 for get the examslist", async function () {
-  var response = await request(server).get('/v1/exams/');
+  var response = await request(server).get('/v1/exams/').set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
   expect(response.status).toBe(200);
 
 });
 test("validate response of get list ", async function () {
-  var response = await request(server).get('/v1/exams/');
+  var response = await request(server).get('/v1/exams/').set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json')  ;
   var exams = response.body;
   expect(response.body).toBeDefined();
 });
 test('should return a valid JSON array if user has the permissions to view the users list', async () => {
-  var response = await request(server).get('/v1/exams/').send().set('accept', 'application/json');
+  var response = await request(server).get('/v1/exams/').send().set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
   expect.assertions(11);
   expect(response.status).toBe(200);
   expect(response.get('content-type')).toContain('application/json');
@@ -38,7 +38,7 @@ test('should return a valid JSON array if user has the permissions to view the u
 
 
   test('it should return all the examsList', async () => {
-  var response = await request(server).get('/v1/exams/').set('content-type', 'application/json');
+  var response = await request(server).get('/v1/exams/').set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
   var body_keys = ['id','description','deadline','numerotasks','teacher','tasks','students']
   expect.assertions(15);
   expect(response).not.toBeNull();
