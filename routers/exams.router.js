@@ -151,7 +151,7 @@ else {
 
 
 });
-
+// METHOD DELETE FOR A TEACHER
 router.delete('/:id',async (req,res) => {
   if(isRequestOkAndHeaderHasAcceptJson(req) && isBodyJson(req) && isNaN(req.params.id)==false){
     if(checkAuth(req.headers))  {
