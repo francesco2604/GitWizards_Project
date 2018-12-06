@@ -1,6 +1,7 @@
 const express = require('express');
 var functions = require('../controllers/exams.controller.js');
 var result_response               = require('../models/error.model')
+const USER_REPOSITORY   = require('../repositories/user.repository');
 var router = express.Router();
 
 function isRequestOkAndHeaderHasAcceptJson(req){
@@ -23,11 +24,49 @@ function sendErrorResponse(res, error_code, error_message){
   res.status(error_code).json(new result_response(error_code, error_message));
 }
 
+function checkAuth(req_headers){
+    if(req_headers){
+        var user_id_regex = new RegExp(/^([1-9][0-9]*)$/);
+        var user_role_regex = new RegExp(/^[2-3]$/);
+        if(!req_headers['user_id'] || !user_id_regex.test(req_headers['user_id'])){
+            return false;
+        }
+        if(!req_headers['user_role'] || !user_role_regex.test(req_headers['user_role'])){
+            return false;
+        }
+        var user_role = (typeof req_headers['user_role'] === 'string') ? parseInt(req_headers['user_role']) : req_headers['user_role'];
+        var user_id = (typeof req_headers['user_id'] === 'string') ? parseInt(req_headers['user_id']) : req_headers['user_id'];
+        var real_user_role = USER_REPOSITORY.getUserRoleByUserId(user_id);
+        if(real_user_role !== -1 && real_user_role === user_role){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 // METHOD GET LIST FOR  STUDENT TEACHER AND
 
 router.get('/', async (req,res) => {
-  var examList = functions.getExamsList();
-  res.status(200).json(examList);
+  if(isRequestOkAndHeaderHasAcceptJson(req)){
+          if(checkAuth(req.headers) ){
+              var examList = functions.getExamsList();
+              if(examList && examList.length !== 0){
+              res.status(200).json(examList);
+              }else if(examList && examList.length === 0){
+                  res.status(200).json({ status : 200, message : 'Lista utenti vuota'});
+              }else{
+                console.log(examList)
+                  sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND, "Errore durante il recupero della lista di exams");
+              }
+          }else{
+              sendErrorResponse(res, result_response.ERROR_CODE.FORBIDDEN, "Accesso negato. Mancanza di permessi per accesso alla risorsa");
+          }
+      }else{
+          //console.log(examList)
+          //console.log(isRequestOkAndHeaderHasAcceptJson(req))
+          sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND, "Errore durante il recupero della lista di exams");
+      }
 });
 //METHOD GET ID FOR TEACHER AND STUDENT
 router.get('/:id',async (req,res) => {
@@ -67,6 +106,10 @@ router.get('/:id',async (req,res) => {
     else {
       sendErrorResponse(res, Error.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione utente nel sistema");
     }
+
+
+
+    
   })
   router.put('/:id',async (req,res) => {
     if(isRequestOkAndHeaderHasAcceptJson(req) && isBodyJson(req)){
