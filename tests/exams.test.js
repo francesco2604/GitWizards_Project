@@ -138,10 +138,10 @@ test(" response 200 for PUT  from list ", async function () {
   expect(response.status).toBe(200);
 });
 
-// test for delete an exams
+//TEST FOR DELETE
 test(" response 404 for delete a exam", async function () {
 
-  //expect(exams.postExam().toEqual(exams.statusok);
+
   var response = await request(server).delete('/v1/exams/88558').set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
   expect(response.status).toBe(404);
 
@@ -149,14 +149,14 @@ test(" response 404 for delete a exam", async function () {
 
 test(" response 400 for delete a exam", async function () {
 
-  //expect(exams.postExam().toEqual(exams.statusok);
+
   var response = await request(server).delete('/v1/exams/dfgr').set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
   expect(response.status).toBe(400);
 
 });
 test(" response 400 for delete a exam no id", async function () {
 
-  //expect(exams.postExam().toEqual(exams.statusok);
+
   var response = await request(server).delete('/v1/exams/2').set('user_id','1').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
   expect(response.status).toBe(403);
 
@@ -164,17 +164,15 @@ test(" response 400 for delete a exam no id", async function () {
 
 test(" response 400 for delete a exam no role", async function () {
 
-  //expect(exams.postExam().toEqual(exams.statusok);
+
   var response = await request(server).delete('/v1/exams/2').set('user_id','2').set('user_role','1').set('content-type', 'application/json').set('accept', 'application/json');
   expect(response.status).toBe(403);
 
 });
 test(" response 200 for delete a exam", async function () {
 
-  //expect(exams.postExam().toEqual(exams.statusok);
-  var response = await request(server).delete('/v1/exams/2').set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
 
-//  console.log(response)
+  var response = await request(server).delete('/v1/exams/2').set('user_id','2').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
   expect(response.status).toBe(200);
 
 });

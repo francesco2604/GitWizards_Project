@@ -114,7 +114,7 @@ router.post('/', (req, res) => {
     sendErrorResponse(res, result_response.ERROR_CODE.FORBIDDEN, "Accesso negato. Mancanza di permessi per accesso alla risorsa");
   }
   else {
-    sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione utente nel sistema");
+    sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione exase nel sistema");
   }
 
 
@@ -146,12 +146,12 @@ router.put('/:id',async (req,res) => {
   sendErrorResponse(res, result_response.ERROR_CODE.FORBIDDEN, "Accesso negato. Mancanza di permessi per accesso alla risorsa");
 }
 else {
-  sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione utente nel sistema");
+  sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione esame nel sistema");
 }
 
 
 });
-
+// METHOD DELETE FOR A TEACHER
 router.delete('/:id',async (req,res) => {
   if(isRequestOkAndHeaderHasAcceptJson(req) && isBodyJson(req) && isNaN(req.params.id)==false){
     if(checkAuth(req.headers))  {
@@ -173,7 +173,7 @@ router.delete('/:id',async (req,res) => {
 
     }
     else {
-      sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione utente nel sistema");
+      sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione esame nel sistema");
     }
 
   });
