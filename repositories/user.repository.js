@@ -23,6 +23,24 @@ class UserRepository {
         return this._users.get(user_id);
     }
 
+    getAllUsers(user_type=User.USER_TYPE.STUDENT){
+        var users = this._users ? Array.from(this._users.values()) : null;
+        if(users){
+            return users.filter((user) => {
+                return user.user_type === user_type || user.user_type === User.USER_TYPE.BOTH;
+            });
+        }
+        return users;
+    }
+
+    getUserRoleByUserId(user_id){
+        var user = this.getUserById(user_id);
+        if(user){
+            return user.user_type;
+        }
+        return -1;
+    }
+
 }
 
 // ====== INIT AND EXPORT =========
