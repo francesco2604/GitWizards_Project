@@ -1,144 +1,87 @@
-taskgroupList = [];
-id_increment = 0;
-error404 = {"codice":404,"messaggio":"Risorsa non trovata"}
-error400 = {"codice":400,"messaggio":"Richiesta mal formattata"}
-error403 = {"codice":403,"messaggio":"Non si hanno i permessi necessari"}
-users = [{"id":1,"firstname":"Daniele","lastname":"Francescatti","email":"daniele.francescatti@gmail.com","type":"Teacher","identification_number":"180514"},{"id": 2,"firstname": "Luca","lastname": "Giorgini","email": "luca.giorgini@example.com","type": "Student","identification_number": 890123}]
+var TaskgroupRepository = require('../repositories/taskgroup.repository.js');
+var taskgroupsList = TaskgroupRepository.getList();
+//taskgroupList = [];
+//id_increment = 0;
 
-function getTaskgroupAll(req,res)
+
+function getTaskgroupAll(userid)
 {
-	userid = req.headers['user_id'];
-	//console.log(userid);
-	if(getUserRole(userid) != "Teacher" && getUserRole(userid) != "Student&Teacher")
+	//taskgroups = [{'id':123456,'description':'domande di storia'},{'id':123457,'description':'domande di geografia'}];		//questo sarà poi preso dall' archivio
+	console.log('ciao');
+	return TaskgroupRepository.getList();
+}
+
+function postTaskgroup(desc)
+{
+	if (desc !== null && desc !== undefined && desc.trim() != "")
 	{
-		res.status(403).json(error403);
+		var index = TaskgroupRepository.addTg(desc);
+		var tg = TaskgroupRepository.getTg(index);
+		//console.log(tg);
+		return tg;
+		//console.log("Creata risorsa ");
 	}
 	else
 	{
-		//taskgroups = [{'id':123456,'description':'domande di storia'},{'id':123457,'description':'domande di geografia'}];		//questo sarà poi preso dall' archivio
-		res.status(200).json(taskgroupList);
+		return null;
 	}
 }
 
-function postTaskgroup(req,res)
+function getTaskgroup(id)
 {
-	userid = req.headers['user_id'];
-	if(getUserRole(userid) != "Teacher" && getUserRole(userid) != "Student&Teacher")
+	index = -1
+	return TaskgroupRepository.getTg(id)
+}
+
+function putTaskgroup(id,desc,tasks)
+{
+	index = -1
+	tg = TaskgroupRepository.getTg(id);
+	//cerco la taskgroup
+	for(i = 0; i < taskgroupsList.length; i++)
 	{
-		res.status(403).json(error403);
+		if (taskgroupsList[i].id == id)
+		{
+			tg = taskgroupsList[i];
+			index = i;
+		}
+	}
+	if (index===-1)
+	{
+		 return null;
+	}
+	else
+	{		
+		TaskgroupRepository.modifyTg(index,desc,tasks);
+		console.log("Modificata risorsa "+index);
+		return tg;
+	}
+}
+
+function deleteTaskgroup(id)
+{
+	index = -1
+	tg = null;
+
+	for(i = 0; i < taskgroupsList.length; i++)
+	{
+		if (taskgroupsList[i].id == id)
+		{
+			tg = taskgroupsList[i];
+			index = i;
+		}
+	}
+	//console.log(index);
+	if (index===-1)
+	{
+		 return 0;
 	}
 	else
 	{
-		const taskgroup_name = req.body.description
-
-		if (taskgroup_name !== null && taskgroup_name !== undefined && taskgroup_name.trim() != "")
-		{
-				id_increment++;
-				const tg =  {"id":id_increment,"description":taskgroup_name}
-				taskgroupList.push(tg)
-				res.status(201).json(tg)
-				console.log("Creata risorsa " + id_increment);
-		}
-		else
-		{
-				res.status(400).json(error400);
-		}
+		TaskgroupRepository.deleteTg(index);
+		console.log("Eliminata risorsa " + (index+1));
+		return 1;
 	}
-}
-
-function getTaskgroup(req,res)
-{
-	userid = req.headers['user_id'];
-	if(getUserRole(userid) != "Teacher" && getUserRole(userid) != "Student&Teacher")
-	{
-		res.status(403).json(error403);
-	}
-	else
-	{
-		id = req.params.id;
-		index = -1
-		tg = null;
-
-		for(i = 0; i < taskgroupList.length; i++)
-		{
-			if (taskgroupList[i].id == id)
-			{
-				tg = taskgroupList[i];
-				index = i;
-			}
-		}
-		//console.log(index);
-		if (index===-1)
-		{
-			 res.status(404).json(error404);
-			 return
-		}
-		else
-		{
-			res.status(200).json(tg)
-		}
-	}
-}
-
-function putTaskgroup(req,res)
-{
-	id = req.params.id;
-}
-
-function deleteTaskgroup(req,res)
-{
-	userid = req.headers['user_id'];
-	if(getUserRole(userid) != "Teacher" && getUserRole(userid) != "Student&Teacher")
-	{
-		res.status(403).json(error403);
-	}
-	else
-	{
-		id = req.params.id;
-		index = -1
-		tg = null;
-
-		for(i = 0; i < taskgroupList.length; i++)
-		{
-			if (taskgroupList[i].id == id)
-			{
-				tg = taskgroupList[i];
-				index = i;
-			}
-		}
-		//console.log(index);
-		if (index===-1)
-		{
-			 res.status(404).json(error404);
-			 return
-		}
-		else
-		{
-			taskgroupList.splice(index,1);
-			res.status(204).send("Risorsa eliminata con successo").end();
-			console.log("Eliminata risorsa " + (index+1));
-		}
-	}
-}
-
-
-// estrapola il ruolo tramite l' id utente
-function getUserRole(id)
-{
-	role = "Unlogged"
-
-	if(id > 0 && id !== undefined && id !== null)
-	{
-		for(i = 0; i < users.length; i++)
-		{
-			if (users[i].id == id)
-			{
-				role = users[i].type;
-			}
-		}
-	}
-
-	return role;
 }
 
 module.exports = {getTaskgroupAll,postTaskgroup,getTaskgroup,putTaskgroup,deleteTaskgroup}

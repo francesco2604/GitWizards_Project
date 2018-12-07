@@ -43,6 +43,16 @@ function isBodyAValidUserObj(body_obj, req_type){
         return false;
     }
 }
+function isUserTypeQueryValid(user_type){
+    if(user_type === undefined){
+        return true;
+    }
+    var user_type_regex = new RegExp(/^[1-3]$/);
+    if(!user_type || !user_type_regex.test(user_type)){
+        return false;
+    }
+    return true;
+}
 
 // ======= METHODS FUNCTIONS =================
 function processPostRequest(body_obj){
@@ -55,5 +65,16 @@ function processPostRequest(body_obj){
         return null;
     }
 }
+function processGetAllRequest(user_type_filter){
+    if(isUserTypeQueryValid(user_type_filter)){
+        if(user_type_filter){
+            user_type_filter = (typeof user_type_filter === 'string') ? parseInt(user_type_filter) : user_type_filter;
+            return user_repository.getAllUsers(user_type_filter);
+        }else{
+            return user_repository.getAllUsers();
+        }
+    }
+    return null;
+}
 
-module.exports = { processPostRequest }
+module.exports = { processPostRequest, processGetAllRequest }
