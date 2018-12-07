@@ -10,6 +10,7 @@ function getExamsList()
   return examRepositories.getList();
 }
 
+// GET ID FUNCTION 
 function getExamsById(id)
 {
   const index = (getExamsList()).findIndex((item)=> {return item.id===id})
@@ -22,6 +23,7 @@ function getExamsById(id)
     return 'ErrorCatch'
   }
 }
+//POST FUNCTION
 function postExams(exam_post, identity)
 {
   if(exam_post.description === undefined || exam_post.numerotasks=== undefined)
@@ -32,6 +34,7 @@ function postExams(exam_post, identity)
   examRepositories.updateList(examList)
   return exam_post
 }
+//PUT FUNCTION
 function putExamsById(id, propertiesChanged, identity) {
   if(parseInt(identity.user_role)!= 2)
   return 'No permission'
@@ -61,7 +64,7 @@ function putExamsById(id, propertiesChanged, identity) {
     }
   }
 }
-//DELETE FUNCTION 
+//DELETE FUNCTION
 function deleteExamsById(id,identity)
 {
 

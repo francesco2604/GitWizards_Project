@@ -57,7 +57,7 @@ test('should return a valid JSON array if user has the permissions to view the u
   expect(response.body[0].students).toEqual(students);
   expect(Object.keys(response.body[0]).sort()).toEqual(body_keys.sort());
 		});
-//test for get an exam from list for student and teacher
+//TEEST FOR GET AN EXAM FOR STUDENT 
 test("response 202 for get a exam from list", async function () {
   var response = await request(server).get('/v1/exams/2').set('content-type', 'application/json').set('accept', 'application/json').set('user_id','2').set('user_role', '2' );
   expect(response.status).toBe(200);
@@ -90,7 +90,7 @@ test("validate response of get by id  in a exam  list ", async function () {
   expect(response.body.students).toBeDefined();
 });
 
-//test for post an exam
+//TEST FOR POST
 
 test(" response 403 for post a exam ----no user id ", async function () {
   var response = await request(server).post('/v1/exams/').send(new Exam(66, 'prova3', 3600, 2,teacher, tasks,students)).set('user_id','3').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
@@ -106,7 +106,7 @@ test("validate response for post a exam", async function () {
   expect(response.status).toBe(200);
 });
 
-//PUT TEST
+//TEST FOR PUT
 test(" response 400 for put a exam  from list id", async function () {
 
   var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','3').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
