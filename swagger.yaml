@@ -222,14 +222,14 @@ paths:
       responses:
         204:
           description: L'utente è stato eliminato con successo
-        404:
+        400:
           description: L'utente specificato non è stato trovato nel sistema
           schema:
             $ref: '#/definitions/Error'
           examples:
             application/json:
-              code: '404'
-              message: 'Errore nella cancellazione. Utente richiesto non trovato'
+              code: '400'
+              message: 'Errore nella cancellazione. Parametri non corretti.'
         403:
           description: Non si hanno i permessi necessari per eliminare questa risorsa
           schema:
