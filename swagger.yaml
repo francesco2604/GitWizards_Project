@@ -220,16 +220,20 @@ paths:
           required: true
           description: L'ID dell'utente che effettua la richiesta
       responses:
-        204:
+        200:
           description: L'utente è stato eliminato con successo
-        404:
-          description: L'utente specificato non è stato trovato nel sistema
+          examples:
+            application/json:
+              status: 200
+              message: 'Cancellazione effettuata con successo.'
+        400:
+          description: I parametri specificati (id o header type) non sono corretti
           schema:
             $ref: '#/definitions/Error'
           examples:
             application/json:
-              code: '404'
-              message: 'Errore nella cancellazione. Utente richiesto non trovato'
+              code: '400'
+              message: 'Errore nella cancellazione. Parametri non corretti.'
         403:
           description: Non si hanno i permessi necessari per eliminare questa risorsa
           schema:
@@ -238,6 +242,14 @@ paths:
             application/json:
               code: '403'
               message: 'Accesso negato. Mancanza di permessi per eliminare la risorsa'
+        500:
+          description: Il server ha avuto un errore interno durante la cancellazione
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '500'
+              message: 'Errore durante la cancellazione. Errore intero.'
           
   /exams:
     get:
