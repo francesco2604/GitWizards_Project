@@ -121,6 +121,7 @@ router.post('/', (req, res) => {
 
 
 })
+// METHOD PUT FOR TEACHER
 router.put('/:id',async (req,res) => {
   if(isRequestOkAndHeaderHasAcceptJson(req) && isBodyJson(req) && isNaN(req.params.id)==false){
     if(checkAuth(req.headers)) {
