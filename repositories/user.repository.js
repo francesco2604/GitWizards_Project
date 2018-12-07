@@ -41,6 +41,10 @@ class UserRepository {
         return -1;
     }
 
+    deleteUserById(user_id){
+        return this._users.delete(user_id);
+    }
+
 }
 
 // ====== INIT AND EXPORT =========
