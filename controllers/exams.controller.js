@@ -32,6 +32,7 @@ function postExams(exam_post, identity)
   examRepositories.updateList(examList)
   return exam_post
 }
+//PUT FUNCTION
 function putExamsById(id, propertiesChanged, identity) {
   if(parseInt(identity.user_role)!= 2)
   return 'No permission'
@@ -61,7 +62,7 @@ function putExamsById(id, propertiesChanged, identity) {
     }
   }
 }
-//DELETE FUNCTION 
+//DELETE FUNCTION
 function deleteExamsById(id,identity)
 {
 
