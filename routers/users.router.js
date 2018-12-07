@@ -28,9 +28,12 @@ function isBodyJson(req){
 function sendErrorResponse(res, error_code, error_message){
     res.status(error_code).json(new Error(error_code, error_message));
 }
-function checkAuthentication(user_id){
+function checkUserId(user_id){
     var user_id_regex = new RegExp(/^([1-9][0-9]*)$/);
-    return (user_id && (user_id_regex.test(user_id)) && (USER_REPOSITORY.getUserById(parseInt(user_id)) !== undefined));
+    return user_id && (user_id_regex.test(user_id));
+}
+function checkAuthentication(user_id){
+    return (checkUserId(user_id) && (USER_REPOSITORY.getUserById(parseInt(user_id)) !== undefined));
 }
 function checkAuthorization(user_id, user_role){
     var user_role_regex = new RegExp(/^[2-3]$/);
@@ -73,6 +76,24 @@ ROUTER.route('/')
             }
         }else{
             sendErrorResponse(res, Error.ERROR_CODE.NOT_FOUND, "Errore durante il recupero della lista di utenti");
+        }
+    });
+ROUTER.route('/:id')
+    .delete((req, res) => {
+        if(isRequestOkAndHeaderHasAcceptJson(req) && checkUserId(req.params.id)){
+            var auth_user_id = req.headers['user_id'];
+            if(checkAuthentication(auth_user_id) && (parseInt(auth_user_id) === parseInt(req.params.id))){
+                var deleted = USERS_CONTROLLER.processDeleteUserRequest(parseInt(req.params.id));
+                if(deleted){
+                    res.status(200).json({ status : 200, message : 'Cancellazione effettuata con successo.'});
+                }else{
+                    sendErrorResponse(res, Error.ERROR_CODE.INTERNAL_ERROR, 'Errore durante la cancellazione. Errore intero.');
+                }
+            }else{
+                sendErrorResponse(res, Error.ERROR_CODE.FORBIDDEN, 'Accesso negato. Mancanza di permessi per eliminare la risorsa.');
+            }
+        }else{
+            sendErrorResponse(res, Error.ERROR_CODE.BAD_REQUEST, "Errore nella cancellazione. Parametri non corretti.");
         }
     });
 
