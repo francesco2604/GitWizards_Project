@@ -116,7 +116,7 @@ describe('## API users TEST', () => {
           return;
       });
     });
-    
+
     //test sulla richiesta GET su tutti i task group
 	describe('GET /v1/taskgroup/ - recive all the taskgroups ', () => {
 		// variables used as test cases
@@ -128,16 +128,16 @@ describe('## API users TEST', () => {
 			'Content-Type': 'application/json',
 			'user_id': 1
 		};
-		
+
 		//tests
 		test('it should return all the taskgroups', async () => {
 			var response = await request(server).get('/v1/taskgroup/').set(good_header);
-			
+
 			expect(response).not.toBeNull();
 			expect(response.headers).toBeDefined();
 			expect(response.headers).not.toBeNull();
 			expect(response.status).toBe(200);
-			
+
 			// controllo il formato della risposta se è corretto
 
 			var body_keys = ['id','description','tasks']
@@ -182,7 +182,7 @@ describe('## API users TEST', () => {
 			return;
 		});
 	});
-    
+
     //test sulla richiesta GET su di un singolo taskgroup
 	describe('GET /v1/taskgroup/:id - recive the selected taskgroup ', () => {
 		// variables used as test cases
@@ -194,16 +194,16 @@ describe('## API users TEST', () => {
 			'Content-Type': 'application/json',
 			'user_id': 1
 		};
-		
+
 		//tests
 		test('it should return the selected taskgroup', async () => {
 			var response = await request(server).get('/v1/taskgroup/1').set(good_header);
-			
+
 			expect(response).not.toBeNull();
 			expect(response.headers).toBeDefined();
 			expect(response.headers).not.toBeNull();
 			expect(response.status).toBe(200);
-			
+
 			// controllo il formato della risposta se è corretto
 
 			var body_keys = ['id','description','tasks']
@@ -248,7 +248,7 @@ describe('## API users TEST', () => {
 			return;
 		});
 	});
-	
+
 	// test sulla richiesta PUT
     describe('PUT /v1/taskgroup/:id - create a taskgroup ', () => {
       // variables used as test cases
@@ -274,9 +274,9 @@ describe('## API users TEST', () => {
           expect(response.get('content-type')).toBeDefined();
           expect(response.get('content-type')).not.toBeNull();
           expect(response.get('content-type')).toContain('application/json');
-          expect(response.status).toBeDefined();         
+          expect(response.status).toBeDefined();
 
-		
+
           // controllo il formato della risposta se è corretto
           var body_keys = ['id','description','tasks']
           expect(typeof response.body).toEqual('object');
@@ -307,7 +307,7 @@ describe('## API users TEST', () => {
           expect(response.get('content-type')).toContain('application/json');
           expect(response.status).toBeDefined();
           expect(response.status).toBe(403);
-			
+
           // controllo il formato della risposta se è corretto
           var body_keys = ['code','message']
           expect(typeof response.body).toEqual('object');
@@ -354,8 +354,8 @@ describe('## API users TEST', () => {
           return;
       });
     });
-    
-	
+
+
     // test sulla richiesta DELETE
     describe('DELETE /v1/taskgroup/:id - delete a specified taskgroup ', () => {
         // variables used as test cases
@@ -386,7 +386,6 @@ describe('## API users TEST', () => {
             expect(response2.get('content-type')).not.toBeNull();
             expect(response2.get('content-type')).toContain('application/json');
             expect(response2.status).toBeDefined();
-<<<<<<< HEAD
             expect(response2.status).toBe(404);
 
             // controllo il formato della risposta se è corretto
@@ -404,25 +403,6 @@ describe('## API users TEST', () => {
             expect(response2.body.code).toBe(404);
 
             expect.assertions(24);
-=======
-            expect(response2.status).toBe(200);
-
-
-            // controllo il formato della risposta se è corretto
-            var body_keys = ['id','description']
-            expect(typeof response.body).toEqual('object');
-            expect(response.body).toBeDefined();
-            expect(response.body).not.toBeNull();
-            expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-            expect(typeof response.body.id).toEqual('number');
-            expect(typeof response.body.description).toEqual('string');
-            expect(response.body.id).not.toBeNull();
-            expect(response.body.id).toBeDefined();
-            expect(response.body.description).toBeDefined();
-            expect(response.body.description).not.toBeNull();
-
-            expect.assertions(26);
->>>>>>> taskgroup_post
             return;
         });
         test('it should return a permission denied error', async () => {
@@ -434,16 +414,11 @@ describe('## API users TEST', () => {
             expect(response.status).toBe(403);
 
             // controllo il formato della risposta se è corretto
-<<<<<<< HEAD
             var body_keys = ['code','message']
-=======
-            var body_keys = ['codice','messaggio']
->>>>>>> taskgroup_post
             expect(typeof response.body).toEqual('object');
             expect(response.body).toBeDefined();
             expect(response.body).not.toBeNull();
             expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-<<<<<<< HEAD
             expect(typeof response.body.code).toEqual('number');
             expect(typeof response.body.message).toEqual('string');
             expect(response.body.code).not.toBeNull();
@@ -453,17 +428,6 @@ describe('## API users TEST', () => {
             expect(response.body.code).toBe(403);
 
             expect.assertions(16);
-=======
-            expect(typeof response.body.codice).toEqual('number');
-            expect(typeof response.body.messaggio).toEqual('string');
-            expect(response.body.codice).not.toBeNull();
-            expect(response.body.codice).toBeDefined();
-            expect(response.body.messaggio).toBeDefined();
-            expect(response.body.messaggio).not.toBeNull();
-            expect(response.body.codice).toBe(403);
-
-            expect.assertions(19);
->>>>>>> taskgroup_post
             return;
         });
         test('it should return a not found error', async () => {
@@ -472,22 +436,14 @@ describe('## API users TEST', () => {
             expect(response.headers).toBeDefined();
             expect(response.headers).not.toBeNull();
             expect(response.status).toBeDefined();
-<<<<<<< HEAD
             expect(response.status).toBe(404);
 
             // controllo il formato della risposta se è corretto
             var body_keys = ['code','message']
-=======
-            expect(response.status).toBe(400);
-
-            // controllo il formato della risposta se è corretto
-            var body_keys = ['codice','messaggio']
->>>>>>> taskgroup_post
             expect(typeof response.body).toEqual('object');
             expect(response.body).toBeDefined();
             expect(response.body).not.toBeNull();
             expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
-<<<<<<< HEAD
             expect(typeof response.body.code).toEqual('number');
             expect(typeof response.body.message).toEqual('string');
             expect(response.body.code).not.toBeNull();
@@ -497,17 +453,6 @@ describe('## API users TEST', () => {
             expect(response.body.code).toBe(404);
 
             expect.assertions(16);
-=======
-            expect(typeof response.body.codice).toEqual('number');
-            expect(typeof response.body.messaggio).toEqual('string');
-            expect(response.body.codice).not.toBeNull();
-            expect(response.body.codice).toBeDefined();
-            expect(response.body.messaggio).toBeDefined();
-            expect(response.body.messaggio).not.toBeNull();
-            expect(response.body.codice).toBe(400);
-
-            expect.assertions(19);
->>>>>>> taskgroup_post
             return;
         });
     });
