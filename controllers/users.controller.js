@@ -76,5 +76,8 @@ function processGetAllRequest(user_type_filter){
     }
     return null;
 }
+function processDeleteUserRequest(user_id){
+    return user_repository.deleteUserById(user_id);
+}
 
-module.exports = { processPostRequest, processGetAllRequest }
+module.exports = { processPostRequest, processGetAllRequest, processDeleteUserRequest }
