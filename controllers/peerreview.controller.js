@@ -1,21 +1,40 @@
 /* Example variables */
-var task_prova = {id: 123456,
-                    numeroDomanda: 2,
-                    question: 'diametro della Terra?',
-                    type: 1,
-                    answers: ['9.742 km',
-                              '19.742 km',
-                              '12.742 km'],
-                    correctAnswer: '3',
-                    studentAnswer: '1'};
+var task = {
+    numeroDomanda: 3,
+    question: 'diametro della Terra?',
+    type: 1,
+    answers: ['9.742 km',
+        '19.742 km',
+        '12.742 km'],
+    correctAnswer: '3',
+    studentAnswer: '1'
+};
 
-var task_prova2 = task_prova;
-
-var tasks = [task_prova, task_prova2];
-
-/* GET method for Peer Review */
-function getPeerreviewAll(req, res){
-	res.status(200).json(tasks);
+var peerReview = {
+    id: 0,
+    examid: 234,
+    task: task,
+    studentanswer: 3,
+    mark: 30,
+    description: 'The task is perfect as it is',
+    deadline: 900
 }
 
-module.exports = {getPeerreviewAll};
+var peerReviews = [peerReview];
+
+/* GET method for Peer Review */
+function getPeerreviewAll() {
+    var result;
+    try {
+        if (peerReviews == null) {
+            result = null;
+        }
+        else { result = peerReviews; }
+        return result;
+    }
+    catch (error) {
+        res.status().end();
+    }
+}
+
+module.exports = { getPeerreviewAll };
