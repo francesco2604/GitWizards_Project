@@ -106,7 +106,7 @@ test("validate response for post a exam", async function () {
   expect(response.status).toBe(200);
 });
 
-//PUT TEST
+//TEST FOR PUT
 test(" response 400 for put a exam  from list id", async function () {
 
   var response = await request(server).put('/v1/exams/2').send(new Exam(2, 'prova3333333333', 3600, 2,teacher, tasks,students)).set('user_id','3').set('user_role','2').set('content-type', 'application/json').set('accept', 'application/json');
