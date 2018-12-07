@@ -22,6 +22,7 @@ function getExamsById(id)
     return 'ErrorCatch'
   }
 }
+//POST FUNCTION
 function postExams(exam_post, identity)
 {
   if(exam_post.description === undefined || exam_post.numerotasks=== undefined)
