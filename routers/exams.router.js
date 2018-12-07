@@ -68,7 +68,7 @@ router.get('/', async (req,res) => {
     sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND, "Errore durante il recupero della lista di exams");
   }
 });
-//METHOD GET ID FOR TEACHER AND STUDENT
+//METHOD GET ID FOR STUDENT
 router.get('/:id',async (req,res) => {
 
   if(isRequestOkAndHeaderHasAcceptJson(req)&& isNaN(req.params.id)== false && isBodyJson(req)){
@@ -92,7 +92,7 @@ router.get('/:id',async (req,res) => {
   else
   sendErrorResponse(res, result_response.ERROR_CODE.BAD_REQUEST, "Errore durante la registrazione esame nel sistema");
 });
-//METHOD POST FOR TEACHER 
+//METHOD POST FOR TEACHER
 router.post('/', (req, res) => {
   if(isRequestOkAndHeaderHasAcceptJson(req) && isBodyJson(req)){
     if(checkAuth(req.headers)) {
