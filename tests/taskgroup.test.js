@@ -354,7 +354,71 @@ describe('## API users TEST', () => {
           return;
       });
     });
+    //test sulla richiesta GET su tutti i task group
+	describe('GET /v1/taskgroup/ - recive all the taskgroups ', () => {
+		// variables used as test cases
+		var good_header = {
+			'Content-Type': 'application/json',
+			'user_id': 2
+		};
+		var bad_header = {
+			'Content-Type': 'application/json',
+			'user_id': 1
+		};
 
+		//tests
+		test('it should return all the taskgroups', async () => {
+			var response = await request(server).get('/v1/taskgroup/').set(good_header);
+
+			expect(response).not.toBeNull();
+			expect(response.headers).toBeDefined();
+			expect(response.headers).not.toBeNull();
+			expect(response.status).toBe(200);
+
+			// controllo il formato della risposta se è corretto
+
+			var body_keys = ['id','description','tasks']
+			expect(typeof response.body[0]).toEqual('object');
+			expect(response.body).toBeDefined();
+			expect(response.body).not.toBeNull();
+			expect(Object.keys(response.body[0]).sort()).toEqual(body_keys.sort());
+			expect(typeof response.body[0].id).toEqual('number');
+			expect(typeof response.body[0].description).toEqual('string');
+			expect(response.body[0].id).not.toBeNull();
+			expect(response.body[0].id).toBeDefined();
+			expect(response.body[0].description).toBeDefined();
+			expect(response.body[0].description).not.toBeNull();
+
+		});
+		test('it should return a permission denied error', async () => {
+			var response = await request(server).get('/v1/taskgroup/').set(bad_header);
+			expect(response).not.toBeNull();
+			expect(response.headers).toBeDefined();
+			expect(response.headers).not.toBeNull();
+			expect(response.get('content-type')).toBeDefined();
+			expect(response.get('content-type')).not.toBeNull();
+			expect(response.get('content-type')).toContain('application/json');
+			expect(response.status).toBeDefined();
+			expect(response.status).toBe(403);
+
+			// controllo il formato della risposta se è corretto
+			var body_keys = ['code','message']
+			expect(typeof response.body).toEqual('object');
+			expect(response.body).toBeDefined();
+			expect(response.body).not.toBeNull();
+			expect(Object.keys(response.body).sort()).toEqual(body_keys.sort());
+			expect(typeof response.body.code).toEqual('number');
+			expect(typeof response.body.message).toEqual('string');
+			expect(response.body.code).not.toBeNull();
+			expect(response.body.code).toBeDefined();
+			expect(response.body.message).toBeDefined();
+			expect(response.body.message).not.toBeNull();
+			expect(response.body.code).toBe(403);
+
+			expect.assertions(19);
+			return;
+		});
+	});
 
     // test sulla richiesta DELETE
     describe('DELETE /v1/taskgroup/:id - delete a specified taskgroup ', () => {
