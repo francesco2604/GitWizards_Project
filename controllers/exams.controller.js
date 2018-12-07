@@ -10,6 +10,7 @@ function getExamsList()
   return examRepositories.getList();
 }
 
+// GET ID FUNCTION 
 function getExamsById(id)
 {
   const index = (getExamsList()).findIndex((item)=> {return item.id===id})
