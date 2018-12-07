@@ -28,22 +28,15 @@ function isBodyJson(req){
 function sendErrorResponse(res, error_code, error_message){
     res.status(error_code).json(new Error(error_code, error_message));
 }
-function checkAuthentication(req_headers){
-    if(req_headers){
-        var user_id_regex = new RegExp(/^([1-9][0-9]*)$/);
-        var user_role_regex = new RegExp(/^[1-2-3]$/);
-        if(!req_headers['user_id'] || !user_id_regex.test(req_headers['user_id'])){
-            return false;
-        }
-        if(!req_headers['user_role'] || !user_role_regex.test(req_headers['user_role'])){
-            return false;
-        }
-        var user_role = (typeof req_headers['user_role'] === 'string') ? parseInt(req_headers['user_role']) : req_headers['user_role'];
-        var user_id = (typeof req_headers['user_id'] === 'string') ? parseInt(req_headers['user_id']) : req_headers['user_id'];
-        var real_user_role = USER_REPOSITORY.getUserRoleByUserId(user_id);
-        if(real_user_role !== -1 && real_user_role === user_role){
-            return true;
-        }
+function checkAuthentication(user_id){
+    var user_id_regex = new RegExp(/^([1-9][0-9]*)$/);
+    return (user_id && (user_id_regex.test(user_id)) && (USER_REPOSITORY.getUserById(parseInt(user_id)) !== undefined));
+}
+function checkAuthorization(user_id, user_role){
+    var user_role_regex = new RegExp(/^[2-3]$/);
+    if(user_role && (user_role_regex.test(user_role))){
+        var real_user_role = USER_REPOSITORY.getUserRoleByUserId(parseInt(user_id));
+        return ((real_user_role !== -1) && (real_user_role === parseInt(user_role) || real_user_role === User.USER_TYPE.BOTH));
     }
     return false;
 }
@@ -64,19 +57,16 @@ ROUTER.route('/')
     })
     .get((req, res) => {
         if(isRequestOkAndHeaderHasAcceptJson(req)){
-            if(checkAuthentication(req.headers)){
-                var user_role = (typeof req.headers['user_role'] === 'string') ? parseInt(req.headers['user_role']) : req.headers['user_role'];
-                if(user_role === User.USER_TYPE.TEACHER || user_role === User.USER_TYPE.BOTH){
-                    var usersList = USERS_CONTROLLER.processGetAllRequest(req.query.type);
-                    if(usersList && usersList.length !== 0){
-                        res.status(200).json(usersList);
-                    }else if(usersList && usersList.length === 0){
-                        res.status(200).json({ status : 200, message : 'Lista utenti vuota'});
-                    }else{
-                        sendErrorResponse(res, Error.ERROR_CODE.NOT_FOUND, "Errore durante il recupero della lista di utenti");
-                    }
+            var user_id = req.headers['user_id'];
+            var user_role = req.headers['user_role'];
+            if(checkAuthentication(user_id) && checkAuthorization(user_id, user_role)){
+                var usersList = USERS_CONTROLLER.processGetAllRequest(req.query.type);
+                if(usersList && usersList.length !== 0){
+                    res.status(200).json(usersList);
+                }else if(usersList && usersList.length === 0){
+                    res.status(200).json({ status : 200, message : 'Lista utenti vuota'});
                 }else{
-                    sendErrorResponse(res, Error.ERROR_CODE.FORBIDDEN, "Accesso negato. Mancanza di permessi per accesso alla risorsa");
+                    sendErrorResponse(res, Error.ERROR_CODE.NOT_FOUND, "Errore durante il recupero della lista di utenti");
                 }
             }else{
                 sendErrorResponse(res, Error.ERROR_CODE.FORBIDDEN, "Accesso negato. Mancanza di permessi per accesso alla risorsa");
