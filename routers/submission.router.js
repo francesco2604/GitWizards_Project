@@ -17,7 +17,6 @@ ROUTER.post('/', (req, res) => {
     catch (error) {
         res.status().end();
     }
-
 });
 
 module.exports = ROUTER;
