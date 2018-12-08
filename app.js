@@ -12,17 +12,18 @@ var app = EXPRESS();
 app.use(BODY_PARSER.json());
 
 /* Init router components*/
-
 const USERS_ROUTER = require('./routers/users.router');
 const TASK_GROUP_ROUTER = require('./routers/taskgroup.router');
 const EXAMS_ROUTER = require('./routers/exams.router');
 const SUBMISSION_ROUTER = require('./routers/submission.router');
+const PEERREVIEW_ROUTER = require('./routers/peerreview.router');
 
 /* API routers */
 app.use('/v1/users',USERS_ROUTER);
 app.use('/v1/taskgroup',TASK_GROUP_ROUTER);
 app.use('/v1/exams', EXAMS_ROUTER);
 app.use('/v1/submission', SUBMISSION_ROUTER);
+app.use('/v1/peerreview', PEERREVIEW_ROUTER);
 app.use('*', (req, res) => {
     res.status(Error.ERROR_CODE.BAD_REQUEST).json(new Error(Error.ERROR_CODE.BAD_REQUEST, 'URL richiesto non valido'));
 });
