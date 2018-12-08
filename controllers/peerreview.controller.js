@@ -1,40 +1,58 @@
-/* Example variables */
-var task = {
-    numeroDomanda: 3,
-    question: 'diametro della Terra?',
-    type: 1,
-    answers: ['9.742 km',
-        '19.742 km',
-        '12.742 km'],
-    correctAnswer: '3',
-    studentAnswer: '1'
-};
+const DATA = require('../repositories/peerreview.repository');
 
-var peerReview = {
-    id: 0,
-    examid: 234,
-    task: task,
-    studentanswer: 3,
-    mark: 30,
-    description: 'The task is perfect as it is',
-    deadline: 900
-}
-
-var peerReviews = [peerReview];
+var tasks = DATA.tasks;
+var peerReviews = DATA.peerReviews;
+var exams = DATA.exams;
 
 /* GET method for Peer Review */
-function getPeerreviewAll() {
-    var result;
+// gets all peer reviews
+function getPeerReviewAll() {
     try {
-        if (peerReviews == null) {
-            result = null;
-        }
-        else { result = peerReviews; }
-        return result;
+        return peerReviews;
     }
     catch (error) {
-        res.status().end();
+        console.log('\tname: ' + error.name
+            + ' message: ' + error.message
+            + ' at: ' + error.at);
     }
 }
 
-module.exports = { getPeerreviewAll };
+// gets peer reviews for a student
+function getPeerReviewPerStudent(studentId) {
+    try {
+        // looks for all student's exams
+        var examsPerStudent = [];
+        exams.forEach((exam) => {
+            exam.students.forEach((student) => {
+                if (student.id == studentId) {
+                    examsPerStudent.push(exam);
+                }
+                else {
+                    console.log("There are no exams for this student.");
+                }
+            })
+        });
+
+        // finds all peer reviews for the exams
+        var peerReviewsPerExam = [];
+        peerReviews.forEach((review) => {
+            examsPerStudent.forEach((exam) => {
+                if (review.examid == exam.id) {
+                    peerReviewsPerExam.push(review);
+                }
+                else {
+                    console.log("There are no peer reviews for these exams.");
+                }
+            })
+        });
+        var peerReview = peerReviewsPerExam;
+        return peerReview;
+    }
+    catch (error) {
+        console.log('\tname: ' + error.name
+            + ' message: ' + error.message
+            + ' at: ' + error.at);
+    }
+}
+
+module.exports = { getPeerReviewAll, getPeerReviewPerStudent };
