@@ -38,12 +38,12 @@ ROUTER.get('/', (req, res) => {
     .put('/:id', (req, res) => {
         try {
             if ((parseInt(req.get('user_role')) == 1) || (parseInt(req.get('user_role')) == 2)) {
-                let newPeerReview = PEERREVIEW_CONTROLLER.putPeerReviewByID(req.body, parseInt(req.params.id));
-                if (newPeerReview == null) {
-                    res.status(404).send("Not fund. \nThere is no peer review for this ID.");
+                let updatedPeerReview = PEERREVIEW_CONTROLLER.putPeerReviewByID(req.body, parseInt(req.params.id));
+                if (updatedPeerReview == null) {
+                    res.status(404).send("Not found. \nThere is no peer review for this ID.");
                 } else {
-                    console.log(newPeerReview);
-                    res.status(200).json(newPeerReview);
+                    console.log(updatedPeerReview);
+                    res.status(200).json(updatedPeerReview);
                 };
             } else {
                 res.status(401).send("Unauthorized. \nUser must be a student or a teacher.");

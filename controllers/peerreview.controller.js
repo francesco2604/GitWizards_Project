@@ -52,7 +52,7 @@ var getPeerReviewPerStudent = (studentID) => {
 
 /* PUT method for Peer Review */
 // puts a new peer review
-var putPeerReviewByID = (newPeerReview, id) => {
+var putPeerReviewByID = (updatedPeerReview, id) => {
     try {
         if (peerReviews.length < id) {
             return null;
@@ -63,8 +63,8 @@ var putPeerReviewByID = (newPeerReview, id) => {
                 }
             });
         };
-        peerReviews[0] = newPeerReview;
-        return newPeerReview;
+        peerReviews[0] = updatedPeerReview;
+        return updatedPeerReview;
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
