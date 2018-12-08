@@ -1,28 +1,28 @@
 /* Example variables */
 var task = {
-    numeroDomanda: 3,
-    question: 'diametro della Terra?',
-    type: 1,
-    answers: ['9.742 km',
-        '19.742 km',
-        '12.742 km'],
-    correctAnswer: '3',
-    studentAnswer: '1'
+  numeroDomanda: 3,
+  question: 'diametro della Terra?',
+  type: 1,
+  answers: ['9.742 km',
+    '19.742 km',
+    '12.742 km'],
+  correctAnswer: '3',
+  studentAnswer: '1'
 };
 
-/*export*/ var tasks = [task];
+var tasks = [task];
 
 var peerReview = {
-    id: 0,
-    examid: 1,
-    task: task,
-    studentanswer: 3,
-    mark: 30,
-    description: 'The task is perfect as it is',
-    deadline: 900
+  id: 0,
+  examid: 1,
+  task: task,
+  studentanswer: 3,
+  mark: 30,
+  description: 'The task is perfect as it is',
+  deadline: 900
 }
 
-/*export*/ var peerReviews = [peerReview];
+var peerReviews = [peerReview];
 
 var exam = {
   id: 1,
@@ -64,6 +64,6 @@ var exam = {
   ]
 };
 
-/*export*/ var exams = [exam];
+var exams = [exam];
 
-module.exports = {tasks, peerReviews, exams};
+module.exports = { peerReviews, exams };
