@@ -50,9 +50,25 @@ var getPeerReviewPerStudent = (studentID) => {
     }
 };
 
+/* POST method for Peer Review */
+// creates a new peer review
+var postPeerReview = (newPeerReview) => {
+    try {
+        newID = peerReviews.length - 1;
+        var createdPeerReview = newPeerReview;
+        createdPeerReview.id = newID;
+        peerReviews.push(createdPeerReview);
+        return peerReviews[newID];
+    } catch (error) {
+        console.log('\nname: ' + error.name
+            + ' message: ' + error.message
+            + ' at: ' + error.at);
+    }
+};
+
 /* PUT method for Peer Review */
 // puts a new peer review
-var putPeerReviewByID = (newPeerReview, id) => {
+var putPeerReviewByID = (updatedPeerReview, id) => {
     try {
         if (peerReviews.length < id) {
             return null;
@@ -63,8 +79,8 @@ var putPeerReviewByID = (newPeerReview, id) => {
                 }
             });
         };
-        peerReviews[0] = newPeerReview;
-        return newPeerReview;
+        peerReviews[0] = updatedPeerReview;
+        return updatedPeerReview;
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
@@ -72,4 +88,4 @@ var putPeerReviewByID = (newPeerReview, id) => {
     }
 };
 
-module.exports = { getPeerReviewAll, getPeerReviewPerStudent, putPeerReviewByID };
+module.exports = { getPeerReviewAll, getPeerReviewPerStudent, putPeerReviewByID, postPeerReview };
