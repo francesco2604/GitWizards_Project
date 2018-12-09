@@ -1,9 +1,10 @@
+//IMPORTO
 const express = require('express');
 var functions = require('../controllers/exams.controller.js');
 var result_response               = require('../models/error.model')
 const USER_REPOSITORY   = require('../repositories/user.repository');
 var router = express.Router();
-
+//FUNZIONIDI CONTROLLO
 function isRequestOkAndHeaderHasAcceptJson(req){
   if(req && req.headers){
     if(req.headers['accept'].indexOf('application/json') !== -1){
@@ -45,7 +46,7 @@ function checkAuth(req_headers){
 }
 
 
-// METHOD GET LIST FOR  STUDENT TEACHER AND
+// METHOD GET LIST FOR  STUDENT AND TEACHER
 
 router.get('/', async (req,res) => {
   if(isRequestOkAndHeaderHasAcceptJson(req)){
@@ -68,7 +69,7 @@ router.get('/', async (req,res) => {
     sendErrorResponse(res, result_response.ERROR_CODE.NOT_FOUND, "Errore durante il recupero della lista di exams");
   }
 });
-//METHOD GET ID FOR STUDENT
+//METHOD GET ID FOR STUDENT AND TEACHER
 router.get('/:id',async (req,res) => {
 
   if(isRequestOkAndHeaderHasAcceptJson(req)&& isNaN(req.params.id)== false && isBodyJson(req)){
