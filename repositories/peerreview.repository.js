@@ -28,16 +28,30 @@ class PeerReviewRepository {
         return newID;
     }
 
+    getLength() {
+        return this._peerReviews.size;
+    }
+
     getAllPeerReviews() {
         return this._peerReviews;
     }
-    
+
     getPeerReviewByID(peerReviewID) {
         return this._peerReviews.get(peerReviewID);
     }
 
-    getLastPeerReview(){
-      return this._peerReviews.get(_peerReviews.size);
+    getLastPeerReview() {
+        return this._peerReviews.get(_peerReviews.size);
+    }
+
+    setPeerReviewByID(reviewID, review) {
+        let toUpdate = this._peerReviews.get(reviewID);
+        toUpdate.examid = review.examid;
+        toUpdate.task = review.task;
+        toUpdate.studentanswer = review.studentanswer;
+        toUpdate.mark = review.mark;
+        toUpdate.description = review.description;
+        toUpdate.deadline = review.deadline;
     }
 }
 

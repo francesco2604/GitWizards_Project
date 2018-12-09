@@ -19,9 +19,9 @@ var getPeerReviewAll = () => {
 // gets peer reviews for a student
 var getPeerReviewPerStudent = (studentID) => {
     try {
-        // looks for all student's exams
+        // looks for all student's exams                        /*  TO FIX! */
         let examsPerStudent = [];
-        exams.forEach((exam) => {
+    /*    exams.forEach((exam) => {
             exam.students.forEach((student) => {
                 if (student.id === studentID) {
                     examsPerStudent.push(exam);
@@ -29,10 +29,10 @@ var getPeerReviewPerStudent = (studentID) => {
                     console.log("There are no exams for this student.");
                 };
             })
-        });
+        });*/
 
         // finds all peer reviews for the exams
-        let peerReviewsPerExam = [];
+        let peerReviewsPerExam = [];/*
         peerReviews.forEach((review) => {
             examsPerStudent.forEach((exam) => {
                 if (review.examid === exam.id) {
@@ -41,7 +41,7 @@ var getPeerReviewPerStudent = (studentID) => {
                     console.log("There are no peer reviews for these exams.");
                 };
             })
-        });
+        });*/
         let peerReviewGot = peerReviewsPerExam;
         return peerReviewGot;
     } catch (error) {
@@ -75,13 +75,13 @@ var postPeerReview = (newPeerReview) => {
 // modifies a peer review
 var putPeerReviewByID = (updatedPeerReview, id) => {
     try {
-        if (peerReviews.length < id) {
+        if (peerReviewRepo.getLength < id) {
             return null;
-        } else {
-            peerReviewGot = peerReviewRepo.getPeerReviewById(id)
-            peerReviewGot = updatedPeerReview;            
-        };
-        return updatedPeerReview;
+        } else {            
+            let changedPeerReview = peerReviewRepo.setPeerReviewByID(id, updatedPeerReview);
+            console.log("LEGGI: " + changedPeerReview);
+            return changedPeerReview;
+        }
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message

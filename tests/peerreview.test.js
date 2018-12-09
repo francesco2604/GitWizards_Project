@@ -16,15 +16,16 @@ describe('Tests for Peer Review', () => {
         let res = await request(API)
             .get('/v1/peerreview')
             .set('user_role', 1).set('user_id', 3);
-        expect.assertions(1);
+        expect.assertions(2);
         expect(res.status).toBe(200);
+        expect(res.get('content-type')).toContain('application/json');
     });
 
     // Status: 200, OK (Student)
     test('Student Peer Review GET', async () => {
         let res = await request(API)
             .get('/v1/peerreview')
-            .set('user_role', 2).set('user_id', 5);
+            .set('user_role', 2).set('user_id', 1);
         expect.assertions(1);
         expect(res.status).toBe(200);
     });
@@ -65,7 +66,7 @@ describe('Tests for Peer Review', () => {
     test('Peer Review PUT', async () => {
         let res = await request(API)
             .put('/v1/peerreview/1')
-            .send(PEERREVIEW_REPO.getPeerReviewByID(0))
+            .send(PEERREVIEW_REPO.getPeerReviewByID(1))
             .set('user_role', 1).set('user_id', 3);
         expect.assertions(2);
         expect(res.status).toBe(200);
