@@ -1,9 +1,6 @@
 const API = require('../app');
 var request = require('supertest');
-const DATA = require('../repositories/peerreview.repository');
-
-var exams = DATA.exams;
-var peerReviews = DATA.peerReviews;
+const PEERREVIEW_REPO = require('../repositories/peerreview.repository');
 
 /* Test starting */
 beforeAll(() => {
@@ -68,7 +65,7 @@ describe('Tests for Peer Review', () => {
     test('Peer Review PUT', async () => {
         let res = await request(API)
             .put('/v1/peerreview/1')
-            .send(peerReviews[0])
+            .send(PEERREVIEW_REPO.getPeerReviewByID(0))
             .set('user_role', 1).set('user_id', 3);
         expect.assertions(2);
         expect(res.status).toBe(200);
@@ -79,7 +76,7 @@ describe('Tests for Peer Review', () => {
     test('Peer Review PUT', async () => {
         let res = await request(API)
             .put('/v1/peerreview/1')
-            .send(peerReviews[0])
+            .send(PEERREVIEW_REPO.getPeerReviewByID(0))
             .set('user_role', 3).set('user_id', 4);
         expect.assertions(2);
         expect(res.status).toBe(401);
@@ -90,7 +87,7 @@ describe('Tests for Peer Review', () => {
     test('Peer Review PUT', async () => {
         let res = await request(API)
             .put('/v1/peerreview/20')
-            .send(peerReviews[0])
+            .send(PEERREVIEW_REPO.getPeerReviewByID(0))
             .set('user_role', 2).set('user_id', 5);
         expect.assertions(1);
         expect(res.status).toBe(404);
