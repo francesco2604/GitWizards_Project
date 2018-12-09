@@ -26,4 +26,4 @@ class ExamRepository
     addEx(exams){this.exams.push(exams)}
     updateList(newlist){this.exams=newlist;}
 }
-module.exports = ExamRepository;
+module.exports = new ExamRepository;
