@@ -1207,6 +1207,8 @@ definitions:
         type: integer
       examid:
         type: integer
+      studentid: 
+        type: integer
       task:
         $ref: '#/definitions/Task'
       studentanswer:
@@ -1220,12 +1222,14 @@ definitions:
     required:
       - id
       - examid
+      - studentid
       - task
       - studentanswer
       - deadline
     example:
       id: 001
       examid: 234
+      studentid: 48
       task: 
         application/json:
           id: 123456
