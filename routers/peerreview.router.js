@@ -18,8 +18,8 @@ ROUTER.get('/', (req, res) => {
             };
         }
         else if (parseInt(req.get('user_role')) == 2) {
-            var studentId = req.get('user_id');
-            peerReviews = PEERREVIEW_CONTROLLER.getPeerReviewPerStudent(parseInt(studentId));
+            let studentId = req.get('user_id');
+            let peerReviews = PEERREVIEW_CONTROLLER.getPeerReviewPerStudent(parseInt(studentId));
             if (peerReviews != null) {
                 res.status(200).json(peerReviews);
             } else {
@@ -38,7 +38,7 @@ ROUTER.get('/', (req, res) => {
     /* Peer Review POST */
     .post('/', (req, res) => {
         try {
-            var newPeerReview = PEERREVIEW_CONTROLLER.postPeerReview(req.body);
+            let newPeerReview = PEERREVIEW_CONTROLLER.postPeerReview(req.body);
             if (req.get('user_role') != 1) {
                 res.status(401).send("Unauthorized. \nOnly a teacher can perform a POST request.");
             } else {
