@@ -45,8 +45,8 @@ describe('Tests for Peer Review\'s GET method', () => {
     });
 });
 
-/* Test cases for the methods in Peer Review */
-describe('Tests for Peer Review\'s methods', () => {
+/* Test cases for POST method in Peer Review */
+describe('Tests for Peer Review\'s POST method', () => {
 
     /* Test POST method in Peer Review*/
     // Status: 201, Created
@@ -55,9 +55,10 @@ describe('Tests for Peer Review\'s methods', () => {
             .post('/v1/peerreview')
             .send(exams[2])
             .set('user_role', 1);
-        expect.assertions(2);
+        expect.assertions(3);
         expect(res.status).toBe(201);
         expect(res.get('content-type')).toContain('application/json');
+        expect(res.body).toBeInstanceOf(Object);
     });
 
     // Status: 401, Unauthorized
@@ -70,6 +71,7 @@ describe('Tests for Peer Review\'s methods', () => {
         expect(res.status).toBe(401);
     });
 });
+
 /* Test cases for PUT method in Peer Review */
 describe('Tests for Peer Review\'s PUT method', () => {
 
