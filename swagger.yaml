@@ -32,21 +32,9 @@ paths:
         - in: query
           name: type
           required: false
-          type: string
-          default: 'Student'
-          description: Il ruolo utente con il quale si vuole filtrare la lista
-        - in: query
-          name: limit
-          required: false
-          type: integer
-          default: 25
-          description: Il numero massimo di entry / risultati che si vogliono nella risposta
-        - in: query
-          name: offset
-          required: false
           type: integer
           default: 0
-          description: L'offset rispetto a inizio lista da cui partire per ricavare i risultati
+          description: Il ruolo utente con il quale si vuole filtrare la lista
         - in: header
           name: user_id
           type: integer
@@ -54,9 +42,9 @@ paths:
           description: L'ID dell'utente che effettua la richiesta
         - in: header
           name: user_role
-          type: string
+          type: integer
           required: true
-          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Lista degli utenti recuperata con successo
@@ -70,13 +58,13 @@ paths:
                 firstname: 'Mario'
                 lastname: 'Rossi'
                 email: 'mario.rossi@example.com'
-                type: 'Student'
+                type: 1
                 identification_number: 234567
               - id: 2
                 firstname: 'Luca'
                 lastname: 'Giorgini'
                 email: 'luca.giorgini@example.com'
-                type: 'Student&Teacher'
+                type: 3
                 identification_number: 890123
         404:
           description: Errore durante il recupero della lista degli utenti
@@ -112,7 +100,7 @@ paths:
               firstname: 'Mario'
               lastname: 'Rossi'
               email: 'mario.rossi@example.com'
-              type: 'Student'
+              type: 1
               identification_number: 345678
       responses:
         201:
@@ -152,9 +140,9 @@ paths:
           description: L'ID dell'utente che effettua la richiesta
         - in: header
           name: user_role
-          type: string
+          type: integer
           required: true
-          description: Il ruolo dell'utente che fa richiesta. Può essere studente o docente.
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Utente recuperato con successo
@@ -232,16 +220,20 @@ paths:
           required: true
           description: L'ID dell'utente che effettua la richiesta
       responses:
-        204:
+        200:
           description: L'utente è stato eliminato con successo
-        404:
-          description: L'utente specificato non è stato trovato nel sistema
+          examples:
+            application/json:
+              status: 200
+              message: 'Cancellazione effettuata con successo.'
+        400:
+          description: I parametri specificati (id o header type) non sono corretti
           schema:
             $ref: '#/definitions/Error'
           examples:
             application/json:
-              code: '404'
-              message: 'Errore nella cancellazione. Utente richiesto non trovato'
+              code: '400'
+              message: 'Errore nella cancellazione. Parametri non corretti.'
         403:
           description: Non si hanno i permessi necessari per eliminare questa risorsa
           schema:
@@ -250,6 +242,14 @@ paths:
             application/json:
               code: '403'
               message: 'Accesso negato. Mancanza di permessi per eliminare la risorsa'
+        500:
+          description: Il server ha avuto un errore interno durante la cancellazione
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '500'
+              message: 'Errore durante la cancellazione. Errore intero.'
           
   /exams:
     get:
@@ -258,6 +258,17 @@ paths:
       summary: Ricava la lista degli esami
       produces:
         - application/json
+      parameters:
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Operazione effettuata con successo
@@ -292,11 +303,10 @@ paths:
                   firstname: 'Marco'
                   lastname: 'Giunta'
                   email: 'marco.giunta@example.com'
-                  type: 'Teacher'
+                  type: 1
                   identification_number: 908765
               tasks: 
                 - id: 123
-                  numeroDomanda: 7
                   question: 'Di che nazionalità era Napoleone Bonaparte?'
                   type: 1
                   answers:
@@ -304,7 +314,6 @@ paths:
                     - 'Francese'
                     - 'Spagnola'
                 - id: 456
-                  numeroDomanda: 2
                   question: 'diametro della Terra?'
                   type: 1
                   answers:
@@ -317,8 +326,9 @@ paths:
                   firstname: 'Mario'
                   lastname: 'Rossi'
                   email: 'mario.rossi@example.com'
-                  type: 'Student'
-                  identification_number: 345678
+                  type: 0
+                  identification_number: 34567
+     
       responses:
         201:
           description: Esame aggiunto con successo
@@ -346,6 +356,17 @@ paths:
           required: true
           type: integer
           description: L'ID dell'esame <br />
+          
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         200:
           description: Operazione effettuata con successo
@@ -387,11 +408,10 @@ paths:
                   firstname: 'Marco'
                   lastname: 'Giunta'
                   email: 'marco.giunta@example.com'
-                  type: 'Teacher'
+                  type: '1'
                   identification_number: 908765
               tasks: 
                 - id: 123
-                  numeroDomanda: 7
                   question: 'Di che nazionalità era Napoleone Bonaparte?'
                   type: 1
                   answers:
@@ -399,7 +419,6 @@ paths:
                     - 'Francese'
                     - 'Spagnola'
                 - id: 456
-                  numeroDomanda: 2
                   question: 'diametro della Terra?'
                   type: 1
                   answers:
@@ -412,8 +431,21 @@ paths:
                   firstname: 'Mario'
                   lastname: 'Rossi'
                   email: 'mario.rossi@example.com'
-                  type: 'Student'
+                  type: 0
                   identification_number: 345678
+                  
+                  
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
+          
       responses:
         200:
           description: Operazione effettuata con successo
@@ -437,6 +469,16 @@ paths:
           required: true
           type: integer
           description: L'ID dell'esame che si intende eliminare
+        - in: header
+          name: user_id
+          type: integer
+          required: true
+          description: L'ID dell'utente che effettua la richiesta
+        - in: header
+          name: user_role
+          type: integer
+          required: true
+          description: Il ruolo dell'utente che fa richiesta. Può essere 0 (studente) o 1 (docente).
       responses:
         204:
           description: L'esame è stato eliminato con successo
@@ -830,7 +872,6 @@ paths:
               - id: 1233
                 task:
                   id: 123456
-                  numeroDomanda: 2
                   question: 'diametro del sole?'
                   type: 1
                   answers: '90.742 km;190.742 km;120.742 km'
@@ -841,7 +882,6 @@ paths:
               - id: 1233
                 task:
                   id: 123456
-                  numeroDomanda: 2
                   question: 'diametro della Terra?'
                   type: 1
                   answers: '9.742 km;19.742 km;12.742 km'
@@ -889,7 +929,6 @@ paths:
             example:
               task:
                 id: 123456
-                numeroDomanda: 2
                 question: 'diametro del sole?'
                 type: 1
                 answers: 
@@ -906,7 +945,6 @@ paths:
               id: 1233
               task:
                 id: 123456
-                numeroDomanda: 2
                 question: 'diametro del sole?'
                 type: 1
                 answers: 
@@ -992,9 +1030,9 @@ definitions:
         type: string
         description: L'indirizzo e-mail dell'utente
       type:
-        type: string
-        enum: [ Student, Teacher, Student&Teacher]
-        description: Identifica il tipo di utente. Può essere uno studente, un docente o entrambi.
+        type: integer
+        enum: [ 1, 2, 3]
+        description: Identifica il tipo di utente. Può essere uno 1 (studente), 2 (docente) o 3 (entrambi).
       identification_number:
         type: integer
         description: Il numero che identifica univocamente l'utente come studente o/e come docente.
@@ -1010,7 +1048,7 @@ definitions:
       firstname: 'Mario'
       lastname: 'Rossi'
       email: 'mario.rossi@example.com'
-      type: 'Student'
+      type: 1
       identification_number: 345678
 
   Error:
@@ -1069,11 +1107,10 @@ definitions:
           firstname: 'Marco'
           lastname: 'Giunta'
           email: 'marco.giunta@example.com'
-          type: 'Teacher'
+          type: 1
           identification_number: 908765
       tasks: 
         - id: 123
-          numeroDomanda: 7
           question: 'Di che nazionalità era Napoleone Bonaparte?'
           type: 1
           answers:
@@ -1081,7 +1118,6 @@ definitions:
             - 'Francese'
             - 'Spagnola'
         - id: 456
-          numeroDomanda: 2
           question: 'diametro della Terra?'
           type: 1
           answers:
@@ -1094,7 +1130,8 @@ definitions:
           firstname: 'Mario'
           lastname: 'Rossi'
           email: 'mario.rossi@example.com'
-          type: 'Student'
+          type: 0
+        
           identification_number: 345678
     
   Task:
@@ -1102,8 +1139,6 @@ definitions:
     type: object
     properties:
       id:
-        type: integer
-      numeroDomanda:
         type: integer
       question:
         type: string
@@ -1118,12 +1153,10 @@ definitions:
       studentAnswer:
         type: string
     required:
-      - numeroDomanda
       - question
       - type
     example:
       id: 123456
-      numeroDomanda: 2
       question: 'diametro della Terra?'
       type: 1
       answers:
@@ -1153,7 +1186,6 @@ definitions:
       description: 'Domande di storia'
       tasks:
         - id: 123
-          numeroDomanda: 7
           question: 'Di che nazionalità era Napoleone Bonaparte?'
           type: 1
           answers: 
@@ -1163,7 +1195,6 @@ definitions:
           correctAnswer: '2'
           studentAnswer: '2'
         - id: 456
-          numeroDomanda: 8
           question: 'Spiega come è iniziata la seconda guerra mondiale'
           type: 2
           studentAnswer: 'Hitler invase la Polonia'
@@ -1198,7 +1229,6 @@ definitions:
       task: 
         application/json:
           id: 123456
-          numeroDomanda: 2
           question: 'diametro della Terra?'
           type: 1
           answers:
