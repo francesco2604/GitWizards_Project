@@ -69,10 +69,13 @@ describe('Tests for Peer Review\'s methods', () => {
         expect.assertions(1);
         expect(res.status).toBe(401);
     });
+});
+/* Test cases for PUT method in Peer Review */
+describe('Tests for Peer Review\'s PUT method', () => {
 
     /* Test PUT method in Peer Review*/
     // Status: 200, OK (Modified)
-    test('Peer Review PUT', async () => {
+    test('Peer Review PUT - Success', async () => {
         let res = await request(API)
             .put('/v1/peerreview/1')
             .send(PEERREVIEW_REPO.getPeerReviewByID(1))
@@ -83,7 +86,7 @@ describe('Tests for Peer Review\'s methods', () => {
     });
 
     // Status: 401, Unauthorized
-    test('Peer Review PUT', async () => {
+    test('Peer Review PUT - Wrong role of user', async () => {
         let res = await request(API)
             .put('/v1/peerreview/1')
             .send(PEERREVIEW_REPO.getPeerReviewByID(0))
@@ -94,7 +97,7 @@ describe('Tests for Peer Review\'s methods', () => {
     });
 
     // Status: 404, Not fund
-    test('Peer Review PUT', async () => {
+    test('Peer Review PUT - Not found', async () => {
         let res = await request(API)
             .put('/v1/peerreview/20')
             .send(PEERREVIEW_REPO.getPeerReviewByID(0))
@@ -102,6 +105,16 @@ describe('Tests for Peer Review\'s methods', () => {
         expect.assertions(1);
         expect(res.status).toBe(404);
     });
+
+    // Status: 400, Bad request
+    /*test('Peer Review PUT - Bad request', async () => {
+        let res = await request(API)
+            .put('/v1/peerreview/2')
+            .send(PEERREVIEW_REPO.getPeerReviewByID(0))
+            .set('user_role', 2).set('user_id', 5);
+        expect.assertions(1);
+        expect(res.status).toBe(400);
+    });*/
 
 });
 
