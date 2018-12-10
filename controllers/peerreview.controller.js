@@ -8,7 +8,7 @@ var exams = peerReviewRepo.exams;
 // gets all peer reviews
 var getPeerReviewAll = () => {
     try {
-        return peerReviewRepo.getAllPeerReviews;
+        return peerReviewRepo.getAllPeerReviews();
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
@@ -19,31 +19,8 @@ var getPeerReviewAll = () => {
 // gets peer reviews for a student
 var getPeerReviewPerStudent = (studentID) => {
     try {
-        // looks for all student's exams                        /*  TO FIX! */
-        let examsPerStudent = [];
-    /*    exams.forEach((exam) => {
-            exam.students.forEach((student) => {
-                if (student.id === studentID) {
-                    examsPerStudent.push(exam);
-                } else {
-                    console.log("There are no exams for this student.");
-                };
-            })
-        });*/
-
-        // finds all peer reviews for the exams
-        let peerReviewsPerExam = [];/*
-        peerReviews.forEach((review) => {
-            examsPerStudent.forEach((exam) => {
-                if (review.examid === exam.id) {
-                    peerReviewsPerExam.push(review);
-                } else {
-                    console.log("There are no peer reviews for these exams.");
-                };
-            })
-        });*/
-        let peerReviewGot = peerReviewsPerExam;
-        return peerReviewGot;
+        let reviewsPerStudent = peerReviewRepo.getPeerReviewsPerStudent(studentID);
+        return reviewsPerStudent;
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
@@ -55,15 +32,8 @@ var getPeerReviewPerStudent = (studentID) => {
 // creates a new peer review
 var postPeerReview = (newPeerReview) => {
     try {
-        /*
-        newID = peerReviews.length - 1;
-        var createdPeerReview = newPeerReview;
-        createdPeerReview.id = newID;
-        peerReviews.push(createdPeerReview);
-        return peerReviews[newID];
-        */
         peerReviewRepo.createPeerReview(newPeerReview);
-        return peerReviewRepo.getLastPeerReview;
+        return peerReviewRepo.getLastPeerReview();
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
@@ -75,9 +45,9 @@ var postPeerReview = (newPeerReview) => {
 // modifies a peer review
 var putPeerReviewByID = (updatedPeerReview, id) => {
     try {
-        if (peerReviewRepo.getLength < id) {
+        if (peerReviewRepo.getLength() < id) {
             return null;
-        } else {            
+        } else {
             let changedPeerReview = peerReviewRepo.setPeerReviewByID(id, updatedPeerReview);
             console.log("LEGGI: " + changedPeerReview);
             return changedPeerReview;
@@ -89,4 +59,4 @@ var putPeerReviewByID = (updatedPeerReview, id) => {
     }
 };
 
-module.exports = { getPeerReviewAll, getPeerReviewPerStudent, putPeerReviewByID, postPeerReview };
+module.exports = { getPeerReviewAll, getPeerReviewPerStudent, postPeerReview, putPeerReviewByID };

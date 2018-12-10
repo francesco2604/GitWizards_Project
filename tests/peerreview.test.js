@@ -1,6 +1,9 @@
 const API = require('../app');
 var request = require('supertest');
 const PEERREVIEW_REPO = require('../repositories/peerreview.repository');
+const EXAM_REPO = require('../repositories/exam.repositories');
+
+var exams = [EXAM_REPO.getExamForId(0), EXAM_REPO.getExamForId(1), EXAM_REPO.getExamForId(2)];
 
 /* Test starting */
 beforeAll(() => {

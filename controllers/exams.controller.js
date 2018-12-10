@@ -1,6 +1,6 @@
 
 var ExamRepository = require('../repositories/exam.repositories.js');
-var examRepositories=(new ExamRepository())
+var examRepositories=ExamRepository;          // DA CAMBIARE: è già un'istanza
 var examList= examRepositories.getList();
 var propertiesForUpdate = ['description', 'numerotasks'];
 var idSequence = 1000;
