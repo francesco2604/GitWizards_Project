@@ -17,7 +17,7 @@ class PeerReviewRepository {
     };
 
     createPeerReview(review) {
-        var newID = this._peerReviews.size;
+        let newID = this._peerReviews.size;
         review.id = newID;
         this._peerReviews.set(newID, review);
         return newID;
@@ -32,13 +32,14 @@ class PeerReviewRepository {
     };
 
     getPeerReviewsPerStudent(studentID) {
-        this._peerReviews.forEach((review) => {
-            if (review.studentID == studentID) {
-                return review;
-            } else {
-                return null;
-            };
-        });
+        let length = this._peerReviews.size;
+        let reviews = [];
+        this._peerReviews.forEach((value, key, map) => {
+            if (value._studentid == studentID) {
+                reviews.push(value);
+            }
+        })
+        return reviews;
     };
 
     getPeerReviewByID(peerReviewID) {

@@ -5,17 +5,17 @@ const EXAM_REPO = require('../repositories/exam.repositories');
 
 var exams = [EXAM_REPO.getExamForId(0), EXAM_REPO.getExamForId(1), EXAM_REPO.getExamForId(2)];
 
-/* Test starting */
+/* Test for Peer Review starting */
 beforeAll(() => {
-    console.log('API test starting!');
+    console.log('API test for Peer Review starting!');
 });
 
-/* Test cases for Peer Review */
-describe('Tests for Peer Review', () => {
+/* Test cases for GET method in Peer Review' */
+describe('Tests for Peer Review\'s GET method', () => {
 
     /* Test GET method in Peer Review*/
     // Status: 200, OK (Teacher)
-    test('Teacher Peer Review GET', async () => {
+    test('Teacher Peer Review GET - Success', async () => {
         let res = await request(API)
             .get('/v1/peerreview')
             .set('user_role', 1).set('user_id', 3);
@@ -25,22 +25,28 @@ describe('Tests for Peer Review', () => {
     });
 
     // Status: 200, OK (Student)
-    test('Student Peer Review GET', async () => {
+    test('Student Peer Review GET - Success', async () => {
         let res = await request(API)
             .get('/v1/peerreview')
             .set('user_role', 2).set('user_id', 1);
-        expect.assertions(1);
+        expect.assertions(2);
         expect(res.status).toBe(200);
+        expect(res.get('content-type')).toContain('application/json');
     });
 
     // Status: 400, Bad request
-    test('Wrong Peer Review GET', async () => {
+    test('Wrong Peer Review GET - Bad request', async () => {
         let res = await request(API)
             .get('/v1/peerreview')
             .set('user_role', 3).set('user_id', 4);
-        expect.assertions(1);
+        expect.assertions(2);
         expect(res.status).toBe(400);
+        expect(res.get('content-type')).not.toContain('application/json');
     });
+});
+
+/* Test cases for the methods in Peer Review */
+describe('Tests for Peer Review\'s methods', () => {
 
     /* Test POST method in Peer Review*/
     // Status: 201, Created

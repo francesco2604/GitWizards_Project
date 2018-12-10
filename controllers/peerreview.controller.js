@@ -6,7 +6,7 @@ var exams = peerReviewRepo.exams;
 
 /* GET method for Peer Review */
 // gets all peer reviews
-function getPeerReviewAll(){
+function getPeerReviewAll() {
     try {
         return peerReviewRepo.getAllPeerReviews();
     } catch (error) {
