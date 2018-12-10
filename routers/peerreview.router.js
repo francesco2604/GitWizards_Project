@@ -67,6 +67,7 @@ ROUTER.get('/', (req, res) => {
             } else {
                 res.status(401).send("Unauthorized. \nUser must be a student or a teacher.");
             };
+            //   res.status(400).send("Bad request. \nThe id must be an integer.");
         } catch (error) {
             console.log('\nname: ' + error.name
                 + ' message: ' + error.message
