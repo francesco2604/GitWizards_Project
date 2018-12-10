@@ -1,7 +1,7 @@
 
 var ExamRepository = require('../repositories/exam.repositories.js');
-
-var examList= ExamRepository.getList();
+var examRepositories = ExamRepository;
+var examList= examRepositories.getList();
 var propertiesForUpdate = ['description', 'numerotasks'];
 var idSequence = 1000;
 //GET EXAMS LIST FOR STUDENT AND TEACHER
