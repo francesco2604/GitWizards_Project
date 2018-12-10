@@ -1,8 +1,9 @@
 class PeerReview {
-    constructor(id, examid, task, studentanswer, mark, description, deadline) {
+    constructor(id, examid, studentid, task, studentanswer, mark, description, deadline) {
         this._id = id;
         this._examid = examid;
-        this._task = task;
+        this._studentid = studentid,
+            this._task = task;
         this._studentanswer = studentanswer;
         this._mark = mark;
         this._description = description;
@@ -14,6 +15,9 @@ class PeerReview {
     };
     get examid() {
         return this._examid;
+    };
+    get studentid() {
+        return this._studentid;
     };
     get tasks() {
         return this._tasks;
@@ -37,6 +41,9 @@ class PeerReview {
     set examid(examid) {
         this._examid = examid;
     };
+    set studentid(studentid) {
+        this._studentid = studentid;
+    };
     set tasks(tasks) {
         this._tasks = tasks;
     };
@@ -57,6 +64,7 @@ class PeerReview {
         return ({
             id: this.id,
             examid: this.examid,
+            studentid: this.studentid,
             task: this.task,
             studentanswer: this.studentanswer,
             mark: this.mark,

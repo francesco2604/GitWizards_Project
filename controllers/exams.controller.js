@@ -1,23 +1,23 @@
 
 var ExamRepository = require('../repositories/exam.repositories.js');
-var examRepositories=ExamRepository;          // DA CAMBIARE: è già un'istanza
+var examRepositories = ExamRepository;
 var examList= examRepositories.getList();
 var propertiesForUpdate = ['description', 'numerotasks'];
 var idSequence = 1000;
 //GET EXAMS LIST FOR STUDENT AND TEACHER
 function getExamsList()
 {
-  return examRepositories.getList();
+  return ExamRepository.getList();
 }
 
-// GET ID FUNCTION 
+// GET ID FUNCTION
 function getExamsById(id)
 {
   const index = (getExamsList()).findIndex((item)=> {return item.id===id})
   if (index===-1)
   return 'Not Found'
   try {
-    return examRepositories.getExamForId(index)
+    return ExamRepository.getExamForId(index)
   }
   catch (error) {
     return 'ErrorCatch'
@@ -31,7 +31,7 @@ function postExams(exam_post, identity)
   idSequence++;
   exam_post.id = idSequence
   examList.push(exam_post)
-  examRepositories.updateList(examList)
+  ExamRepository.updateList(examList)
   return exam_post
 }
 //PUT FUNCTION
@@ -58,7 +58,7 @@ function putExamsById(id, propertiesChanged, identity) {
           }
         }
         deleteExamsById(id,identity)
-        examRepositories.addEx(examFromDB)
+        ExamRepository.addEx(examFromDB)
         return examFromDB
       }
     }
@@ -74,10 +74,10 @@ function deleteExamsById(id,identity)
   if(index===-1)
   return 'Not Found'
   else{
-    if(((examRepositories.getExamForId(index))['teacher'])['id']!=parseInt(identity.user_id))
+    if(((ExamRepository.getExamForId(index))['teacher'])['id']!=parseInt(identity.user_id))
     return 'No permission'
     else {
-      examRepositories.deleteEx(index)
+      ExamRepository.deleteEx(index)
       return getExamsList();
     }
   }
