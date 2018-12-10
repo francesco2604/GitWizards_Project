@@ -1,69 +1,60 @@
-/* Example variables */
-var task = {
-  numeroDomanda: 3,
-  question: 'diametro della Terra?',
-  type: 1,
-  answers: ['9.742 km',
-    '19.742 km',
-    '12.742 km'],
-  correctAnswer: '3',
-  studentAnswer: '1'
-};
+var UserRepo = require('../repositories/user.repository.js');
+var TaskRepo = require('../repositories/task.repository.js');
+var ExamRepo = require('../repositories/exam.repositories.js');
 
-var tasks = [task];
+var PeerReview = require('../models/peerreview.model');
 
-var peerReview = {
-  id: 0,
-  examid: 1,
-  task: task,
-  studentanswer: 3,
-  mark: 30,
-  description: 'The task is perfect as it is',
-  deadline: 900
+var tasks = [TaskRepo.getTaskById(1), TaskRepo.getTaskById(2)];
+
+class PeerReviewRepository {
+
+    constructor() {
+        this._peerReviews = new Map([
+            [1, new PeerReview(0, 1, 1, tasks[0], 3, 30, 'Example n. 1', '12.21.18')],
+            [2, new PeerReview(1, 2, 1, tasks[0], 2, 20, 'Example n. 2', '02.01.19')],
+            [3, new PeerReview(2, 3, 2, tasks[1], 2, 24, 'Example n. 3', '03.01.19')]
+        ]);
+    };
+
+    createPeerReview(review) {
+        let newID = this._peerReviews.size;
+        review.id = newID;
+        this._peerReviews.set(newID, review);
+        return newID;
+    };
+
+    getLength() {
+        return this._peerReviews.size;
+    };
+
+    getAllPeerReviews() {
+        return this._peerReviews;
+    };
+
+    getPeerReviewsPerStudent(studentID) {
+        let length = this._peerReviews.size;
+        let reviews = [];
+        this._peerReviews.forEach((value, key, map) => {
+            if (value._studentid == studentID) {
+                reviews.push(value);
+            }
+        })
+        return reviews;
+    };
+
+    getPeerReviewByID(peerReviewID) {
+        return this._peerReviews.get(peerReviewID);
+    };
+
+    getLastPeerReview() {
+        return this._peerReviews.get(this._peerReviews.size);
+    };
+
+    setPeerReviewByID(reviewID, review) {
+        this._peerReviews.set(reviewID, review);
+        return this._peerReviews.get(reviewID);
+    };
 }
 
-var peerReviews = [peerReview];
-
-var exam = {
-  id: 1,
-  example: null,
-  description: 'esame di valutazione conoscenze generali',
-  deadline: 3600,
-  numerotasks: 2,
-  teacher: {
-    id: 32,
-    firstname: 'Marco',
-    lastname: 'Giunta',
-    email: 'marco.giunta@example.com',
-    type: 'Teacher',
-    identification_number: 908765
-  },
-  tasks: [task,
-    {
-      id: 456,
-      numeroDomanda: 3,
-      question: 'diametro della Luna?',
-      type: 1,
-      answers: [
-        '4.742 km',
-        '14.742 km',
-        '8.742 km'
-      ],
-      correctAnswer: 3
-    }
-  ],
-  students: [
-    {
-      id: 5,
-      firstname: 'Mario',
-      lastname: 'Rossi',
-      email: 'mario.rossi@example.com',
-      type: 'Student',
-      identification_number: 345678
-    }
-  ]
-};
-
-var exams = [exam];
-
-module.exports = { peerReviews, exams };
+var peerReviewRepository = new PeerReviewRepository();
+module.exports = peerReviewRepository;

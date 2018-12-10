@@ -14,19 +14,19 @@ ROUTER.get('/', (req, res) => {
             if (peerReviews != null) {
                 res.status(200).json(peerReviews);
             } else {
-                res.status(204).send("There are currently no peer reviews.");
+                res.status(204).send("No content. \nThere are currently no peer reviews.");
             };
         }
         else if (parseInt(req.get('user_role')) == 2) {
-            var studentId = req.get('user_id');
-            peerReviews = PEERREVIEW_CONTROLLER.getPeerReviewPerStudent(parseInt(studentId));
+            let studentId = req.get('user_id');
+            let peerReviews = PEERREVIEW_CONTROLLER.getPeerReviewPerStudent(parseInt(studentId));
             if (peerReviews != null) {
                 res.status(200).json(peerReviews);
             } else {
-                res.status(204).send("There are currently no peer reviews.");
+                res.status(204).send("No content. \nThere are currently no peer reviews.");
             };
         } else {
-            res.status(400).send("User must be of type student or teacher.");
+            res.status(400).send("Bad request. \nUser must be of type student or teacher.");
         };
     } catch (error) {
         console.log('\nname: ' + error.name
@@ -35,6 +35,26 @@ ROUTER.get('/', (req, res) => {
     }
 })
 
+    /* Peer Review POST */
+    .post('/', (req, res) => {
+        try {
+            let newPeerReview = PEERREVIEW_CONTROLLER.postPeerReview(req.body);
+            if (req.get('user_role') != 1) {
+                res.status(401).send("Unauthorized. \nOnly a teacher can perform a POST request.");
+            } else {
+                if (newPeerReview == null) {
+                    res.status(404);
+                } else {
+                    res.status(201).json(newPeerReview);
+                }
+            }
+        } catch (error) {
+            console.log('\nname: ' + error.name
+                + ' message: ' + error.message
+                + ' at: ' + error.at);
+        }
+    })
+
     .put('/:id', (req, res) => {
         try {
             if ((parseInt(req.get('user_role')) == 1) || (parseInt(req.get('user_role')) == 2)) {
@@ -42,7 +62,6 @@ ROUTER.get('/', (req, res) => {
                 if (newPeerReview == null) {
                     res.status(404).send("Not fund. \nThere is no peer review for this ID.");
                 } else {
-                    console.log(newPeerReview);
                     res.status(200).json(newPeerReview);
                 };
             } else {

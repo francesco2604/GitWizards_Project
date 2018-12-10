@@ -1,13 +1,14 @@
-const DATA = require('../repositories/peerreview.repository');
+var peerReviewRepo = require('../repositories/peerreview.repository');
+var exams = require('../repositories/exam.repositories.js');
 
-var peerReviews = DATA.peerReviews;
-var exams = DATA.exams;
+var peerReviews = peerReviewRepo.peerReviews;
+var exams = peerReviewRepo.exams;
 
 /* GET method for Peer Review */
 // gets all peer reviews
-var getPeerReviewAll = () => {
+function getPeerReviewAll() {
     try {
-        return peerReviews;
+        return peerReviewRepo.getAllPeerReviews();
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
@@ -16,33 +17,23 @@ var getPeerReviewAll = () => {
 };
 
 // gets peer reviews for a student
-var getPeerReviewPerStudent = (studentID) => {
+function getPeerReviewPerStudent(studentID) {
     try {
-        // looks for all student's exams
-        let examsPerStudent = [];
-        exams.forEach((exam) => {
-            exam.students.forEach((student) => {
-                if (student.id === studentID) {
-                    examsPerStudent.push(exam);
-                } else {
-                    console.log("There are no exams for this student.");
-                };
-            })
-        });
+        let reviewsPerStudent = peerReviewRepo.getPeerReviewsPerStudent(studentID);
+        return reviewsPerStudent;
+    } catch (error) {
+        console.log('\nname: ' + error.name
+            + ' message: ' + error.message
+            + ' at: ' + error.at);
+    }
+};
 
-        // finds all peer reviews for the exams
-        let peerReviewsPerExam = [];
-        peerReviews.forEach((review) => {
-            examsPerStudent.forEach((exam) => {
-                if (review.examid === exam.id) {
-                    peerReviewsPerExam.push(review);
-                } else {
-                    console.log("There are no peer reviews for these exams.");
-                };
-            })
-        });
-        let peerReviewGot = peerReviewsPerExam;
-        return peerReviewGot;
+/* POST method for Peer Review */
+// creates a new peer review
+function postPeerReview(newPeerReview) {
+    try {
+        peerReviewRepo.createPeerReview(newPeerReview);
+        return peerReviewRepo.getLastPeerReview();
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
@@ -51,20 +42,15 @@ var getPeerReviewPerStudent = (studentID) => {
 };
 
 /* PUT method for Peer Review */
-// puts a new peer review
-var putPeerReviewByID = (newPeerReview, id) => {
+// modifies a peer review
+function putPeerReviewByID(updatedPeerReview, id) {
     try {
-        if (peerReviews.length < id) {
+        if (peerReviewRepo.getLength() < id) {
             return null;
         } else {
-            let index = peerReviews.findIndex((item) => {
-                if (item.id === id) {
-                    return item;
-                }
-            });
-        };
-        peerReviews[0] = newPeerReview;
-        return newPeerReview;
+            let changedPeerReview = peerReviewRepo.setPeerReviewByID(id, updatedPeerReview);
+            return changedPeerReview;
+        }
     } catch (error) {
         console.log('\nname: ' + error.name
             + ' message: ' + error.message
@@ -72,4 +58,4 @@ var putPeerReviewByID = (newPeerReview, id) => {
     }
 };
 
-module.exports = { getPeerReviewAll, getPeerReviewPerStudent, putPeerReviewByID };
+module.exports = { getPeerReviewAll, getPeerReviewPerStudent, postPeerReview, putPeerReviewByID };
