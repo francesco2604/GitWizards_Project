@@ -43,7 +43,6 @@ ROUTER.get('/', (req, res) => {
                 res.status(401).send("Unauthorized. \nOnly a teacher can perform a POST request.");
             } else {
                 if (newPeerReview == null) {
-                    console.log("LEGGIMI");
                     res.status(404);
                 } else {
                     res.status(201).json(newPeerReview);

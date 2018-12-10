@@ -47,7 +47,7 @@ describe('Tests for Peer Review', () => {
     test('Peer Review POST', async () => {
         let res = await request(API)
             .post('/v1/peerreview')
-            .send(exams[0])
+            .send(exams[2])
             .set('user_role', 1);
         expect.assertions(2);
         expect(res.status).toBe(201);
